@@ -7,20 +7,20 @@ updated: 2026-10-15T23:30:00+05:30
 ## Current Position
 
 **Milestone:** V1 Foundation (Phases 1–6)  
-**Phase:** Phase 4 — Lexicographic Hub Placement & Contiguous Zone Partitioning (Completed)  
-**Status:** verified  
-**Plan:** 4-1-PLAN.md, 4-2-PLAN.md (Wave 1 & Wave 2 completed & verified)
+**Phase:** Phase 5 — Direction-Aware Closed-Ring Sequencing & Zero-Overlap Route Synthesis  
+**Status:** ready_for_execution  
+**Plan:** 5-1-PLAN.md, 5-2-PLAN.md (Wave 1 & Wave 2)
 
 ## Last Action
 
-Executed and independently verified Phase 4:
-- Wave 1 (Plan 4.1): Partition contracts (`HubAssignment`, `HubZonePartition`), `hub_candidates.py` sampling candidate points inside eligible rooms $\ge 0.505\text{ m}$ from obstacles and $\ge 0.30\text{ m}$ from fixed nodes.
-- Wave 2 (Plan 4.2): Implemented `zone_milp.py` solving exact CP-SAT contiguous room partitioning, matching Slide 5 lower bound ($H_{\min} = 2$) and exact zone split (`Living, Bed 1, Bed 3` vs `Bed 2, Kitchen, Storage`), with area-gap tie-breaker ($\min \Delta A_{\text{gap}}$).
-- Independent Verification: `gsd-verifier` ran full test suite (`tests/test_phase4_candidates.py`, `tests/test_phase4_partitioning.py`), confirming 6/6 must-haves pass with 0 errors.
+Completed Phase 5 planning following `v2.md` Section 5.5 and GSD guidelines:
+- Created `.gsd/phases/5/RESEARCH.md` detailing direction-aware Held-Karp dynamic programming, parallel doorway lane routing for $O = 0$, and Slide 5 target metrics ($L=49.0\text{ m}, J=59.0$).
+- Created `.gsd/phases/5/5-1-PLAN.md` (Wave 1: Contracts, `exact_ring_tsp.py`, ring TSP unit tests).
+- Created `.gsd/phases/5/5-2-PLAN.md` (Wave 2: `loop_synthesizer.py`, Slide 5 validation, zero-overlap leaf routing, Phase 5 test suite).
 
 ## Next Steps
 
-1. `/plan 5` — Plan Phase 5 (Direction-Aware Closed-Ring Sequencing & Zero-Overlap Route Synthesis).
+1. `/execute 5` — Execute Plan 5.1 and Plan 5.2 sequentially to implement Phase 5.
 
 ## Active Decisions
 
