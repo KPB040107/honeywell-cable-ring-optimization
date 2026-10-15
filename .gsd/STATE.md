@@ -7,21 +7,21 @@ updated: 2026-10-15T23:30:00+05:30
 ## Current Position
 
 **Milestone:** V1 Foundation (Phases 1–6)  
-**Phase:** Phase 5 — Direction-Aware Closed-Ring Sequencing & Zero-Overlap Route Synthesis  
-**Status:** complete (verified 6/6 must-haves passed)  
-**Plan:** 5-1-PLAN.md, 5-2-PLAN.md (Wave 1 & Wave 2 completed and independently verified)
+**Phase:** Phase 6 — Official $1\text{ mm}$ Evaluation Checker, Slide 8 JSON Exporter & Visual Overlay Renderer  
+**Status:** ready for execution  
+**Plan:** 6-1-PLAN.md (Wave 1: Checker & Slide 7 metrics), 6-2-PLAN.md (Wave 2: Slide 8 JSON Exporter, Visualizer & Pipeline)
 
 ## Last Action
 
-Completed and verified Phase 5 (Plan 5.1 & Plan 5.2):
-- Implemented `exact_ring_tsp.py` (direction-aware Held-Karp DP ring TSP solver for $m \le 5$ with wrap-around bend accounting).
-- Implemented `loop_synthesizer.py` (sequential conflict-free polyline synthesis, single-door parallel lane routing $O = 0.0\text{ m}$, dynamic edge usage penalties).
-- Verified Slide 5 benchmark replication: $L = 49.0\text{ m}, B = 20, X = 0, O = 0.0\text{ m}, J = 59.0$ across 2 hubs.
-- Independent verification report `.gsd/phases/5/VERIFICATION.md` confirmed 6/6 must-haves passed; 53/53 tests passing.
+Authored Phase 6 execution plans:
+- Plan 6.1 (Wave 1): Independent evaluation checker `checker.py` strictly enforcing all 6 hard validity rules at $1\text{ mm}$ tolerance and recomputing $L, X, O, B, J, \Delta A_{\text{gap}}$; Slide 7 unit tests and Slide 3 negative rule violation tests (`test_phase6_output.py`).
+- Plan 6.2 (Wave 2): Slide 8 JSON exporter (`json_exporter.py`), two-column Slide 5 architectural floor-plan overlay with red violation badges (`visualizer.py`), and end-to-end routing pipeline with CLI (`pipeline.py`, `cli.py`, `test_integration_pipeline.py`).
+- Committed plans in `07a433e`.
 
 ## Next Steps
 
-1. Plan Phase 6 (`/plan 6`): Official $1\text{ mm}$ Evaluation Checker, Slide 8 JSON Exporter & Visual Overlay Renderer.
+1. Execute Phase 6 (`/execute 6`): Run Plan 6.1 (Wave 1) then Plan 6.2 (Wave 2).
+2. Verify Phase 6 with `gsd-verifier` to achieve full V1 Foundation milestone completion.
 
 ## Active Decisions
 
