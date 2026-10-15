@@ -7,20 +7,20 @@ updated: 2026-10-15T23:30:00+05:30
 ## Current Position
 
 **Milestone:** V1 Foundation (Phases 1–6)  
-**Phase:** Phase 2 — Door & Open-Passage Topology Extraction & Parallel-Lane Portal Waypoints (Completed)  
-**Status:** verified  
-**Plan:** 2-1-PLAN.md, 2-2-PLAN.md (Wave 1 & Wave 2 completed & verified)
+**Phase:** Phase 3 — Obstacle-Aware Axis-Aligned Micro-Router & Directional Cost Tensor  
+**Status:** ready_for_execution  
+**Plan:** 3-1-PLAN.md, 3-2-PLAN.md (Wave 1 & Wave 2)
 
 ## Last Action
 
-Executed and independently verified Phase 2:
-- Wave 1 (Plan 2.1): Pydantic contracts for portals (`DoorOrPassagePortal`, `PortalTopologyGraph`), `portal_extractor.py` detecting interior doors via STRtree and open passages $\ge 0.50\text{ m}$ in free space.
-- Wave 2 (Plan 2.2): NetworkX dual graph `MacroTopologyGraph`, single connected component verification, degree-1 leaf identification (`Bedroom 2`, `Storage`), parallel doorway lanes $\ge 20\text{ mm}$ for zero overlap ($O = 0$).
-- Independent Verification: `gsd-verifier` ran full test suite (`tests/test_phase2_portals.py`, `tests/test_phase2_topology.py`), confirming 6/6 must-haves pass with 0 errors.
+Completed Phase 3 planning following `v2.md` Section 5.3 and GSD guidelines:
+- Created `.gsd/phases/3/RESEARCH.md` detailing axis-aligned Hanan grid generation, direction-augmented $(v, d_{\text{in}})$ state-space search, and Slide 7 bend/reversal accounting.
+- Created `.gsd/phases/3/3-1-PLAN.md` (Wave 1: Contracts, `rectilinear_grid.py`, Hanan grid unit tests).
+- Created `.gsd/phases/3/3-2-PLAN.md` (Wave 2: `astar_rectilinear.py`, `cost_matrix.py`, Slide 7 bend tests & full routing suite).
 
 ## Next Steps
 
-1. `/plan 3` — Plan Phase 3 (Obstacle-Aware Axis-Aligned Micro-Router & Directional Cost Tensor).
+1. `/execute 3` — Execute Plan 3.1 and Plan 3.2 sequentially to implement Phase 3.
 
 ## Active Decisions
 
