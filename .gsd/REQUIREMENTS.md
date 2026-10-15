@@ -40,11 +40,11 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 ### Phase 4: Lexicographic Hub Placement & Contiguous Zone Partitioning
 | ID | Requirement | Source | Phase | Status |
 |----|-------------|--------|-------|--------|
-| **REQ-PART-01** | Sample candidate hub locations $\mathcal{H}_i$ within $0.5\text{ m}$ wall-eroded eligible room polygons ($R_i \setminus \mathcal{O}.\text{buffer}(0.505\text{ m})$), maintaining $\|H_k - N_i\|_2 \ge 0.30\text{ m}$ for clarity. | SPEC Goal 4 | 4 | Pending |
-| **REQ-PART-02** | Enforce minimal hub lower bound: $H \ge H_{\min} = \max(\lceil \sum A_i / 100 \rceil, \lceil N / 5 \rceil)$. Increment $H$ only if no valid partition exists. | SPEC Goal 4 | 4 | Pending |
-| **REQ-PART-03** | Partition eligible rooms into $H$ disjoint zones covering all eligible rooms, ensuring each zone is connected in $G_{\text{macro}}$ via doors/open passages only. | SPEC Goal 4 | 4 | Pending |
-| **REQ-PART-04** | Enforce capacity limits: assigned eligible-room area $\le 100.0\text{ m}^2$ and assigned nodes $\le 5$ per hub. | SPEC Goal 4 | 4 | Pending |
-| **REQ-PART-05** | Formulate lexicographic objective in CP-SAT/MILP: minimize $H$, then minimize sum of exact closed-ring costs $\sum J^*(Z_k)$, with tertiary tie-breaker minimizing area gap $\Delta A_{\text{gap}}$. | SPEC Goal 4 | 4 | Pending |
+| **REQ-PART-01** | Sample candidate hub locations $\mathcal{H}_i$ within $0.5\text{ m}$ wall-eroded eligible room polygons ($R_i \setminus \mathcal{O}.\text{buffer}(0.505\text{ m})$), maintaining $\|H_k - N_i\|_2 \ge 0.30\text{ m}$ for clarity. | SPEC Goal 4 | 4 | Complete |
+| **REQ-PART-02** | Enforce minimal hub lower bound: $H \ge H_{\min} = \max(\lceil \sum A_i / 100 \rceil, \lceil N / 5 \rceil)$. Increment $H$ only if no valid partition exists. | SPEC Goal 4 | 4 | Complete |
+| **REQ-PART-03** | Partition eligible rooms into $H$ disjoint zones covering all eligible rooms, ensuring each zone is connected in $G_{\text{macro}}$ via doors/open passages only. | SPEC Goal 4 | 4 | Complete |
+| **REQ-PART-04** | Enforce capacity limits: assigned eligible-room area $\le 100.0\text{ m}^2$ and assigned nodes $\le 5$ per hub. | SPEC Goal 4 | 4 | Complete |
+| **REQ-PART-05** | Formulate lexicographic objective in CP-SAT/MILP: minimize $H$, then minimize sum of exact closed-ring costs $\sum J^*(Z_k)$, with tertiary tie-breaker minimizing area gap $\Delta A_{\text{gap}}$. | SPEC Goal 4 | 4 | Complete |
 
 ### Phase 5: Direction-Aware Closed-Ring Sequencing & Route Synthesis
 | ID | Requirement | Source | Phase | Status |
@@ -120,11 +120,11 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 | REQ-ROUTE-02 | 3 | `rectilinear_grid.py` | `test_strict_horizontal_vertical_runs` | Complete |
 | REQ-ROUTE-03 | 3 | `astar_rectilinear.py` | `test_slide7_bend_and_reversal_counting` | Complete |
 | REQ-ROUTE-04 | 3 | `cost_matrix.py` | `test_pairwise_cost_tensor_caching` | Complete |
-| REQ-PART-01 | 4 | `hub_candidates.py` | `test_rule6_hub_05m_wall_clearance` | Pending |
-| REQ-PART-02 | 4 | `zone_milp.py` | `test_lower_bound_hub_count` | Pending |
-| REQ-PART-03 | 4 | `zone_milp.py` | `test_door_connected_zone_partitions` | Pending |
-| REQ-PART-04 | 4 | `zone_milp.py` | `test_capacity_constraints_area_and_nodes` | Pending |
-| REQ-PART-05 | 4 | `zone_milp.py` | `test_area_gap_tie_breaker` | Pending |
+| REQ-PART-01 | 4 | `hub_candidates.py` | `test_rule6_hub_05m_wall_clearance` | Complete |
+| REQ-PART-02 | 4 | `zone_milp.py` | `test_lower_bound_hub_count` | Complete |
+| REQ-PART-03 | 4 | `zone_milp.py` | `test_door_connected_zone_partitions` | Complete |
+| REQ-PART-04 | 4 | `zone_milp.py` | `test_capacity_constraints_area_and_nodes` | Complete |
+| REQ-PART-05 | 4 | `zone_milp.py` | `test_area_gap_tie_breaker` | Complete |
 | REQ-RING-01 | 5 | `exact_ring_tsp.py` | `test_direction_aware_held_karp` | Pending |
 | REQ-RING-02 | 5 | `loop_synthesizer.py` | `test_slide5_ring_metrics` | Pending |
 | REQ-RING-03 | 5 | `loop_synthesizer.py` | `test_single_door_parallel_runs_zero_overlap` | Pending |

@@ -7,7 +7,7 @@ updated: 2026-10-15T23:30:00+05:30
 # ROADMAP.md
 
 > **Current Milestone:** V1 Foundation (Core Algorithmic Engine & Reference Checker)  
-> **Current Phase:** Phase 4 — Lexicographic Hub Placement & Contiguous Zone Partitioning  
+> **Current Phase:** Phase 5 — Direction-Aware Closed-Ring Sequencing & Zero-Overlap Route Synthesis  
 > **Status:** ⬜ Ready for Planning
 
 ---
@@ -62,14 +62,14 @@ updated: 2026-10-15T23:30:00+05:30
 ---
 
 ### Phase 4: Lexicographic Hub Placement & Contiguous Zone Partitioning
-**Status:** ⬜ Not Started  
+**Status:** ✅ Complete  
 **Objective:** Formulate and solve the contiguous room partitioning problem over $G_{\text{macro}}$ using CP-SAT/MILP, minimizing hub count $H \ge \max(\lceil \text{area}/100 \rceil, \lceil \text{nodes}/5 \rceil)$, ensuring capacity limits ($\le 100\text{ m}^2, \le 5$ nodes), sampling $0.5\text{ m}$ wall-cleared candidate hub points in host rooms, pricing zones with exact ring costs, and applying the area-gap tie-breaker ($\min \Delta A_{\text{gap}}$).  
 **Depends on:** Phase 3  
 **Requirements:** REQ-PART-01, REQ-PART-02, REQ-PART-03, REQ-PART-04, REQ-PART-05  
 
 **Plans:**
-- [ ] Plan 4.1: `hub_candidates.py` (Wall-eroded polygon sampling, Hanan alignment, node-hub separation)
-- [ ] Plan 4.2: `zone_milp.py` (Contiguous zone partitioning, CP-SAT/MILP formulation, lexicographic tie-breaking)
+- [x] Plan 4.1: `hub_candidates.py` (Wall-eroded polygon sampling, Hanan alignment, node-hub separation)
+- [x] Plan 4.2: `zone_milp.py` (Contiguous zone partitioning, CP-SAT/MILP formulation, lexicographic tie-breaking)
 
 ---
 
@@ -136,7 +136,7 @@ updated: 2026-10-15T23:30:00+05:30
 | **Phase 1** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 2** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 3** | V1 Foundation | ✅ Complete | 2/2 | 100% |
-| **Phase 4** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
+| **Phase 4** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 5** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
 | **Phase 6** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
 | **Phase 7** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |

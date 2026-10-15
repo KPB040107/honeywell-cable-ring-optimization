@@ -7,20 +7,20 @@ updated: 2026-10-15T23:30:00+05:30
 ## Current Position
 
 **Milestone:** V1 Foundation (Phases 1–6)  
-**Phase:** Phase 4 — Lexicographic Hub Placement & Contiguous Zone Partitioning  
-**Status:** ready_for_execution  
-**Plan:** 4-1-PLAN.md, 4-2-PLAN.md (Wave 1 & Wave 2)
+**Phase:** Phase 4 — Lexicographic Hub Placement & Contiguous Zone Partitioning (Completed)  
+**Status:** verified  
+**Plan:** 4-1-PLAN.md, 4-2-PLAN.md (Wave 1 & Wave 2 completed & verified)
 
 ## Last Action
 
-Completed Phase 4 planning following `v2.md` Section 5.4 and GSD guidelines:
-- Created `.gsd/phases/4/RESEARCH.md` detailing Rule 6 hub candidate sampling ($0.505\text{ m}$ buffer), connected zone enumeration, and CP-SAT lexicographic set partitioning.
-- Created `.gsd/phases/4/4-1-PLAN.md` (Wave 1: Contracts, `hub_candidates.py`, candidate unit tests).
-- Created `.gsd/phases/4/4-2-PLAN.md` (Wave 2: `zone_milp.py`, Slide 5 2-hub partition, area-gap tie-breaker, Phase 4 test suite).
+Executed and independently verified Phase 4:
+- Wave 1 (Plan 4.1): Partition contracts (`HubAssignment`, `HubZonePartition`), `hub_candidates.py` sampling candidate points inside eligible rooms $\ge 0.505\text{ m}$ from obstacles and $\ge 0.30\text{ m}$ from fixed nodes.
+- Wave 2 (Plan 4.2): Implemented `zone_milp.py` solving exact CP-SAT contiguous room partitioning, matching Slide 5 lower bound ($H_{\min} = 2$) and exact zone split (`Living, Bed 1, Bed 3` vs `Bed 2, Kitchen, Storage`), with area-gap tie-breaker ($\min \Delta A_{\text{gap}}$).
+- Independent Verification: `gsd-verifier` ran full test suite (`tests/test_phase4_candidates.py`, `tests/test_phase4_partitioning.py`), confirming 6/6 must-haves pass with 0 errors.
 
 ## Next Steps
 
-1. `/execute 4` — Execute Plan 4.1 and Plan 4.2 sequentially to implement Phase 4.
+1. `/plan 5` — Plan Phase 5 (Direction-Aware Closed-Ring Sequencing & Zero-Overlap Route Synthesis).
 
 ## Active Decisions
 
