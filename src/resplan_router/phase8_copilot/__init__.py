@@ -8,10 +8,14 @@ from resplan_router.contracts import (
 from resplan_router.phase8_copilot.candidate_generator import (
     PerturbationCandidateGenerator,
 )
+from resplan_router.phase8_copilot.wall_optimizer import (
+    ArchitecturalCoPilot,
+)
 
 __all__ = [
     "ProposalType",
     "StructuralProposal",
     "CoPilotReport",
     "PerturbationCandidateGenerator",
+    "ArchitecturalCoPilot",
 ]
