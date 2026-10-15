@@ -32,10 +32,10 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 ### Phase 3: Obstacle-Aware Axis-Aligned Micro-Routing & Cost Tensor
 | ID | Requirement | Source | Phase | Status |
 |----|-------------|--------|-------|--------|
-| **REQ-ROUTE-01** | Construct an axis-aligned Hanan grid inside $\mathcal{F}$ induced by fixed nodes, portal tracks, candidate hub positions, offset bypass lines ($\pm 0.04\text{ m}$), and wall-clearance contours. | SPEC Goal 3 | 3 | Pending |
-| **REQ-ROUTE-02** | Filter grid edges to ensure all segments are strictly horizontal or vertical and lie entirely inside $\mathcal{F}$ with zero obstacle intersections. | SPEC Goal 3 | 3 | Pending |
-| **REQ-ROUTE-03** | Implement direction-augmented state-space $(v, d_{\text{in}})$ Dijkstra/$A^*$ algorithm, where direction changes incur $+0.5$ bend cost ($90^\circ$ turns and $180^\circ$ reversals). | SPEC Goal 3 | 3 | Pending |
-| **REQ-ROUTE-04** | Precompute and cache the directional pairwise cost tensor $C(u, d_{\text{start}} \to v, d_{\text{end}})$ between all nodes, portals, and candidate hub sites. | SPEC Goal 3 | 3 | Pending |
+| **REQ-ROUTE-01** | Construct an axis-aligned Hanan grid inside $\mathcal{F}$ induced by fixed nodes, portal tracks, candidate hub positions, offset bypass lines ($\pm 0.04\text{ m}$), and wall-clearance contours. | SPEC Goal 3 | 3 | Complete |
+| **REQ-ROUTE-02** | Filter grid edges to ensure all segments are strictly horizontal or vertical and lie entirely inside $\mathcal{F}$ with zero obstacle intersections. | SPEC Goal 3 | 3 | Complete |
+| **REQ-ROUTE-03** | Implement direction-augmented state-space $(v, d_{\text{in}})$ Dijkstra/$A^*$ algorithm, where direction changes incur $+0.5$ bend cost ($90^\circ$ turns and $180^\circ$ reversals). | SPEC Goal 3 | 3 | Complete |
+| **REQ-ROUTE-04** | Precompute and cache the directional pairwise cost tensor $C(u, d_{\text{start}} \to v, d_{\text{end}})$ between all nodes, portals, and candidate hub sites. | SPEC Goal 3 | 3 | Complete |
 
 ### Phase 4: Lexicographic Hub Placement & Contiguous Zone Partitioning
 | ID | Requirement | Source | Phase | Status |
@@ -116,10 +116,10 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 | REQ-TOPO-02 | 2 | `portal_extractor.py` | `test_open_passage_detection` | Complete |
 | REQ-TOPO-03 | 2 | `macro_graph.py` | `test_window_wall_entrance_rejection` | Complete |
 | REQ-TOPO-04 | 2 | `macro_graph.py` | `test_parallel_door_lanes_exceed_1mm_tolerance` | Complete |
-| REQ-ROUTE-01 | 3 | `rectilinear_grid.py` | `test_hanan_grid_construction` | Pending |
-| REQ-ROUTE-02 | 3 | `rectilinear_grid.py` | `test_strict_horizontal_vertical_runs` | Pending |
-| REQ-ROUTE-03 | 3 | `astar_rectilinear.py` | `test_slide7_bend_and_reversal_counting` | Pending |
-| REQ-ROUTE-04 | 3 | `cost_matrix.py` | `test_pairwise_cost_tensor_caching` | Pending |
+| REQ-ROUTE-01 | 3 | `rectilinear_grid.py` | `test_hanan_grid_construction` | Complete |
+| REQ-ROUTE-02 | 3 | `rectilinear_grid.py` | `test_strict_horizontal_vertical_runs` | Complete |
+| REQ-ROUTE-03 | 3 | `astar_rectilinear.py` | `test_slide7_bend_and_reversal_counting` | Complete |
+| REQ-ROUTE-04 | 3 | `cost_matrix.py` | `test_pairwise_cost_tensor_caching` | Complete |
 | REQ-PART-01 | 4 | `hub_candidates.py` | `test_rule6_hub_05m_wall_clearance` | Pending |
 | REQ-PART-02 | 4 | `zone_milp.py` | `test_lower_bound_hub_count` | Pending |
 | REQ-PART-03 | 4 | `zone_milp.py` | `test_door_connected_zone_partitions` | Pending |
