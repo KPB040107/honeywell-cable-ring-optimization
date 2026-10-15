@@ -12,7 +12,7 @@ from typing import Any, Dict, Optional
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -86,9 +86,27 @@ def health_check() -> Dict[str, str]:
 
 
 @app.get("/api/state")
-def get_current_state() -> Dict[str, Any]:
+def get_current_state(include_bim: bool = False) -> Dict[str, Any]:
     """Fetch current floor plan state, metrics, halos, hubs, and routes."""
-    return engine.get_state()
+    return engine.get_state(include_bim=include_bim)
+
+
+@app.get("/api/bim/scene")
+def get_bim_scene_endpoint() -> Dict[str, Any]:
+    """Fetch current 3D Building Information Modeling (BIM) scene for client-side Three.js rendering."""
+    scene = engine.get_bim_scene()
+    return scene.model_dump()
+
+
+@app.get("/api/bim/export/obj")
+def export_bim_obj_endpoint() -> Response:
+    """Download formatted Wavefront .obj architectural model file."""
+    obj_data = engine.export_obj()
+    return Response(
+        content=obj_data,
+        media_type="text/plain",
+        headers={"Content-Disposition": 'attachment; filename="resplan_model.obj"'},
+    )
 
 
 @app.post("/api/reset")
@@ -311,8 +329,16 @@ async def websocket_co_design(websocket: WebSocket) -> None:
                 await websocket.send_json(state)
 
             elif action == "get_state":
-                state = engine.get_state()
+                include_bim = bool(data.get("include_bim", False))
+                state = engine.get_state(include_bim=include_bim)
                 await websocket.send_json(state)
+
+            elif action == "get_bim_scene":
+                scene = engine.get_bim_scene()
+                await websocket.send_json({
+                    "type": "bim_scene_update",
+                    "scene": scene.model_dump(),
+                })
 
             elif action == "wire_cut":
                 hub_id = str(data.get("hub_id", ""))

@@ -18,6 +18,7 @@ import shapely
 from shapely.geometry import LineString, Point, Polygon
 
 from resplan_router.contracts import (
+    BIM3DScene,
     ClassASimulationReport,
     CompassDirection,
     CompletedHubRing,
@@ -63,6 +64,7 @@ from resplan_router.phase6_output.json_exporter import export_slide8_json
 from resplan_router.phase7_interactive.halo_tracker import ClearanceHaloTracker
 from resplan_router.phase8_copilot.wall_optimizer import ArchitecturalCoPilot
 from resplan_router.phase9_survivability.circuit_simulator import ClassACircuitSimulator
+from resplan_router.phase10_bim.bim_generator import BIM3DGenerator
 
 
 def _find_fixture_path() -> Path:
@@ -90,6 +92,9 @@ class IncrementalCoDesignEngine:
     ) -> None:
         self.halo_tracker = ClearanceHaloTracker()
         self.circuit_simulator = ClassACircuitSimulator()
+        self.bim_generator = BIM3DGenerator()
+        self._cached_bim_scene: Optional[BIM3DScene] = None
+        self._raw_data: Optional[Dict[str, Any]] = None
         self._active_cut: Optional[ClassASimulationReport] = None
         self._active_proposals: Dict[str, StructuralProposal] = {}
         self._raw_doors: Optional[Sequence[Any]] = None
@@ -119,9 +124,11 @@ class IncrementalCoDesignEngine:
         with open(fixture_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
+        self._raw_data = data
         self._raw_doors = data.get("doors")
         self._raw_entrance = data.get("front_door")
         self._active_proposals = {}
+        self._cached_bim_scene = None
         self.plan = parse_floor_plan(data)
         portals = extract_all_portals(self.plan, self._raw_doors, self._raw_entrance)
         self.topology = MacroTopologyGraph.build_topology(self.plan, portals)
@@ -167,6 +174,7 @@ class IncrementalCoDesignEngine:
         self._load_slide5_baseline()
         self._active_proposals = {}
         self._active_cut = None
+        self._cached_bim_scene = None
         self._last_report = FloorPlanChecker.evaluate(
             self.plan, self.bundle, topology=self.topology
         )
@@ -185,6 +193,7 @@ class IncrementalCoDesignEngine:
     ) -> Tuple[Dict[str, Any], float]:
         """Sever cable leg near (cut_x, cut_y) and compute bidirectional Class A survivability."""
         t0 = time.perf_counter()
+        self._cached_bim_scene = None
         target_ring: Optional[CompletedHubRing] = None
         if hub_id:
             for ring in self.bundle.hub_rings:
@@ -225,6 +234,7 @@ class IncrementalCoDesignEngine:
         """Clear active wire cut, restoring full closed-loop circuit topology."""
         t0 = time.perf_counter()
         self._active_cut = None
+        self._cached_bim_scene = None
         latency_ms = (time.perf_counter() - t0) * 1000
         return self.get_state(latency_ms=latency_ms), latency_ms
 
@@ -441,6 +451,7 @@ class IncrementalCoDesignEngine:
         # 3. Evaluate compliance
         report = FloorPlanChecker.evaluate(self.plan, self.bundle, topology=self.topology)
         self._last_report = report
+        self._cached_bim_scene = None
 
         latency_ms = (time.perf_counter() - t0) * 1000
         return self.get_state(latency_ms=latency_ms, report=report), latency_ms
@@ -585,6 +596,7 @@ class IncrementalCoDesignEngine:
         # 3. Evaluate compliance
         report = FloorPlanChecker.evaluate(self.plan, self.bundle, topology=self.topology)
         self._last_report = report
+        self._cached_bim_scene = None
 
         latency_ms = (time.perf_counter() - t0) * 1000
         return self.get_state(latency_ms=latency_ms, report=report), latency_ms
@@ -674,6 +686,7 @@ class IncrementalCoDesignEngine:
 
         report = FloorPlanChecker.evaluate(self.plan, self.bundle, topology=self.topology)
         self._last_report = report
+        self._cached_bim_scene = None
 
         latency_ms = (time.perf_counter() - t0) * 1000
         return self.get_state(latency_ms=latency_ms, report=report), latency_ms
@@ -682,6 +695,7 @@ class IncrementalCoDesignEngine:
         self,
         latency_ms: float = 0.0,
         report: Optional[EvaluationReport] = None,
+        include_bim: bool = False,
     ) -> Dict[str, Any]:
         """Assemble current state payload for WebSockets broadcast and HUD display."""
         rep = report or self._last_report
@@ -822,7 +836,37 @@ class IncrementalCoDesignEngine:
         else:
             state_payload["survivability_report"] = None
 
+        if include_bim:
+            state_payload["bim_scene"] = self.get_bim_scene().model_dump()
+
         return state_payload
+
+    def get_bim_scene(self) -> BIM3DScene:
+        """Generate or return cached 3D Building Information Modeling (BIM) scene.
+
+        Returns:
+            BIM3DScene: Complete 3D architectural and electrical mesh scene.
+        """
+        if self._cached_bim_scene is None:
+            raw_data = getattr(self, "_raw_data", None)
+            portals = self.topology.portals if self.topology else None
+            self._cached_bim_scene = self.bim_generator.generate_3d_scene(
+                plan=self.plan,
+                partition=self.partition,
+                bundle=self.bundle,
+                raw_json=raw_data,
+                portals=portals,
+            )
+        return self._cached_bim_scene
+
+    def export_obj(self) -> str:
+        """Export current 3D architectural and electrical scene to Wavefront OBJ format.
+
+        Returns:
+            str: Wavefront OBJ file content.
+        """
+        scene = self.get_bim_scene()
+        return self.bim_generator.export_wavefront_obj(scene)
 
     def get_copilot_recommendations(
         self,
@@ -919,6 +963,7 @@ class IncrementalCoDesignEngine:
 
         # Clear stale proposals cache
         self._active_proposals = {}
+        self._cached_bim_scene = None
 
         latency_ms = (time.perf_counter() - t0) * 1000
         return self.get_state(latency_ms=latency_ms, report=report), latency_ms
