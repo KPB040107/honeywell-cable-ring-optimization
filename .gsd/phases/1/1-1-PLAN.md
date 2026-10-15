@@ -12,9 +12,9 @@ Establish the Python 3.12 development environment, project dependencies, configu
 
 <tasks>
 <task id="1">
-<title>Create pyproject.toml and virtual environment</title>
+<title>Create pyproject.toml and isolated virtual environment</title>
 <description>
-Define pyproject.toml with Python >= 3.12 and pinned dependencies:
+Define pyproject.toml with Python >= 3.12 and explicit pinned/constrained dependencies:
 - pydantic >= 2.6.0
 - shapely >= 2.0.2
 - networkx >= 3.2.1
@@ -25,7 +25,7 @@ Define pyproject.toml with Python >= 3.12 and pinned dependencies:
 - pyyaml >= 6.0.1
 - pytest >= 8.0.0
 
-Create the virtual environment using /opt/homebrew/bin/python3.12 at .venv and install the dependencies in editable mode. Verify all imports succeed.
+Create the virtual environment using `/opt/homebrew/bin/python3.12` at `.venv` and install the package dependencies in editable mode (`pip install -e .`). Verify that `.venv/` and output directories are listed in `.gitignore`.
 </description>
 <verification>
 .venv/bin/python -c "import pydantic, shapely, networkx, ortools, numpy, scipy, matplotlib, yaml, pytest; print('All core dependencies imported successfully')"
@@ -36,7 +36,7 @@ Create the virtual environment using /opt/homebrew/bin/python3.12 at .venv and i
 <title>Implement configuration system and profiles</title>
 <description>
 Create `configs/strict_v1.yaml` (default: max_area=100.0, max_nodes=5, eligible_rooms=[living, bedroom, kitchen, storage], excluded_rooms=[bathroom, balcony, parking, pool, stair, garden, land]) and `configs/ia_extended.yaml` (max_area=100.0, max_nodes=20).
-Create `src/resplan_router/config.py` using Pydantic BaseSettings / BaseModel to load and validate these YAML configurations.
+Create `src/resplan_router/config.py` using Pydantic BaseModel to load, validate, and access these YAML configurations deterministically.
 </description>
 <verification>
 .venv/bin/python -c "from resplan_router.config import load_config; cfg = load_config('configs/strict_v1.yaml'); assert cfg.max_nodes_per_hub == 5 and cfg.max_area_per_hub == 100.0; print('Config loaded successfully')"
@@ -62,7 +62,7 @@ Ensure clean JSON serialization and deserialization roundtrips.
 </tasks>
 
 <success_criteria>
-- Virtual environment `.venv` active with Python 3.12 and all dependencies.
+- Virtual environment `.venv` active with Python 3.12 and all dependencies installed without global pollution.
 - `strict_v1.yaml` and `ia_extended.yaml` functional.
 - `contracts.py` defined and verified with roundtrip serialization.
 </success_criteria>
