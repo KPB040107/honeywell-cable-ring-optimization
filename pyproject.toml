@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "resplan-router"
+version = "0.1.0"
+description = "ResPlan Cable Ring Router — Autonomous Cable Ring Layout & Optimization"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.0",
+    "shapely>=2.0",
+    "networkx>=3.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "ortools>=9.6",
+    "matplotlib>=3.7",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

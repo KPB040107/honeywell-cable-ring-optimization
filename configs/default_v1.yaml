@@ -1,0 +1,18 @@
+# Default configuration for ResPlan Cable Ring Router (V1 Foundation)
+# Reference: v2.md Section 2.1, 2.3 & configs/default_v1.yaml
+
+# Hub capacity constraints
+max_area_m2: 100.0
+max_nodes_per_hub: 5
+
+# Spatial and geometric tolerances
+wall_clearance_m: 0.5
+checker_tolerance_m: 0.001
+min_room_area_m2: 2.0
+doorway_lane_offset_m: 0.02
+
+# Scoring weights (J = weight_length * L + weight_crossing * X + weight_overlap * O + weight_bend * B)
+weight_length: 1.0
+weight_crossing: 5.0
+weight_overlap: 1.0
+weight_bend: 0.5
