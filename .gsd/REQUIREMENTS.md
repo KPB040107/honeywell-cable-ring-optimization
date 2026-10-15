@@ -49,10 +49,10 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 ### Phase 5: Direction-Aware Closed-Ring Sequencing & Route Synthesis
 | ID | Requirement | Source | Phase | Status |
 |----|-------------|--------|-------|--------|
-| **REQ-RING-01** | Implement direction-aware Held-Karp dynamic programming for $m \le 5$ nodes, tracking node turns and wrap-around hub arrival/departure bend count. | SPEC Goal 5 | 5 | Pending |
-| **REQ-RING-02** | Synthesize sequential conflict-free rectilinear polylines for the ring sequence $H_k \to N_1 \to \dots \to N_m \to H_k$ using the zone's rectilinear grid. | SPEC Goal 5 | 5 | Pending |
-| **REQ-RING-03** | Route out-and-back runs in single-door leaf rooms along Parallel Door Lanes A and B, achieving $O = 0.0\text{ m}$ and $X = 0$. | SPEC Goal 5 | 5 | Pending |
-| **REQ-RING-04** | Simplify polyline representations by merging consecutive collinear segments, ensuring each internal vertex represents an authentic $90^\circ$ turn. | SPEC Goal 5 | 5 | Pending |
+| **REQ-RING-01** | Implement direction-aware Held-Karp dynamic programming for $m \le 5$ nodes, tracking node turns and wrap-around hub arrival/departure bend count. | SPEC Goal 5 | 5 | Complete |
+| **REQ-RING-02** | Synthesize sequential conflict-free rectilinear polylines for the ring sequence $H_k \to N_1 \to \dots \to N_m \to H_k$ using the zone's rectilinear grid. | SPEC Goal 5 | 5 | Complete |
+| **REQ-RING-03** | Route out-and-back runs in single-door leaf rooms along Parallel Door Lanes A and B, achieving $O = 0.0\text{ m}$ and $X = 0$. | SPEC Goal 5 | 5 | Complete |
+| **REQ-RING-04** | Simplify polyline representations by merging consecutive collinear segments, ensuring each internal vertex represents an authentic $90^\circ$ turn. | SPEC Goal 5 | 5 | Complete |
 
 ### Phase 6: Independent Evaluation Checker, JSON Export & Visualization
 | ID | Requirement | Source | Phase | Status |

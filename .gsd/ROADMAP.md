@@ -74,14 +74,14 @@ updated: 2026-10-15T23:30:00+05:30
 ---
 
 ### Phase 5: Direction-Aware Closed-Ring Sequencing & Zero-Overlap Route Synthesis
-**Status:** ⬜ Not Started  
+**Status:** ✅ Complete  
 **Objective:** Determine the optimal closed node sequence $H_k \to N_1 \to \dots \to N_m \to H_k$ for each hub using direction-aware Held-Karp dynamic programming ($m \le 5$), tracking turns at nodes and hubs, and synthesize physical polylines using parallel door lanes to guarantee zero overlap ($O = 0$) and zero crossings ($X = 0$).  
 **Depends on:** Phase 4  
 **Requirements:** REQ-RING-01, REQ-RING-02, REQ-RING-03, REQ-RING-04  
 
 **Plans:**
-- [ ] Plan 5.1: `exact_ring_tsp.py` (Direction-aware Held-Karp DP for $m \le 5$ with wrap-around hub bend tracking)
-- [ ] Plan 5.2: `loop_synthesizer.py` (Conflict-free polyline routing, dynamic crossing penalties, collinear segment simplification)
+- [x] Plan 5.1: `exact_ring_tsp.py` (Direction-aware Held-Karp DP for $m \le 5$ with wrap-around hub bend tracking)
+- [x] Plan 5.2: `loop_synthesizer.py` (Conflict-free polyline routing, dynamic crossing penalties, collinear segment simplification)
 
 ---
 
@@ -137,7 +137,7 @@ updated: 2026-10-15T23:30:00+05:30
 | **Phase 2** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 3** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 4** | V1 Foundation | ✅ Complete | 2/2 | 100% |
-| **Phase 5** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
+| **Phase 5** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 6** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
 | **Phase 7** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
 | **Phase 8** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
