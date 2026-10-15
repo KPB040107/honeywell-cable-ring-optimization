@@ -264,3 +264,133 @@ class PortalTopologyGraph(BaseModel):
         description="List of room IDs having degree 1 in topology (single-door leaf rooms)",
     )
 
+
+class CompassDirection(str, Enum):
+    """Discrete cardinal compass direction for axis-aligned micro-routing and bend accounting."""
+
+    NORTH = "N"
+    SOUTH = "S"
+    EAST = "E"
+    WEST = "W"
+
+    @classmethod
+    def from_delta(cls, dx: float, dy: float, tolerance: float = 1e-4) -> "CompassDirection":
+        """Determine cardinal direction from displacement delta (dx, dy).
+
+        Raises ValueError if displacement is zero or not strictly axis-aligned.
+        """
+        abs_dx = abs(dx)
+        abs_dy = abs(dy)
+        if abs_dx < tolerance and abs_dy < tolerance:
+            raise ValueError(f"Zero displacement (dx={dx}, dy={dy}) has no direction")
+        if abs_dx >= tolerance and abs_dy >= tolerance:
+            raise ValueError(f"Non-rectilinear displacement: dx={dx}, dy={dy}")
+        if abs_dx >= tolerance:
+            return cls.EAST if dx > 0 else cls.WEST
+        else:
+            return cls.NORTH if dy > 0 else cls.SOUTH
+
+    def unit_vector(self) -> tuple[float, float]:
+        """Return unit vector (dx, dy) for this compass direction."""
+        vectors = {
+            CompassDirection.NORTH: (0.0, 1.0),
+            CompassDirection.SOUTH: (0.0, -1.0),
+            CompassDirection.EAST: (1.0, 0.0),
+            CompassDirection.WEST: (-1.0, 0.0),
+        }
+        return vectors[self]
+
+    def opposite(self) -> "CompassDirection":
+        """Return the opposite 180-degree compass direction."""
+        opposites = {
+            CompassDirection.NORTH: CompassDirection.SOUTH,
+            CompassDirection.SOUTH: CompassDirection.NORTH,
+            CompassDirection.EAST: CompassDirection.WEST,
+            CompassDirection.WEST: CompassDirection.EAST,
+        }
+        return opposites[self]
+
+
+class PairRouteMetric(BaseModel):
+    """Optimal obstacle-aware rectilinear route metric between a pair of endpoints.
+
+    Includes exact entry/exit directions, cable length L, bend count B,
+    composite cost J = L + 0.5 * B, and the axis-aligned polyline.
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    start_id: str = Field(description="Starting terminal identifier (node or hub candidate ID)")
+    end_id: str = Field(description="Ending terminal identifier (node or hub candidate ID)")
+    start_dir: Optional[CompassDirection] = Field(
+        default=None,
+        description="Departure direction from start terminal",
+    )
+    end_dir: Optional[CompassDirection] = Field(
+        default=None,
+        description="Arrival direction at end terminal",
+    )
+    length_m: float = Field(
+        description="Axis-aligned cable length in metres",
+        ge=0.0,
+    )
+    bends: int = Field(
+        description="Number of 90-degree turns and 180-degree reversals",
+        ge=0,
+    )
+    cost_J: float = Field(
+        description="Official checker cost J = L + 0.5 * B",
+        ge=0.0,
+    )
+    polyline: list[Point2D] = Field(
+        default_factory=list,
+        description="Ordered sequence of axis-aligned vertices from start to end",
+    )
+
+    @field_validator("polyline")
+    @classmethod
+    def validate_axis_aligned_polyline(cls, points: list[Point2D]) -> list[Point2D]:
+        """Verify that every segment in polyline is strictly horizontal or vertical."""
+        if len(points) < 2:
+            return points
+        for i in range(len(points) - 1):
+            p1 = points[i]
+            p2 = points[i + 1]
+            dx = abs(p2.x - p1.x)
+            dy = abs(p2.y - p1.y)
+            if dx > 1e-4 and dy > 1e-4:
+                raise ValueError(
+                    f"Segment {i} -> {i+1} ({p1.coords} -> {p2.coords}) is not axis-aligned: "
+                    f"dx={dx:.5f}, dy={dy:.5f}"
+                )
+        return points
+
+
+class RectilinearRoutingIndex(BaseModel):
+    """Directional pairwise routing tensor cache and grid metadata."""
+
+    model_config = ConfigDict(frozen=True)
+
+    plan_id: str = Field(description="Floor plan identifier")
+    grid_node_count: int = Field(description="Number of vertices in the Hanan routing grid", ge=0)
+    grid_edge_count: int = Field(description="Number of valid free-space edges in the Hanan grid", ge=0)
+    pair_metrics: dict[str, PairRouteMetric] = Field(
+        default_factory=dict,
+        description="Lookup table keyed by '{start}_{end}_{dir_in}_{dir_out}' or '{start}_{end}'",
+    )
+
+    def get_metric(
+        self,
+        start_id: str,
+        end_id: str,
+        start_dir: Optional[CompassDirection] = None,
+        end_dir: Optional[CompassDirection] = None,
+    ) -> Optional[PairRouteMetric]:
+        """Retrieve precomputed PairRouteMetric for given endpoint and direction pair."""
+        key = f"{start_id}_{end_id}_{start_dir.value if start_dir else '*'}_{end_dir.value if end_dir else '*'}"
+        if key in self.pair_metrics:
+            return self.pair_metrics[key]
+        fallback_key = f"{start_id}_{end_id}"
+        return self.pair_metrics.get(fallback_key)
+
+
