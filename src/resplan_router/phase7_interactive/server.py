@@ -104,6 +104,72 @@ def drag_hub_http(req: HubDragRequest) -> Dict[str, Any]:
     return state
 
 
+class MutationRequest(BaseModel):
+    action: str
+    node_id: Optional[str] = None
+    hub_id: Optional[str] = None
+    door_id: Optional[str] = None
+    room_id: Optional[str] = None
+    x: Optional[float] = None
+    y: Optional[float] = None
+    offset_m: Optional[float] = 0.0
+    delta_area_m2: Optional[float] = 0.0
+
+
+@app.post("/api/mutate")
+def mutate_http(req: MutationRequest) -> Any:
+    """Execute programmatic floor plan mutation via HTTP REST."""
+    action = req.action.lower()
+    if action == "drag_node":
+        if req.node_id is None or req.x is None or req.y is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "drag_node requires node_id, x, and y"},
+            )
+        state, _ = engine.update_node_position(req.node_id, req.x, req.y)
+        return state
+
+    elif action == "drag_hub":
+        if req.hub_id is None or req.x is None or req.y is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "drag_hub requires hub_id, x, and y"},
+            )
+        state, _ = engine.update_hub_position(req.hub_id, req.x, req.y)
+        return state
+
+    elif action == "slide_door":
+        if req.door_id is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "slide_door requires door_id"},
+            )
+        state, _ = engine.slide_door(req.door_id, req.offset_m or 0.0)
+        return state
+
+    elif action == "shift_wall":
+        if req.room_id is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "shift_wall requires room_id"},
+            )
+        state, _ = engine.shift_room_boundary(req.room_id, req.delta_area_m2 or 0.0)
+        return state
+
+    elif action == "reset":
+        state, _ = engine.reset()
+        return state
+
+    elif action == "get_state":
+        return engine.get_state()
+
+    else:
+        return JSONResponse(
+            status_code=400,
+            content={"error": f"Unsupported mutation action '{req.action}'"},
+        )
+
+
 @app.websocket("/ws/co-design")
 async def websocket_co_design(websocket: WebSocket) -> None:
     """Sub-50 ms bidirectional WebSocket channel for live interactive co-design canvas.

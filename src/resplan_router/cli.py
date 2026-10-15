@@ -81,9 +81,28 @@ def main(argv: Optional[list[str]] = None) -> int:
     parser.add_argument(
         "-i",
         "--input",
-        required=True,
+        required=False,
+        default=None,
         type=str,
         help="Path to input floor plan JSON file",
+    )
+    parser.add_argument(
+        "--serve",
+        action="store_true",
+        default=False,
+        help="Launch interactive Co-Design Studio web server with live reviewer HUD",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port to run the Co-Design Studio server on (default: 8000)",
+    )
+    parser.add_argument(
+        "--host",
+        type=str,
+        default="127.0.0.1",
+        help="Host interface to bind the Co-Design Studio server (default: 127.0.0.1)",
     )
     parser.add_argument(
         "-o",
@@ -120,6 +139,23 @@ def main(argv: Optional[list[str]] = None) -> int:
     )
 
     args = parser.parse_args(argv)
+
+    if args.serve:
+        import uvicorn
+        from resplan_router.phase7_interactive.server import app, engine
+        url = f"http://{args.host}:{args.port}"
+        print("=" * 80)
+        print(f"{'RESPLAN CO-DESIGN STUDIO LAUNCHER':^80}")
+        print("=" * 80)
+        print(f"Interactive Architectural Studio URL: {url}")
+        print(f"Active Floor Plan: {engine.plan.plan_id if engine.plan else 'Slide 5 Baseline'}")
+        print("Press Ctrl+C to stop the server.")
+        print("=" * 80)
+        uvicorn.run(app, host=args.host, port=args.port, log_level="info")
+        return 0
+
+    if not args.input:
+        parser.error("the following arguments are required: -i/--input (unless --serve is specified)")
 
     input_path = Path(args.input)
     if not input_path.is_file():
