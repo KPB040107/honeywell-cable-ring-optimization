@@ -1,9 +1,13 @@
 import math
 import logging
 from typing import Any, Dict, Tuple
-from resplan_router.phase1_ingestion.parser import AmbiguousCoordinateUnitError
 
 logger = logging.getLogger(__name__)
+
+
+class AmbiguousCoordinateUnitError(Exception):
+    """Raised when the coordinate unit cannot be verified deterministically."""
+    pass
 
 
 def compute_metric_scale_factor(data: Dict[str, Any], raw_room_area: float) -> Tuple[float, str]:
@@ -14,7 +18,7 @@ def compute_metric_scale_factor(data: Dict[str, Any], raw_room_area: float) -> T
     coord_unit = data.get("coordinate_unit")
     if not coord_unit or coord_unit not in {"meter", "pixel"}:
         raise AmbiguousCoordinateUnitError(
-            f"Missing or invalid coordinate_unit: '{coord_unit}'. Must be 'meter' or 'pixel'."
+            f"Missing or invalid coordinate_unit: '{coord_unit}'. Must be explicitly 'meter' or 'pixel'."
         )
 
     if coord_unit == "meter":

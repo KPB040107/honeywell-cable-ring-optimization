@@ -4,12 +4,18 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 import shapely
 from shapely import MultiPolygon, Polygon
+from shapely.affinity import scale as shapely_scale
 from shapely.wkt import loads as wkt_loads
 
 from resplan_router.contracts import DoorEntity, FloorPlanModel, RoomEntity
+from resplan_router.phase1_ingestion.scale_normalizer import (
+    AmbiguousCoordinateUnitError,
+    compute_metric_scale_factor,
+)
 
 logger = logging.getLogger(__name__)
 
+SUPPORTED_SCHEMA_VERSIONS = {"resplan_wkt_v1", "resplan_geo_v1"}
 ELIGIBLE_CATEGORIES = {"living", "bedroom", "kitchen", "storage"}
 EXCLUDED_CATEGORIES = {"bathroom", "balcony", "parking", "pool", "stair", "garden", "land"}
 TRANSIT_CATEGORIES = {"corridor", "hallway", "passage"}
@@ -17,11 +23,6 @@ TRANSIT_CATEGORIES = {"corridor", "hallway", "passage"}
 
 class ResPlanSchemaValidationError(Exception):
     """Raised when an input document does not conform to supported ResPlan schemas."""
-    pass
-
-
-class AmbiguousCoordinateUnitError(Exception):
-    """Raised when the coordinate unit cannot be verified deterministically."""
     pass
 
 
@@ -99,11 +100,17 @@ def parse_geometry_input(val: Any) -> Union[Polygon, MultiPolygon]:
     raise ResPlanSchemaValidationError(f"Unsupported geometry type: {type(val)}")
 
 
+def apply_metric_scaling(geom: Union[Polygon, MultiPolygon], scale_factor: float) -> Union[Polygon, MultiPolygon]:
+    """Scales a Shapely geometry consistently across all coordinates."""
+    if geom.is_empty or abs(scale_factor - 1.0) < 1e-6:
+        return geom
+    return shapely_scale(geom, xfact=scale_factor, yfact=scale_factor, origin=(0, 0))
+
+
 def parse_resplan_json(
-    file_path_or_dict: Union[str, Path, Dict[str, Any]],
-    scale_factor: float = 1.0
+    file_path_or_dict: Union[str, Path, Dict[str, Any]]
 ) -> FloorPlanModel:
-    """Ingests and validates a ResPlan floor plan document into a FloorPlanModel."""
+    """Ingests, validates, and normalizes a ResPlan floor plan document into a FloorPlanModel."""
     if isinstance(file_path_or_dict, (str, Path)):
         p = Path(file_path_or_dict)
         if not p.is_file():
@@ -120,6 +127,12 @@ def parse_resplan_json(
         raise ResPlanSchemaValidationError("Missing required top-level field: 'id'")
     plan_id = str(data["id"])
 
+    schema_version = data.get("schema_version")
+    if schema_version and schema_version not in SUPPORTED_SCHEMA_VERSIONS:
+        raise ResPlanSchemaValidationError(
+            f"Unsupported schema_version: '{schema_version}'. Supported versions: {sorted(SUPPORTED_SCHEMA_VERSIONS)}"
+        )
+
     # Explicit unit validation
     coord_unit = data.get("coordinate_unit")
     if not coord_unit or coord_unit not in {"meter", "pixel"}:
@@ -128,44 +141,56 @@ def parse_resplan_json(
             "Must be explicitly 'meter' or 'pixel'."
         )
 
-    # 2. Extract and Repair Rooms
-    rooms: List[RoomEntity] = []
+    # 2. Compute Raw Areas to determine Scale Factor
     semantic_room_keys = list(ELIGIBLE_CATEGORIES) + list(EXCLUDED_CATEGORIES) + list(TRANSIT_CATEGORIES)
-    
+    raw_room_polys: List[Tuple[str, Polygon]] = []
+    total_raw_room_area = 0.0
+
     for category in semantic_room_keys:
         if category not in data:
             continue
         raw_geom = parse_geometry_input(data[category])
         if raw_geom.is_empty:
             continue
-        
         repaired = repair_geometry_if_needed(raw_geom, f"raw_{category}")
         polys = decompose_multipolygon(repaired)
-        
-        for idx, poly in enumerate(polys):
-            room_id = f"{category}_{idx}"
-            is_elig = category in ELIGIBLE_CATEGORIES
-            is_trans = category in TRANSIT_CATEGORIES
-            rooms.append(
-                RoomEntity(
-                    room_id=room_id,
-                    category=category,
-                    polygon_wkt=poly.wkt,
-                    area_m2=round(poly.area * (scale_factor ** 2), 4),
-                    is_eligible=is_elig,
-                    is_transit=is_trans,
-                )
-            )
+        for poly in polys:
+            raw_room_polys.append((category, poly))
+            total_raw_room_area += poly.area
 
-    if not rooms:
+    if not raw_room_polys:
         raise ResPlanSchemaValidationError(f"No valid rooms found in plan '{plan_id}'")
 
-    # 3. Extract Doors and Front Doors
+    scale_factor, scale_msg = compute_metric_scale_factor(data, total_raw_room_area)
+
+    # 3. Apply Scaling to All Room Geometries
+    rooms: List[RoomEntity] = []
+    category_counts: Dict[str, int] = {}
+    for category, poly in raw_room_polys:
+        scaled_poly = apply_metric_scaling(poly, scale_factor)
+        idx = category_counts.get(category, 0)
+        category_counts[category] = idx + 1
+        room_id = f"{category}_{idx}"
+        is_elig = category in ELIGIBLE_CATEGORIES
+        is_trans = category in TRANSIT_CATEGORIES
+        rooms.append(
+            RoomEntity(
+                room_id=room_id,
+                category=category,
+                polygon_wkt=scaled_poly.wkt,
+                area_m2=round(scaled_poly.area, 4),
+                is_eligible=is_elig,
+                is_transit=is_trans,
+            )
+        )
+
+    # 4. Extract and Scale Doors and Front Doors
     doors: List[DoorEntity] = []
     if "door" in data:
         door_geom = parse_geometry_input(data["door"])
         if not door_geom.is_empty:
-            door_polys = decompose_multipolygon(door_geom, min_area_m2=0.01)
+            scaled_doors = apply_metric_scaling(door_geom, scale_factor)
+            door_polys = decompose_multipolygon(scaled_doors, min_area_m2=0.005)
             for d_idx, d_poly in enumerate(door_polys):
                 doors.append(
                     DoorEntity(
@@ -178,7 +203,8 @@ def parse_resplan_json(
     if "front_door" in data:
         fd_geom = parse_geometry_input(data["front_door"])
         if not fd_geom.is_empty:
-            fd_polys = decompose_multipolygon(fd_geom, min_area_m2=0.01)
+            scaled_fd = apply_metric_scaling(fd_geom, scale_factor)
+            fd_polys = decompose_multipolygon(scaled_fd, min_area_m2=0.005)
             for fd_idx, fd_poly in enumerate(fd_polys):
                 doors.append(
                     DoorEntity(
@@ -188,13 +214,14 @@ def parse_resplan_json(
                     )
                 )
 
-    # 4. Obstacle Mask (wall + window + front_door)
+    # 5. Extract, Scale, and Build Obstacle Mask (wall + window + front_door)
     obstacle_geoms: List[Union[Polygon, MultiPolygon]] = []
     for obst_key in ["wall", "window", "front_door"]:
         if obst_key in data:
             g = parse_geometry_input(data[obst_key])
             if not g.is_empty:
-                obstacle_geoms.append(g)
+                scaled_obst = apply_metric_scaling(g, scale_factor)
+                obstacle_geoms.append(scaled_obst)
     
     if obstacle_geoms:
         obstacle_union = shapely.unary_union(obstacle_geoms)
@@ -202,10 +229,11 @@ def parse_resplan_json(
     else:
         obstacle_union_wkt = "POLYGON EMPTY"
 
-    # 5. Inner Polygon Boundary
+    # 6. Extract and Scale Inner Polygon Boundary
     if "inner" in data and data["inner"]:
         inner_geom = parse_geometry_input(data["inner"])
-        inner_wkt = inner_geom.wkt
+        scaled_inner = apply_metric_scaling(inner_geom, scale_factor)
+        inner_wkt = scaled_inner.wkt
     else:
         # Fallback: unary union of all rooms and doors
         all_interior = [wkt_loads(r.polygon_wkt) for r in rooms] + [wkt_loads(d.polygon_wkt) for d in doors]

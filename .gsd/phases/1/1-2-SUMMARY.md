@@ -3,28 +3,43 @@
 ## Objective
 Construct the synthetic 6-room benchmark fixture based on PRD Section 5.4.3 area and topology requirements, explicitly declaring all unverified coordinates as provisional. Implement the ResPlan geometry parser with documented schema definitions, targeted repair logging, the metric scale normalizer, and the deterministic polylabel device node placement engine with strict 0.20 m post-snap clearance enforcement. Verify all Phase 1 gates via automated pytest suite.
 
-## Deliverables & Changes
-1. **Provisional Benchmark Fixture & Provenance Documentation**:
-   - `tests/fixtures/schematic_6room.json`: Synthetic benchmark representing the 6 eligible rooms (118 m²: Living 40 m², Bed 1 16 m², Bed 2 16 m², Bed 3 15 m², Kitchen 16 m², Storage 15 m²) + 1 excluded Bathroom, with `is_provisional: true`.
-   - `tests/fixtures/README.md`: Documents all verified facts from PRD v1 and explicitly lists all unverified coordinate and threshold assumptions.
-2. **Schema Ingestion & Targeted Repair (`phase1_ingestion/parser.py`)**:
-   - Supported schemas documented: `resplan_wkt_v1` and `resplan_geo_v1`.
-   - Explicit unit handling: Rejects missing/ambiguous coordinate units with `AmbiguousCoordinateUnitError`.
-   - Targeted repair: Avoids unconditional healing; only tests `geom.is_valid` and applies `make_valid` if invalid, rejecting excessive area drift (>1%) with `GeometryRepairError`.
+## Deliverables & Audited Correctness
+1. **Provisional Benchmark Fixture & Exact Metric Geometry**:
+   - `tests/fixtures/schematic_6room.json`: Validated synthetic benchmark where eligible room areas sum to **exactly $118.0000\text{ m}^2$**:
+     - `Living`: $40.0\text{ m}^2$
+     - `Kitchen`: $16.0\text{ m}^2$
+     - `Storage`: $15.0\text{ m}^2$
+     - `Bedroom 1`: $16.0\text{ m}^2$
+     - `Bedroom 2`: $16.0\text{ m}^2$
+     - `Bedroom 3`: $15.0\text{ m}^2$
+     - `Bathroom`: $8.1\text{ m}^2$ (excluded)
+   - Verified that the 5 doors connect the exact intended room pairs (`Living`–`Bed 3`, `Bed 3`–`Bed 1`, `Living`–`Bed 1`, `Bed 2`–`Kitchen`, `Kitchen`–`Storage`) and satisfy all solid-wall exclusions.
+   - `tests/fixtures/README.md` documents every coordinate vertex, room dimension, and provisional assumption.
+2. **Schema Ingestion & Consistent Geometric Scaling (`phase1_ingestion/parser.py`)**:
+   - Enforces supported schema versions (`resplan_wkt_v1`, `resplan_geo_v1`) and rejects unknown versions.
+   - Requires explicit `coordinate_unit` (`"meter"` or `"pixel"`).
+   - Consistent scaling: Applies metric scale factor $s = \sqrt{A_{\text{metadata}} / A_{\text{raw}}}$ to **all** geometry primitives (rooms, doors, front doors, inner bounds, and obstacle masks), not just room areas.
+   - Targeted repair: Avoids unconditional repair; only triggers `make_valid` on invalid geometries and rejects area drift $> 1\%$.
 3. **Metric Scale Calibration (`phase1_ingestion/scale_normalizer.py`)**:
-   - Explicit calibration based on declared metadata; rejects ambiguous units.
+   - Explicit calibration based on declared metadata; isolates `AmbiguousCoordinateUnitError`.
 4. **Deterministic Safe Node Placement (`phase1_ingestion/node_placer.py`)**:
-   - 0.25 m candidate erosion providing 0.05 m buffer margin before 0.05 m grid snapping.
-   - Independent post-snap clearance validator enforcing $\ge 0.20\text{ m}$ wall clearance.
-   - Deterministic 8-neighbor grid search recovery; raises `InfeasibleNodePlacementError` if clearance is unachievable (e.g. 0.30 m corridor).
-5. **Phase 1 Automated Test Suite (`tests/test_phase1_ingestion.py`)**:
-   - 8 automated unit tests covering all Phase 1 requirements, schema rejections, repair drift, non-convex polylabel, clearance, narrow room infeasibility, and full serialization roundtrips.
+   - $0.25\text{ m}$ candidate erosion margin, $0.05\text{ m}$ grid snapping, and independent $\ge 0.20\text{ m}$ clearance verification.
+   - Deterministic 8-neighbor recovery (tested against obstacle obstruction).
+   - Narrow room test confirms explicit `InfeasibleNodePlacementError` specifically for clearance violation.
+5. **Automated Pytest Suite (`tests/test_phase1_ingestion.py`)**:
+   - 8 comprehensive unit and integration tests passing with 100% compliance.
 
 ## Empirical Verification
-- Command: `.venv/bin/pytest tests/test_phase1_ingestion.py -v`
-- Result: **8 passed in 0.12s (100% pass rate)**.
-- Ingestion benchmark: Verified 7 rooms (6 eligible, 1 excluded) and 6 safely placed nodes with zero clearance violations.
+- **All Phase 1 Verification Commands Passed**:
+  1. `Task 1.1`: Dependencies imported successfully.
+  2. `Task 1.2`: Config profiles loaded and validated.
+  3. `Task 1.3`: Contracts serialized/deserialized cleanly.
+  4. `Task 2.1`: Parser successfully ingested provisional fixture (7 rooms, exact areas).
+  5. `Task 2.2`: Node placer placed 6 safe nodes with clearance $\ge 0.20\text{ m}$.
+- **Focused Pytest Suite**:
+  - Command: `.venv/bin/pytest tests/test_phase1_ingestion.py -v`
+  - Result: **8 passed in 0.07s (100% pass rate)**.
 
 ## Status
-- **Phase 1 Plan 2 Status**: `COMPLETE`
-- **Milestone Phase 1 Status**: `COMPLETE`
+- **Phase 1 Status**: `AUDITED & FULLY COMPLETE`
+- **Next Step**: Phase 2 Planning (`/plan 2`).
