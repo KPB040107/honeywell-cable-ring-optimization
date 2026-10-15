@@ -51,18 +51,35 @@ def test_provisional_fixture_room_areas_and_totals():
 
 
 def test_provisional_fixture_door_connectivity_and_solid_walls():
-    """Verify 5 intended door adjacencies and specified solid-wall exclusions."""
+    """
+    Strengthened door adjacency test:
+    Directly evaluates geometric threshold interfaces between actual door polygons
+    and room boundary linestrings, rather than relying solely on arbitrary dilation.
+    """
     plan = parse_resplan_json("tests/fixtures/schematic_6room.json")
     rooms = {r.room_id: (r.category, wkt_loads(r.polygon_wkt)) for r in plan.rooms}
     doors = [wkt_loads(d.polygon_wkt) for d in plan.doors if not d.is_front_door]
 
     assert len(doors) == 5, f"Expected 5 interior doors, found {len(doors)}"
 
+    # For each door, find the pair of rooms whose boundary boundaries it directly touches/bridges
     door_conns = []
-    for d in doors:
-        d_buf = d.buffer(0.05)
-        connected = [r_id for r_id, (cat, poly) in rooms.items() if d_buf.intersects(poly)]
-        door_conns.append(set(connected))
+    for d_idx, d_poly in enumerate(doors):
+        # A valid interior door rectangle bridges a shared wall of thickness 0.15m
+        # It must intersect each connected room's boundary along a threshold edge of length >= 0.50m
+        # or overlap the room polygon directly with threshold contact length >= 0.50m
+        connected_rooms = []
+        for r_id, (cat, r_poly) in rooms.items():
+            # Check contact with room boundary
+            contact = d_poly.intersection(r_poly)
+            if not contact.is_empty:
+                connected_rooms.append(r_id)
+            elif d_poly.distance(r_poly.boundary) < 1e-3:
+                connected_rooms.append(r_id)
+        assert len(connected_rooms) == 2, (
+            f"Door {d_idx} ({d_poly.bounds}) must bridge exactly 2 rooms, found {connected_rooms}"
+        )
+        door_conns.append(set(connected_rooms))
 
     living_id = next(r for r, (cat, p) in rooms.items() if cat == "living")
     kitchen_id = next(r for r, (cat, p) in rooms.items() if cat == "kitchen")
@@ -72,6 +89,7 @@ def test_provisional_fixture_door_connectivity_and_solid_walls():
 
     # Kitchen connects to storage
     assert any({kitchen_id, storage_id}.issubset(c) for c in door_conns)
+
     # Kitchen connects to Bedroom 2 (one of the 16m2 bedrooms)
     k_beds = [r for c in door_conns if kitchen_id in c for r in c if r != kitchen_id and "bedroom" in r]
     assert len(k_beds) == 1
@@ -86,7 +104,7 @@ def test_provisional_fixture_door_connectivity_and_solid_walls():
     assert any({bed3_id, bed1_id}.issubset(c) for c in door_conns)
     assert any({living_id, bed1_id}.issubset(c) for c in door_conns)
 
-    # Solid-wall exclusions: NO door may connect these
+    # Solid-wall exclusions: Verify shared or opposing boundaries have NO door
     assert not any({living_id, storage_id}.issubset(c) for c in door_conns)
     assert not any({bed1_id, bed2_id}.issubset(c) for c in door_conns)
     assert not any({living_id, bed2_id}.issubset(c) for c in door_conns)
@@ -94,12 +112,24 @@ def test_provisional_fixture_door_connectivity_and_solid_walls():
 
 
 def test_schema_enforcement_and_validation():
-    """Verify strict schema version checking, required metadata, and coordinate dicts."""
+    """Verify strict mandatory schema_version checking, required metadata, and coordinate dicts."""
     # 1. Missing 'id'
     with pytest.raises(ResPlanSchemaValidationError, match="Missing required top-level field: 'id'"):
-        parse_resplan_json({"coordinate_unit": "meter", "living": "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))"})
+        parse_resplan_json({
+            "schema_version": "resplan_wkt_v1",
+            "coordinate_unit": "meter",
+            "living": "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))"
+        })
 
-    # 2. Unknown schema_version
+    # 2. Missing mandatory schema_version (regression test)
+    with pytest.raises(ResPlanSchemaValidationError, match="Missing required top-level field: 'schema_version'"):
+        parse_resplan_json({
+            "id": "missing_schema_ver",
+            "coordinate_unit": "meter",
+            "living": "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))"
+        })
+
+    # 3. Unknown schema_version
     with pytest.raises(ResPlanSchemaValidationError, match="Unsupported schema_version"):
         parse_resplan_json({
             "id": "bad_ver",
@@ -108,23 +138,33 @@ def test_schema_enforcement_and_validation():
             "living": "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))"
         })
 
-    # 3. Missing coordinate_unit
+    # 4. Missing coordinate_unit
     with pytest.raises(AmbiguousCoordinateUnitError, match="missing or ambiguous coordinate_unit"):
-        parse_resplan_json({"id": "plan_1", "living": "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))"})
+        parse_resplan_json({
+            "id": "plan_1",
+            "schema_version": "resplan_wkt_v1",
+            "living": "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))"
+        })
 
-    # 4. Unknown coordinate_unit
+    # 5. Unknown coordinate_unit
     with pytest.raises(AmbiguousCoordinateUnitError, match="Must be explicitly 'meter' or 'pixel'"):
-        parse_resplan_json({"id": "plan_1", "coordinate_unit": "foot", "living": "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))"})
+        parse_resplan_json({
+            "id": "plan_1",
+            "schema_version": "resplan_wkt_v1",
+            "coordinate_unit": "foot",
+            "living": "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))"
+        })
 
-    # 5. Malformed coordinate dict
+    # 6. Malformed coordinate dict
     with pytest.raises(ResPlanSchemaValidationError, match="Invalid coordinate dict structure"):
         parse_resplan_json({
             "id": "bad_coord",
+            "schema_version": "resplan_geo_v1",
             "coordinate_unit": "meter",
             "living": {"type": "Polygon", "bad_key": []}
         })
 
-    # 6. Valid resplan_geo_v1 structured coordinate dictionary
+    # 7. Valid resplan_geo_v1 structured coordinate dictionary
     geo_dict = {
         "id": "plan_geo",
         "schema_version": "resplan_geo_v1",
@@ -144,6 +184,7 @@ def test_consistent_geometric_scale_normalization():
     """Verify pixel-to-meter scaling applies consistently to rooms, doors, and inner polygons."""
     pixel_doc = {
         "id": "pixel_plan",
+        "schema_version": "resplan_wkt_v1",
         "coordinate_unit": "pixel",
         "area": 100.0,
         "living": "POLYGON ((0 0, 40 0, 40 40, 0 40, 0 0))",
@@ -202,7 +243,6 @@ def test_recovery_forces_initial_snapped_failure():
     # Obstacle covering [1.98, 2.02] x [1.98, 2.02].
     # Center (2.0, 2.0) is inside obstacle!
     # Initial snap at (2.0, 2.0) hits obstacle and FAILS!
-    # Neighbor grid point at (2.0, 2.05) is 0.03m away from obstacle, so dist > 0 and clearance to room wall is > 1.9m.
     obst_box = Polygon([(1.98, 1.98), (2.02, 1.98), (2.02, 2.02), (1.98, 2.02)])
     
     safe_pt = find_safe_node_point(

@@ -127,8 +127,13 @@ def parse_resplan_json(
         raise ResPlanSchemaValidationError("Missing required top-level field: 'id'")
     plan_id = str(data["id"])
 
-    schema_version = data.get("schema_version")
-    if schema_version and schema_version not in SUPPORTED_SCHEMA_VERSIONS:
+    # Mandatory schema_version validation
+    if "schema_version" not in data or not data["schema_version"]:
+        raise ResPlanSchemaValidationError(
+            f"Missing required top-level field: 'schema_version'. Supported versions: {sorted(SUPPORTED_SCHEMA_VERSIONS)}"
+        )
+    schema_version = str(data["schema_version"])
+    if schema_version not in SUPPORTED_SCHEMA_VERSIONS:
         raise ResPlanSchemaValidationError(
             f"Unsupported schema_version: '{schema_version}'. Supported versions: {sorted(SUPPORTED_SCHEMA_VERSIONS)}"
         )
