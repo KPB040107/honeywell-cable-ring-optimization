@@ -43,6 +43,10 @@
     measuredLatencyMs: 15,
     showHalos: true,
     showBadges: true,
+    showGhostDoors: true,
+    copilotProposals: [],
+    activeProposalId: null,
+    copilotLoading: false,
 
     // Floor plan data from backend
     serverState: null,
@@ -102,6 +106,12 @@
 
   const chkHalos = document.getElementById('chkHalos');
   const chkBadges = document.getElementById('chkBadges');
+  const chkGhostDoors = document.getElementById('chkGhostDoors');
+  const btnSuggestToolbar = document.getElementById('btnSuggestToolbar');
+  const btnSuggestActions = document.getElementById('btnSuggestActions');
+  const btnRefreshCopilot = document.getElementById('btnRefreshCopilot');
+  const copilotContainer = document.getElementById('copilotContainer');
+
   const btnZoomIn = document.getElementById('btnZoomIn');
   const btnZoomOut = document.getElementById('btnZoomOut');
   const btnFitScreen = document.getElementById('btnFitScreen');
@@ -283,6 +293,16 @@
         fitToScreen();
       }
       updateHUD(data);
+      if (state.activeProposalId) {
+        state.activeProposalId = null;
+        state.copilotProposals = [];
+        renderCopilotProposals([], null);
+      }
+    } else if (data.type === 'copilot_proposals') {
+      state.copilotLoading = false;
+      const report = data.report || {};
+      state.copilotProposals = report.recommended_proposals || [];
+      renderCopilotProposals(state.copilotProposals, report);
     }
   }
 
@@ -462,6 +482,11 @@
 
     // 6. Draw Fixed Nodes
     drawNodes(state.serverState.nodes || []);
+
+    // 7. Draw Ghost Doorways (Co-Pilot Recommendations)
+    if (state.showGhostDoors && state.copilotProposals && state.copilotProposals.length > 0) {
+      drawGhostDoorways(state.copilotProposals);
+    }
   }
 
   function drawGrid(w, h) {
@@ -734,6 +759,95 @@
     });
   }
 
+  // --- Ghost Doorways Drawing (Phase 8 Co-Pilot) ---
+  function drawGhostDoorways(proposals) {
+    if (!proposals || !proposals.length) return;
+
+    proposals.forEach((prop, idx) => {
+      const wallSeg = prop.wall_segment;
+      if (!wallSeg || wallSeg.length < 2) return;
+
+      const p1 = wallSeg[0];
+      const p2 = wallSeg[1];
+      const dx = p2.x - p1.x;
+      const dy = p2.y - p1.y;
+      const segLen = Math.hypot(dx, dy);
+      const tx = segLen > 1e-6 ? dx / segLen : 1;
+      const ty = segLen > 1e-6 ? dy / segLen : 0;
+      const hw = (prop.door_width_m || 0.90) / 2.0;
+
+      const cx = prop.suggested_door_center.x;
+      const cy = prop.suggested_door_center.y;
+
+      const startPt = { x: cx - hw * tx, y: cy - hw * ty };
+      const endPt = { x: cx + hw * tx, y: cy + hw * ty };
+
+      const sStart = worldToScreen(startPt.x, startPt.y);
+      const sEnd = worldToScreen(endPt.x, endPt.y);
+      const sCenter = worldToScreen(cx, cy);
+
+      // 1. Draw glowing dashed cyan doorway opening
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(sStart.x, sStart.y);
+      ctx.lineTo(sEnd.x, sEnd.y);
+      ctx.lineWidth = Math.max(5, 7 * (state.transform.scale / 40));
+      ctx.strokeStyle = '#00D2FF';
+      ctx.setLineDash([8, 5]);
+      ctx.lineCap = 'round';
+      ctx.shadowColor = 'rgba(0, 210, 255, 0.75)';
+      ctx.shadowBlur = 12;
+      ctx.stroke();
+
+      // Door threshold end ticks
+      ctx.setLineDash([]);
+      ctx.lineWidth = 2;
+      const nx = -ty * 6;
+      const ny = tx * 6;
+      ctx.beginPath();
+      ctx.moveTo(sStart.x - nx, sStart.y - ny);
+      ctx.lineTo(sStart.x + nx, sStart.y + ny);
+      ctx.moveTo(sEnd.x - nx, sEnd.y - ny);
+      ctx.lineTo(sEnd.x + nx, sEnd.y + ny);
+      ctx.stroke();
+      ctx.restore();
+
+      // 2. Floating savings pill badge directly above doorway center
+      const labelText = prop.delta_hubs > 0
+        ? `Save ${prop.delta_length_m.toFixed(1)}m (ΔH = -${prop.delta_hubs})`
+        : `Save ${prop.delta_length_m.toFixed(1)}m (ΔJ = -${prop.delta_cost_J.toFixed(1)})`;
+
+      ctx.save();
+      ctx.font = 'bold 11px JetBrains Mono, monospace';
+      const textMetrics = ctx.measureText(labelText);
+      const paddingX = 8;
+      const pillHeight = 20;
+      const pillWidth = textMetrics.width + paddingX * 2;
+      const pillX = sCenter.x - pillWidth / 2;
+      const pillY = sCenter.y - 24;
+
+      // Glow & background
+      ctx.fillStyle = 'rgba(0, 210, 255, 0.95)';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetY = 2;
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(pillX, pillY, pillWidth, pillHeight, 10);
+      } else {
+        ctx.rect(pillX, pillY, pillWidth, pillHeight);
+      }
+      ctx.fill();
+
+      // Pill label text
+      ctx.fillStyle = '#0F172A';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(labelText, sCenter.x, pillY + pillHeight / 2);
+      ctx.restore();
+    });
+  }
+
   // --- Pointer & Hit-Testing Interaction ---
   function getPointerCanvasPos(e) {
     const rect = canvas.getBoundingClientRect();
@@ -902,6 +1016,158 @@
   chkBadges.addEventListener('change', (e) => {
     state.showBadges = e.target.checked;
   });
+
+  // --- Co-Pilot Architectural Suggestions (Phase 8) ---
+  async function requestCopilotSuggestions() {
+    state.copilotLoading = true;
+    if (copilotContainer) {
+      copilotContainer.innerHTML = `
+        <div class="copilot-empty-state">
+          <span>Exploring layout perturbations and calculating rectilinear cost deltas...</span>
+        </div>
+      `;
+    }
+
+    if (state.wsConnected && state.ws && state.ws.readyState === WebSocket.OPEN) {
+      sendWebSocketMessage({ action: 'copilot_suggest', max_proposals: 5 });
+    } else {
+      try {
+        const resp = await fetch(`${CONFIG.httpFallbackBase}/api/copilot/suggest`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ max_proposals: 5 }),
+        });
+        if (resp.ok) {
+          const report = await resp.json();
+          state.copilotLoading = false;
+          state.copilotProposals = report.recommended_proposals || [];
+          renderCopilotProposals(state.copilotProposals, report);
+        }
+      } catch (err) {
+        console.error('Co-Pilot suggest failed:', err);
+        state.copilotLoading = false;
+        if (copilotContainer) {
+          copilotContainer.innerHTML = `
+            <div class="copilot-empty-state">
+              <span>Could not generate proposals: ${escapeHtml(err.message)}</span>
+            </div>
+          `;
+        }
+      }
+    }
+  }
+
+  async function applyCopilotProposal(proposalId) {
+    state.activeProposalId = proposalId;
+    if (copilotContainer) {
+      const btn = copilotContainer.querySelector(`button[data-id="${proposalId}"]`);
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Applying...';
+      }
+    }
+
+    if (state.wsConnected && state.ws && state.ws.readyState === WebSocket.OPEN) {
+      sendWebSocketMessage({ action: 'copilot_apply', proposal_id: proposalId });
+    } else {
+      try {
+        const resp = await fetch(`${CONFIG.httpFallbackBase}/api/copilot/apply`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ proposal_id: proposalId }),
+        });
+        if (resp.ok) {
+          const newState = await resp.json();
+          handleServerPayload(newState);
+        }
+      } catch (err) {
+        console.error('Co-Pilot apply failed:', err);
+        state.activeProposalId = null;
+      }
+    }
+  }
+
+  function renderCopilotProposals(proposals, report) {
+    if (!copilotContainer) return;
+
+    if (!proposals || proposals.length === 0) {
+      copilotContainer.innerHTML = `
+        <div class="copilot-empty-state">
+          <span>Click "Suggest Improvements" to analyze layout perturbations.</span>
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    proposals.forEach((prop, idx) => {
+      const isSlide = prop.proposal_type === 'slide_door';
+      const title = isSlide ? `Slide Doorway` : `Ghost Doorway`;
+      const roomTags = `<span class="proposal-room-tag">${escapeHtml(prop.room_a_id)} ↔ ${escapeHtml(prop.room_b_id)}</span>`;
+
+      let chips = '';
+      if (prop.delta_hubs > 0) {
+        chips += `<span class="impact-chip hub">ΔH: -${prop.delta_hubs}</span>`;
+      }
+      chips += `<span class="impact-chip cost">ΔJ: -${prop.delta_cost_J.toFixed(1)}</span>`;
+      chips += `<span class="impact-chip length">ΔL: -${prop.delta_length_m.toFixed(1)}m</span>`;
+      chips += `<span class="impact-chip bend">ΔB: -${prop.delta_bends}</span>`;
+
+      html += `
+        <div class="copilot-proposal-card" data-id="${escapeHtml(prop.proposal_id)}">
+          <div class="proposal-card-header">
+            <div class="proposal-title">
+              <span>#${idx + 1} ${title}</span>
+              ${roomTags}
+            </div>
+          </div>
+          <div class="proposal-chips">
+            ${chips}
+          </div>
+          <div class="proposal-rationale">
+            ${escapeHtml(prop.rationale)}
+          </div>
+          <button class="btn-apply-tweak" data-id="${escapeHtml(prop.proposal_id)}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Apply Tweak
+          </button>
+        </div>
+      `;
+    });
+
+    copilotContainer.innerHTML = html;
+
+    // Attach click events to Apply Tweak buttons
+    copilotContainer.querySelectorAll('.btn-apply-tweak').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        if (id) {
+          applyCopilotProposal(id);
+        }
+      });
+    });
+  }
+
+  // --- Toolbar & Action Listeners for Co-Pilot ---
+  if (chkGhostDoors) {
+    chkGhostDoors.addEventListener('change', (e) => {
+      state.showGhostDoors = e.target.checked;
+    });
+  }
+
+  if (btnSuggestToolbar) {
+    btnSuggestToolbar.addEventListener('click', requestCopilotSuggestions);
+  }
+
+  if (btnSuggestActions) {
+    btnSuggestActions.addEventListener('click', requestCopilotSuggestions);
+  }
+
+  if (btnRefreshCopilot) {
+    btnRefreshCopilot.addEventListener('click', requestCopilotSuggestions);
+  }
 
   // --- Action Buttons ---
   btnResetBaseline.addEventListener('click', async () => {

@@ -664,6 +664,213 @@ body {
   color: #fff;
 }
 
+/* ==========================================================================
+   Architectural Co-Pilot Styles (Phase 8)
+   ========================================================================== */
+
+/* Ghost Doorway Legend & Toolbar */
+.legend-dot.ghost-door {
+  background-color: #00D2FF;
+  box-shadow: 0 0 8px #00D2FF;
+}
+
+.copilot-suggest-btn {
+  background: rgba(0, 210, 255, 0.12);
+  color: #00D2FF;
+  border: 1px solid rgba(0, 210, 255, 0.4);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.copilot-suggest-btn:hover {
+  background: rgba(0, 210, 255, 0.25);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.copilot-primary-btn {
+  background: linear-gradient(135deg, #0284C7, #00D2FF);
+  color: #0F172A;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(0, 210, 255, 0.35);
+}
+
+.copilot-primary-btn:hover {
+  background: linear-gradient(135deg, #0369A1, #00B4D8);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Reviewer HUD Co-Pilot Drawer */
+.header-with-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #00D2FF;
+}
+
+.header-with-badge h3 {
+  color: #F8FAFC;
+}
+
+.refresh-badge-btn {
+  background: rgba(0, 210, 255, 0.15);
+  color: #00D2FF;
+  border: 1px solid rgba(0, 210, 255, 0.35);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.refresh-badge-btn:hover {
+  background: rgba(0, 210, 255, 0.3);
+  color: #fff;
+}
+
+.copilot-intro {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.copilot-proposals-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.copilot-empty-state {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px dashed var(--border-subtle);
+  border-radius: 6px;
+}
+
+/* Co-Pilot Proposal Cards */
+.copilot-proposal-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid #00D2FF;
+  border-radius: 6px;
+  padding: 10px 12px;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.copilot-proposal-card:hover {
+  border-color: #00D2FF;
+  background: var(--bg-card-hover);
+  box-shadow: 0 4px 12px rgba(0, 210, 255, 0.15);
+}
+
+.proposal-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.proposal-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #F8FAFC;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.proposal-room-tag {
+  background: rgba(255, 255, 255, 0.1);
+  color: #94A3B8;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.proposal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.impact-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.impact-chip.hub {
+  background: rgba(230, 85, 13, 0.25);
+  color: #FF8A65;
+  border: 1px solid rgba(230, 85, 13, 0.5);
+}
+
+.impact-chip.cost {
+  background: rgba(0, 210, 255, 0.2);
+  color: #00D2FF;
+  border: 1px solid rgba(0, 210, 255, 0.4);
+}
+
+.impact-chip.length {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.impact-chip.bend {
+  background: rgba(148, 163, 184, 0.2);
+  color: #CBD5E1;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.proposal-rationale {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.btn-apply-tweak {
+  align-self: flex-end;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  font-weight: 600;
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.btn-apply-tweak:hover {
+  background: #10B981;
+  color: #0F172A;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  transform: translateY(-1px);
+}
+
 @keyframes pulse {
   0% { opacity: 0.4; }
   50% { opacity: 1; }
