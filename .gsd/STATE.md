@@ -8,23 +8,22 @@ updated: 2026-10-15T23:30:00+05:30
 
 **Milestone:** V2 Interactive Extension (Phases 7–10)  
 **Phase:** Phase 8 — "Architectural Co-Pilot" Doorway & Wall Optimizer  
-**Status:** Phase 8 Complete (Waves 1 & 2); Ready for Phase 8 Verification  
-**Plan:** 8-1-PLAN.md (Wave 1 - COMPLETED), 8-2-PLAN.md (Wave 2 - COMPLETED)  
+**Status:** complete (verified 8/8 must-haves passed)  
+**Plan:** 8-1-PLAN.md, 8-2-PLAN.md (Wave 1 & Wave 2 completed and independently verified)  
 
 ## Last Action
 
-Completed Plan 8.2 (Wave 2):
-- Implemented Co-Pilot REST API endpoints (`POST /api/copilot/suggest`, `POST /api/copilot/apply`) and WebSockets actions in `server.py` and `incremental_router.py`.
-- Integrated Co-Design Studio HUD: "Suggest Floor-Plan Improvements" buttons in toolbar and actions, Co-Pilot recommendation drawer in Reviewer HUD.
-- Implemented HTML5 canvas ghost doorway rendering: glowing cyan dashed openings with floating metric savings badges.
-- Implemented one-click "Apply Tweak" floor-plan mutation and live route re-calculation with scoreboard refresh.
-- Added comprehensive integration tests in `tests/test_phase8_studio_copilot.py` (4/4 passed). Full regression suite passing (87/87 passed).
-- Committed changes in `b71b3a6` and `e1bef8b`.
+Completed and verified Phase 8 (Plan 8.1 & Plan 8.2):
+- Implemented `PerturbationCandidateGenerator` (`candidate_generator.py`) detecting candidate ghost doorways and movable doors on shared interior walls.
+- Implemented `ArchitecturalCoPilot` (`wall_optimizer.py`) evaluating candidate perturbations and lexicographically ranking them by hub reduction $\Delta H$ and cost savings $\Delta J$.
+- Implemented REST API (`POST /api/copilot/suggest`, `POST /api/copilot/apply`) and WebSockets actions in `server.py` and `incremental_router.py`.
+- Integrated Co-Design Studio HUD: interactive cyan glowing dashed ghost doorways on HTML5 canvas with floating metric savings badges, recommendation cards in Reviewer HUD, and one-click "Apply Tweak" live floor-plan mutation.
+- Verified on Slide 5 schematic: top ghost doorway recommendation eliminated leaf-room out-and-back dead-end, saving $5.04\text{ m}$ cable and 2 bends ($\Delta J = -6.04$), dropping cost from $59.0$ to $45.48$ with 100% valid rule compliance.
+- Independent verification report `.gsd/phases/8/VERIFICATION.md` confirmed 8/8 must-haves passed; 87/87 tests passing with zero regressions.
 
 ## Next Steps
 
-1. Verify Phase 8 with `gsd-verifier`.
-2. Proceed to Phase 9 ("Auto-Zone" Dynamic Multi-Floor Expansion & Boundary Synthesizer).
+1. Proceed to Phase 9 (`/plan 9`): Interactive Wire-Cut Survivability Simulator (NFPA 72 Class A).
 
 ## Active Decisions
 
