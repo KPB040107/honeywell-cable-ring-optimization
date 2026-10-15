@@ -394,3 +394,87 @@ class RectilinearRoutingIndex(BaseModel):
         return self.pair_metrics.get(fallback_key)
 
 
+class HubAssignment(BaseModel):
+    """Immutable hub assignment and contiguous zone model (Slide 3 Rule 2 & Rule 6)."""
+
+    model_config = ConfigDict(frozen=True)
+
+    hub_id: str = Field(description="Unique hub identifier (e.g. H1, H2)")
+    room_id: str = Field(description="Host eligible room containing the hub")
+    location: Point2D = Field(description="Metric coordinates satisfying >= 0.5m wall clearance")
+    assigned_rooms: list[str] = Field(
+        default_factory=list,
+        description="Eligible rooms assigned to this hub",
+    )
+    assigned_nodes: list[str] = Field(
+        default_factory=list,
+        description="Fixed nodes served by this hub (<= 5)",
+    )
+    zone_area_m2: float = Field(
+        description="Total eligible area of assigned rooms (<= 100.0 m^2)",
+        ge=0.0,
+    )
+    estimated_ring_cost_J: float = Field(
+        default=0.0,
+        description="Pre-routing estimated closed-ring cost",
+        ge=0.0,
+    )
+
+    @field_validator("zone_area_m2")
+    @classmethod
+    def validate_zone_area(cls, v: float) -> float:
+        if v > 100.001:
+            raise ValueError(f"Zone area {v:.4f} m^2 exceeds maximum capacity limit of 100.0 m^2")
+        return v
+
+    @field_validator("assigned_nodes")
+    @classmethod
+    def validate_assigned_nodes(cls, v: list[str]) -> list[str]:
+        if len(v) > 5:
+            raise ValueError(f"Zone assigned nodes count ({len(v)}) exceeds maximum capacity of 5 nodes")
+        return v
+
+    @model_validator(mode="after")
+    def validate_host_room_membership(self) -> "HubAssignment":
+        if self.assigned_rooms and self.room_id not in self.assigned_rooms:
+            raise ValueError(
+                f"Host room '{self.room_id}' must be in assigned_rooms {self.assigned_rooms}"
+            )
+        return self
+
+
+class HubZonePartition(BaseModel):
+    """Immutable full floor plan hub assignment and contiguous zone partition contract."""
+
+    model_config = ConfigDict(frozen=True)
+
+    plan_id: str = Field(description="Floor plan identifier")
+    hub_count: int = Field(description="Total selected hubs H", ge=1)
+    lower_bound_hubs: int = Field(
+        description="Theoretical lower bound H_min = max(ceil(area/100), ceil(nodes/5))",
+        ge=1,
+    )
+    area_gap_m2: float = Field(
+        default=0.0,
+        description="Area gap between maximum and minimum zone area: max_k A_k - min_k A_k",
+        ge=0.0,
+    )
+    hubs: list[HubAssignment] = Field(
+        default_factory=list,
+        description="List of hub assignments for each zone",
+    )
+
+    @model_validator(mode="after")
+    def validate_partition(self) -> "HubZonePartition":
+        if self.hubs and len(self.hubs) != self.hub_count:
+            raise ValueError(
+                f"hub_count ({self.hub_count}) does not match number of hubs ({len(self.hubs)})"
+            )
+        if self.hub_count < self.lower_bound_hubs:
+            raise ValueError(
+                f"hub_count ({self.hub_count}) cannot be less than lower bound ({self.lower_bound_hubs})"
+            )
+        return self
+
+
+
