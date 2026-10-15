@@ -835,3 +835,56 @@ class ClassASimulationReport(BaseModel):
         ge=0.0,
     )
 
+
+class BIMElementType(str, Enum):
+    """Classification of 3D Building Information Modeling architectural and electrical elements."""
+
+    SLAB = "slab"
+    WALL = "wall"
+    WINDOW = "window"
+    DOOR_LINTEL = "door_lintel"
+    NODE = "node"
+    HUB = "hub"
+    CONDUIT = "conduit"
+
+
+class BIMElement3D(BaseModel):
+    """Immutable 3D geometric mesh representation of an architectural or electrical element."""
+
+    model_config = ConfigDict(frozen=True)
+
+    element_id: str = Field(description="Unique BIM element ID")
+    element_type: BIMElementType = Field(description="Type classification of BIM element")
+    room_id: Optional[str] = Field(default=None, description="Associated room ID if applicable")
+    hub_id: Optional[str] = Field(default=None, description="Associated hub ID if applicable")
+    vertices_3d: list[list[float]] = Field(
+        description="List of 3D vertices [x, y, z] in metric coordinates (metres)"
+    )
+    faces: list[list[int]] = Field(
+        description="List of face vertex indices (0-indexed polygons/triangles)"
+    )
+    color_hex: str = Field(description="Primary display hex color (e.g. #2B2B2B)")
+    opacity: float = Field(default=1.0, ge=0.0, le=1.0, description="Surface material opacity")
+    metadata: dict[str, Any] = Field(
+        default_factory=dict, description="Arbitrary element metadata (area, dimensions, labels)"
+    )
+
+
+class BIM3DScene(BaseModel):
+    """Top-level 3D Building Information Modeling (BIM) architectural scene contract."""
+
+    model_config = ConfigDict(frozen=True)
+
+    plan_id: str = Field(description="Floor plan identifier")
+    units: str = Field(default="m", description="Metric coordinate units")
+    ceiling_height_m: float = Field(default=2.70, description="Standard ceiling height in metres", gt=0.0)
+    conduit_elevation_m: float = Field(
+        default=2.55, description="Ceiling conduit center elevation in metres", gt=0.0
+    )
+    elements: list[BIMElement3D] = Field(
+        default_factory=list, description="Collection of 3D architectural and electrical elements"
+    )
+    metrics_hud: dict[str, Any] = Field(
+        default_factory=dict, description="Live reviewer metrics and formula breakdown"
+    )
+
