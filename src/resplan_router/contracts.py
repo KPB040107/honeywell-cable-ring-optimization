@@ -740,3 +740,98 @@ class CoPilotReport(BaseModel):
         default_factory=list,
         description="Lexicographically ranked list of top recommended structural proposals",
     )
+
+
+class PowerSource(str, Enum):
+    """Active electrical branch energizing a device node in Class A topology."""
+
+    PRIMARY_OUTBOUND = "primary_outbound"
+    RETURN_TERMINAL = "return_terminal"
+    OFFLINE = "offline"
+
+
+class WireCutLocation(BaseModel):
+    """Spatial and topological location of an open-circuit wire cut on a cable leg."""
+
+    model_config = ConfigDict(frozen=True)
+
+    hub_id: str = Field(description="Hub identifier for the ring")
+    leg_index: int = Field(description="0-indexed leg in closed_sequence where wire is cut", ge=0)
+    from_node: str = Field(description="Starting terminal ID of the severed leg")
+    to_node: str = Field(description="Ending terminal ID of the severed leg")
+    cut_point: Point2D = Field(description="2D physical coordinate of the cut")
+    distance_along_leg_m: float = Field(
+        default=0.0,
+        description="Metric distance of cut from from_node along leg",
+        ge=0.0,
+    )
+
+
+class NodeSurvivabilityStatus(BaseModel):
+    """Operational status and branch connectivity for an individual device node."""
+
+    model_config = ConfigDict(frozen=True)
+
+    node_id: str = Field(description="Unique device node ID")
+    is_online: bool = Field(description="True if node is electrically reachable from at least one hub terminal")
+    power_source: PowerSource = Field(description="Power branch energizing this node")
+    path_length_m: float = Field(
+        default=0.0,
+        description="Metric cable distance from hub to node along energized branch",
+        ge=0.0,
+    )
+    hop_count: int = Field(
+        default=0,
+        description="Number of cable hops from hub terminal to node",
+        ge=0,
+    )
+
+
+class ClassASimulationReport(BaseModel):
+    """Comprehensive NFPA 72 Class A wire-cut survivability simulation report."""
+
+    model_config = ConfigDict(frozen=True)
+
+    plan_id: str = Field(default="", description="Floor plan identifier")
+    hub_id: str = Field(description="Hub identifier")
+    is_severed: bool = Field(default=False, description="True if one or more cable legs are severed")
+    cut_location: Optional[WireCutLocation] = Field(
+        default=None,
+        description="Primary or single wire cut location if severed",
+    )
+    cut_locations: list[WireCutLocation] = Field(
+        default_factory=list,
+        description="All cut locations in simulation",
+    )
+    total_nodes: int = Field(description="Total number of device nodes in ring", ge=0)
+    online_nodes: int = Field(description="Number of operational device nodes remaining online", ge=0)
+    survivability_pct: float = Field(
+        description="Percentage of nodes surviving (0.0 to 100.0)",
+        ge=0.0,
+        le=100.0,
+    )
+    primary_branch_nodes: list[str] = Field(
+        default_factory=list,
+        description="Ordered node IDs powered via Primary Outbound",
+    )
+    return_branch_nodes: list[str] = Field(
+        default_factory=list,
+        description="Ordered node IDs powered via Return Terminal",
+    )
+    offline_nodes: list[str] = Field(
+        default_factory=list,
+        description="Node IDs disconnected from both terminals",
+    )
+    node_statuses: dict[str, NodeSurvivabilityStatus] = Field(
+        default_factory=dict,
+        description="Detailed per-node survivability status",
+    )
+    nfpa72_class_a_compliant: bool = Field(
+        description="True iff 100% of nodes remain online under any single cut",
+    )
+    max_latency_path_m: float = Field(
+        default=0.0,
+        description="Longest cable path length in metres from hub to any operational node",
+        ge=0.0,
+    )
+
