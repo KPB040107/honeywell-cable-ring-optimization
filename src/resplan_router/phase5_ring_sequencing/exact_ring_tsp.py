@@ -274,6 +274,17 @@ class DirectionalRingSolver:
 
             node_order = list(reversed(reversed_nodes))
             leg_directions = list(reversed(reversed_dirs))
+
+            # Canonicalize orientation: prefer visiting lower-indexed node first
+            if len(node_order) >= 2 and node_order[0] > node_order[-1]:
+                node_order = list(reversed(node_order))
+                rev_dirs: List[Tuple[Optional[CompassDirection], Optional[CompassDirection]]] = []
+                for d_s, d_e in reversed(leg_directions):
+                    d_s_rev = d_e.opposite() if d_e is not None else None
+                    d_e_rev = d_s.opposite() if d_s is not None else None
+                    rev_dirs.append((d_s_rev, d_e_rev))
+                leg_directions = rev_dirs
+
             closed_sequence = (
                 [self.hub.hub_id]
                 + [self.nodes[idx].node_id for idx in node_order]
@@ -313,6 +324,13 @@ class DirectionalRingSolver:
                 best_cost = seq_cost
                 best_seq = seq
                 best_dirs = dirs
+
+        if len(best_seq) > 3 and best_seq[1] > best_seq[-2]:
+            best_seq = [best_seq[0]] + list(reversed(best_seq[1:-1])) + [best_seq[-1]]
+            best_dirs = [
+                (d_e.opposite() if d_e else None, d_s.opposite() if d_s else None)
+                for d_s, d_e in reversed(best_dirs)
+            ]
 
         return best_seq, best_dirs
 
