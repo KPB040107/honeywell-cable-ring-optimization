@@ -477,4 +477,138 @@ class HubZonePartition(BaseModel):
         return self
 
 
+class RouteSegment(BaseModel):
+    """Single directed leg of a closed ring connecting two consecutive terminals."""
+
+    model_config = ConfigDict(frozen=True)
+
+    from_node: str = Field(description="Starting terminal ID (e.g. H1 or N1)")
+    to_node: str = Field(description="Ending terminal ID")
+    length_m: float = Field(description="Cable length in metres", ge=0.0)
+    polyline: list[Point2D] = Field(
+        default_factory=list,
+        description="Ordered sequence of axis-aligned vertices",
+    )
+
+    @field_validator("polyline")
+    @classmethod
+    def validate_axis_aligned_polyline(cls, points: list[Point2D]) -> list[Point2D]:
+        """Verify that every segment in polyline is strictly horizontal or vertical."""
+        if len(points) < 2:
+            return points
+        for i in range(len(points) - 1):
+            p1 = points[i]
+            p2 = points[i + 1]
+            dx = abs(p2.x - p1.x)
+            dy = abs(p2.y - p1.y)
+            if dx > 1e-4 and dy > 1e-4:
+                raise ValueError(
+                    f"Segment {i} -> {i+1} ({p1.coords} -> {p2.coords}) is not axis-aligned: "
+                    f"dx={dx:.5f}, dy={dy:.5f}"
+                )
+        return points
+
+
+class CompletedHubRing(BaseModel):
+    """Completed, direction-aware closed ring route for a single hub."""
+
+    model_config = ConfigDict(frozen=True)
+
+    hub_id: str = Field(description="Unique hub identifier (e.g. H1)")
+    room_id: str = Field(description="Host eligible room containing the hub")
+    location: Point2D = Field(description="Fixed metric coordinates of the hub")
+    assigned_rooms: list[str] = Field(
+        default_factory=list,
+        description="Eligible rooms assigned to this hub",
+    )
+    assigned_nodes: list[str] = Field(
+        default_factory=list,
+        description="Fixed nodes served by this hub",
+    )
+    closed_sequence: list[str] = Field(
+        description="Ordered sequence of terminals starting and ending with hub_id",
+    )
+    route_segments: list[RouteSegment] = Field(
+        default_factory=list,
+        description="Synthesized route segments connecting sequence terminals",
+    )
+    ring_length_m: float = Field(
+        description="Total cable length in metres",
+        ge=0.0,
+    )
+    ring_bends: int = Field(
+        description="Total bend count including node and hub turns",
+        ge=0,
+    )
+    ring_crossings: int = Field(
+        default=0,
+        description="Number of crossings X",
+        ge=0,
+    )
+    ring_overlap_m: float = Field(
+        default=0.0,
+        description="Total overlap length O in metres",
+        ge=0.0,
+    )
+    cost_J: float = Field(
+        description="Composite cost J = L + 5X + O + 0.5B",
+        ge=0.0,
+    )
+
+    @model_validator(mode="after")
+    def validate_closed_sequence(self) -> "CompletedHubRing":
+        if not self.closed_sequence:
+            raise ValueError("closed_sequence cannot be empty")
+        if self.closed_sequence[0] != self.hub_id:
+            raise ValueError(
+                f"closed_sequence must start with hub_id '{self.hub_id}', got '{self.closed_sequence[0]}'"
+            )
+        if self.closed_sequence[-1] != self.hub_id:
+            raise ValueError(
+                f"closed_sequence must end with hub_id '{self.hub_id}', got '{self.closed_sequence[-1]}'"
+            )
+        intermediate = self.closed_sequence[1:-1]
+        if self.assigned_nodes:
+            if set(intermediate) != set(self.assigned_nodes) or len(intermediate) != len(self.assigned_nodes):
+                raise ValueError(
+                    f"closed_sequence intermediate nodes {intermediate} must visit each assigned node {self.assigned_nodes} exactly once"
+                )
+        return self
+
+
+class SynthesizedRingsBundle(BaseModel):
+    """Complete floor-plan bundle of synthesized closed rings across all hubs."""
+
+    model_config = ConfigDict(frozen=True)
+
+    plan_id: str = Field(description="Floor plan identifier")
+    hub_rings: list[CompletedHubRing] = Field(
+        default_factory=list,
+        description="List of completed closed rings for each hub",
+    )
+    total_length_m: float = Field(
+        description="Total cable length across all rings in metres",
+        ge=0.0,
+    )
+    total_bends: int = Field(
+        description="Total bends across all rings",
+        ge=0,
+    )
+    total_crossings: int = Field(
+        default=0,
+        description="Total crossings across all rings",
+        ge=0,
+    )
+    total_overlap_m: float = Field(
+        default=0.0,
+        description="Total overlap length across all rings in metres",
+        ge=0.0,
+    )
+    total_cost_J: float = Field(
+        description="Total composite cost J = L + 5X + O + 0.5B",
+        ge=0.0,
+    )
+
+
+
 
