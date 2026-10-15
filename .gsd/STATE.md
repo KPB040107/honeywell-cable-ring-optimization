@@ -7,20 +7,20 @@ updated: 2026-10-15T23:30:00+05:30
 ## Current Position
 
 **Milestone:** V1 Foundation (Phases 1–6)  
-**Phase:** Phase 3 — Obstacle-Aware Axis-Aligned Micro-Router & Directional Cost Tensor (Completed)  
-**Status:** verified  
-**Plan:** 3-1-PLAN.md, 3-2-PLAN.md (Wave 1 & Wave 2 completed & verified)
+**Phase:** Phase 4 — Lexicographic Hub Placement & Contiguous Zone Partitioning  
+**Status:** ready_for_execution  
+**Plan:** 4-1-PLAN.md, 4-2-PLAN.md (Wave 1 & Wave 2)
 
 ## Last Action
 
-Executed and independently verified Phase 3:
-- Wave 1 (Plan 3.1): Added routing contracts (`CompassDirection`, `PairRouteMetric`, `RectilinearRoutingIndex`) and implemented `rectilinear_grid.py` generating dense Hanan grid inside free space $\mathcal{F}$ without obstacle collisions.
-- Wave 2 (Plan 3.2): Implemented `astar_rectilinear.py` with direction-state $(v, d_{\text{in}})$ search pricing $90^\circ$ turns (+0.5) and $180^\circ$ reversals (+0.5), and precomputed pairwise directional cost tensors in `cost_matrix.py`.
-- Independent Verification: `gsd-verifier` ran full test suite (`tests/test_phase3_grid.py`, `tests/test_phase3_micro_routing.py`), confirming 5/5 must-haves pass with 0 errors.
+Completed Phase 4 planning following `v2.md` Section 5.4 and GSD guidelines:
+- Created `.gsd/phases/4/RESEARCH.md` detailing Rule 6 hub candidate sampling ($0.505\text{ m}$ buffer), connected zone enumeration, and CP-SAT lexicographic set partitioning.
+- Created `.gsd/phases/4/4-1-PLAN.md` (Wave 1: Contracts, `hub_candidates.py`, candidate unit tests).
+- Created `.gsd/phases/4/4-2-PLAN.md` (Wave 2: `zone_milp.py`, Slide 5 2-hub partition, area-gap tie-breaker, Phase 4 test suite).
 
 ## Next Steps
 
-1. `/plan 4` — Plan Phase 4 (Lexicographic Hub Placement & Contiguous Zone Partitioning).
+1. `/execute 4` — Execute Plan 4.1 and Plan 4.2 sequentially to implement Phase 4.
 
 ## Active Decisions
 
