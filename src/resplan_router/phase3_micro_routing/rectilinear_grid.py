@@ -69,6 +69,7 @@ class HananRoutingGrid:
         edges: Sequence[GridEdge],
         node_vertices: Optional[Dict[str, Point2D]] = None,
         portal_vertices: Optional[Dict[str, Dict[str, Point2D]]] = None,
+        portal_rooms: Optional[Dict[str, Tuple[str, str]]] = None,
     ) -> None:
         self.plan_id = plan_id
         self._vertices: List[Point2D] = list(vertices)
@@ -76,6 +77,7 @@ class HananRoutingGrid:
         self._edges: List[GridEdge] = list(edges)
         self.node_vertices: Dict[str, Point2D] = dict(node_vertices or {})
         self.portal_vertices: Dict[str, Dict[str, Point2D]] = dict(portal_vertices or {})
+        self.portal_rooms: Dict[str, Tuple[str, str]] = dict(portal_rooms or {})
 
         # Fast coordinate index for nearest/exact snapping: (x, y) -> Point2D
         self._coord_map: Dict[Tuple[float, float], Point2D] = {
@@ -440,10 +442,14 @@ def build_hanan_grid(
     # Sort vertices deterministically: by y, then x
     sorted_vertices = sorted(retained_vertices, key=lambda p: (p.y, p.x))
 
+    # Build portal-to-rooms mapping
+    portal_rooms = {p.portal_id: (p.room1_id, p.room2_id) for p in topology.portals}
+
     return HananRoutingGrid(
         plan_id=plan.plan_id,
         vertices=sorted_vertices,
         edges=retained_edges,
         node_vertices=node_vertices,
         portal_vertices=portal_vertices,
+        portal_rooms=portal_rooms,
     )

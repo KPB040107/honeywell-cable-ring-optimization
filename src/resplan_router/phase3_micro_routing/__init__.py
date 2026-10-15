@@ -1,5 +1,12 @@
 """Phase 3: Obstacle-Aware Axis-Aligned Micro-Routing & Directional Cost Tensor."""
 
+from resplan_router.phase3_micro_routing.astar_rectilinear import (
+    DirectionStateRouter,
+    NoPathFoundError,
+    SingleSourceResult,
+    compress_polyline,
+    count_bends,
+)
 from resplan_router.phase3_micro_routing.rectilinear_grid import (
     GridEdge,
     HananRoutingGrid,
@@ -7,7 +14,12 @@ from resplan_router.phase3_micro_routing.rectilinear_grid import (
 )
 
 __all__ = [
+    "DirectionStateRouter",
     "GridEdge",
     "HananRoutingGrid",
+    "NoPathFoundError",
+    "SingleSourceResult",
     "build_hanan_grid",
+    "compress_polyline",
+    "count_bends",
 ]
