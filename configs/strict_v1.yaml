@@ -1,0 +1,33 @@
+profile_name: "strict_v1"
+description: "UR Hackathon 2026H2 PS4 strict competition rubric"
+max_area_per_hub: 100.0
+max_nodes_per_hub: 5
+min_wall_clearance_m: 0.20
+pole_buffer_clearance_m: 0.25
+grid_snap_tolerance_m: 0.05
+portal_lane_offset_delta_m: 0.15
+portal_step_clearance_m: 0.20
+eligible_room_types:
+  - "living"
+  - "bedroom"
+  - "kitchen"
+  - "storage"
+excluded_room_types:
+  - "bathroom"
+  - "balcony"
+  - "parking"
+  - "pool"
+  - "stair"
+  - "garden"
+  - "land"
+transit_corridor_types:
+  - "corridor"
+  - "hallway"
+  - "passage"
+cost_weights:
+  w_len: 1.0
+  w_bend: 0.5
+  w_ovlp: 50.0
+  w_cross: 25.0
+time_limit_cp_sat_sec: 3.0
+time_limit_routing_sec: 1.0

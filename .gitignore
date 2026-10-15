@@ -1,0 +1,26 @@
+# Python Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Project output artifacts
+dist/
+build/
+*.egg-info/
+output/
+visualizations/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
