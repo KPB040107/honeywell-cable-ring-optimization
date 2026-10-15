@@ -8,22 +8,19 @@ updated: 2026-10-15T23:30:00+05:30
 
 **Milestone:** V1 Foundation (Phases 1–6)  
 **Phase:** Phase 1 — Ingestion, Scale Normalization, Polygon Healing & Fixed Node Loading  
-**Status:** planning  
-**Plan:** None active (SPEC initialized in DRAFT pending verification of flagged claims)
+**Status:** ready_for_execution  
+**Plan:** 1-1-PLAN.md, 1-2-PLAN.md (Wave 1 & Wave 2)
 
 ## Last Action
 
-Initialized project structure from `v2.md` via `/new-project`:
-- Created `.gsd/SPEC.md` with full 6-rule specifications, metric hierarchy, and 9 flagged claims requiring source/dataset verification.
-- Created `.gsd/ROADMAP.md` decomposing Phases 1–6 as V1 Foundation and Phases 7–10 as V2 Extension Milestone.
-- Created `.gsd/REQUIREMENTS.md` with traceable functional and non-functional requirements.
-- Created `.gsd/RESEARCH.md` detailing technology stack, scale conversion math, parallel doorway lanes, and state-space routing.
+Completed Phase 1 planning following `v2.md` Section 5.1 and GSD guidelines:
+- Created `.gsd/phases/1/RESEARCH.md` detailing metric scale inversion math, Shapely healing, and fixture specs.
+- Created `.gsd/phases/1/1-1-PLAN.md` (Wave 1: Packaging, Config, Pydantic Contracts, Scale Converter).
+- Created `.gsd/phases/1/1-2-PLAN.md` (Wave 2: Polygon Healing, Free-Space Extraction, Node Ingestion & Tests).
 
 ## Next Steps
 
-1. **Verify Flagged Claims**: Review the 9 flagged claims in `.gsd/SPEC.md` (Section 7) against organizer test fixtures/rules.
-2. **Finalize Spec**: Update `.gsd/SPEC.md` status to `FINALIZED` once confirmed.
-3. **Plan Phase 1**: Run `/plan 1` to create execution plans for Phase 1 (Ingestion & Normalization).
+1. `/execute 1` — Execute Plan 1.1 and Plan 1.2 sequentially to implement Phase 1.
 
 ## Active Decisions
 
@@ -37,7 +34,7 @@ Initialized project structure from `v2.md` via `/new-project`:
 
 ## Blockers
 
-- [ ] Flagged Claims Review (F-01 through F-09): Verify against organizer slides / sample dataset before marking `SPEC.md` as `FINALIZED`.
+None for Phase 1 planning. The exact organiser input JSON keys remain an implementation risk for the input adapter.
 
 ## Concerns
 
@@ -46,4 +43,4 @@ Initialized project structure from `v2.md` via `/new-project`:
 
 ## Session Context
 
-Project initialized fresh from clean slate. The GSD workflow enforces the Planning Lock: implementation code will begin once the spec status transitions to `FINALIZED`.
+`v2.md` is the build plan and source of truth. The supplied deck validates the challenge rules, and the raw ResPlan archive supports dataset work. The spec is FINALIZED for Phase 1 planning.
