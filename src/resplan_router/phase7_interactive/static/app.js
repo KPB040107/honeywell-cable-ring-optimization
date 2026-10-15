@@ -78,6 +78,26 @@
     hoveredCable: null,
     activeCutReport: null,
     pulsePhase: 0,
+
+    // 3D BIM Viewport (Phase 10)
+    viewMode: 'split',
+    bimSceneData: null,
+    bimSceneLoading: false,
+  };
+
+  // --- Three.js 3D BIM Engine State ---
+  const bim3d = {
+    renderer: null,
+    scene: null,
+    camera: null,
+    controls: null,
+    container: null,
+    elementsGroup: null,
+    survivabilityGroup: null,
+    gridHelper: null,
+    dirLight: null,
+    ambientLight: null,
+    isInitialized: false,
   };
 
   // --- DOM Elements ---
@@ -353,6 +373,13 @@
       state.activeCutReport = data.report || data.survivability_report || null;
       updateSurvivabilityHUD(state.activeCutReport);
       updateHUD(data);
+      if (data.bim_scene) {
+        state.bimSceneData = data.bim_scene;
+        rebuildBIMMeshes(data.bim_scene);
+      } else {
+        fetchBIMScene();
+      }
+      updateBIMSurvivability();
     } else if (data.type === 'state_update') {
       const firstLoad = !state.serverState;
       state.serverState = data;
@@ -362,11 +389,21 @@
       state.activeCutReport = data.survivability_report || null;
       updateSurvivabilityHUD(state.activeCutReport);
       updateHUD(data);
+      if (data.bim_scene) {
+        state.bimSceneData = data.bim_scene;
+        rebuildBIMMeshes(data.bim_scene);
+      } else {
+        fetchBIMScene();
+      }
+      updateBIMSurvivability();
       if (state.activeProposalId) {
         state.activeProposalId = null;
         state.copilotProposals = [];
         renderCopilotProposals([], null);
       }
+    } else if (data.type === 'bim_scene_update') {
+      state.bimSceneData = data.scene;
+      rebuildBIMMeshes(data.scene);
     } else if (data.type === 'copilot_proposals') {
       state.copilotLoading = false;
       const report = data.report || {};
@@ -450,6 +487,32 @@
     metricO.textContent = metrics.O !== undefined ? metrics.O.toFixed(2) : '--';
     metricH.textContent = metrics.H !== undefined ? metrics.H : '--';
     areaGapVal.textContent = metrics.delta_area_gap_m2 !== undefined ? `${metrics.delta_area_gap_m2.toFixed(2)} m²` : '0.00 m²';
+
+    // Live Equation Breakdown Pills & Penalty Labels
+    const pillValL = document.getElementById('pillValL');
+    const pillValX = document.getElementById('pillValX');
+    const pillValO = document.getElementById('pillValO');
+    const pillValB = document.getElementById('pillValB');
+    const pillValJ = document.getElementById('pillValJ');
+    const subMetricX = document.getElementById('subMetricX');
+    const subMetricO = document.getElementById('subMetricO');
+    const subMetricB = document.getElementById('subMetricB');
+
+    const valL = metrics.L !== undefined ? Number(metrics.L) : 0;
+    const valX = metrics.X !== undefined ? Number(metrics.X) : 0;
+    const valO = metrics.O !== undefined ? Number(metrics.O) : 0;
+    const valB = metrics.B !== undefined ? Number(metrics.B) : 0;
+    const valJ = metrics.J !== undefined ? Number(metrics.J) : (valL + 5 * valX + valO + 0.5 * valB);
+
+    if (pillValL) pillValL.textContent = `${valL.toFixed(2)}m`;
+    if (pillValX) pillValX.textContent = `+${(5 * valX).toFixed(2)}`;
+    if (pillValO) pillValO.textContent = `+${(1 * valO).toFixed(2)}`;
+    if (pillValB) pillValB.textContent = `+${(0.5 * valB).toFixed(2)}`;
+    if (pillValJ) pillValJ.textContent = `${valJ.toFixed(2)}`;
+
+    if (subMetricX) subMetricX.textContent = `+${(5 * valX).toFixed(2)} penalty (5x)`;
+    if (subMetricO) subMetricO.textContent = `+${(1 * valO).toFixed(2)} penalty (1x)`;
+    if (subMetricB) subMetricB.textContent = `+${(0.5 * valB).toFixed(2)} penalty (0.5x)`;
 
     // Validity Banner
     if (isValid) {
@@ -558,6 +621,7 @@
     }
 
     drawScene();
+    render3D();
     requestAnimationFrame(renderLoop);
   }
 
@@ -1237,6 +1301,7 @@
       canvas.style.cursor = 'grabbing';
       state.dragTarget.currentX = worldPos.x;
       state.dragTarget.currentY = worldPos.y;
+      update3DDragMesh(state.dragTarget);
 
       // Throttle sending updates to server via requestAnimationFrame
       if (!state.inFlightAction) {
@@ -1286,6 +1351,7 @@
           y: Math.round(state.dragTarget.currentY * 100) / 100,
         });
       }
+      reset3DDragMesh(state.dragTarget);
       state.dragTarget = null;
       canvas.style.cursor = 'crosshair';
     }
@@ -1535,14 +1601,390 @@
     }
   });
 
+  // =========================================================================
+  // Three.js 3D BIM Architectural Engine (Phase 10)
+  // =========================================================================
+
+  function initThreeEngine() {
+    if (typeof THREE === 'undefined') {
+      console.warn('Three.js not loaded. Skipping 3D BIM initialization.');
+      return;
+    }
+    const container = document.getElementById('bimViewport');
+    if (!container || bim3d.isInitialized) return;
+
+    bim3d.container = container;
+    const width = container.clientWidth || 600;
+    const height = container.clientHeight || 500;
+
+    // WebGL Renderer
+    bim3d.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    bim3d.renderer.setSize(width, height);
+    bim3d.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    bim3d.renderer.shadowMap.enabled = true;
+    bim3d.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    if (THREE.sRGBEncoding) bim3d.renderer.outputEncoding = THREE.sRGBEncoding;
+
+    container.innerHTML = '';
+    container.appendChild(bim3d.renderer.domElement);
+
+    // Scene
+    bim3d.scene = new THREE.Scene();
+    bim3d.scene.background = new THREE.Color(0x0f172a); // dark architectural navy
+
+    // Perspective Camera
+    bim3d.camera = new THREE.PerspectiveCamera(45, width / (height || 1), 0.1, 500);
+    bim3d.camera.position.set(18, 16, 20);
+
+    // Orbit Controls
+    if (typeof THREE.OrbitControls !== 'undefined') {
+      bim3d.controls = new THREE.OrbitControls(bim3d.camera, bim3d.renderer.domElement);
+      bim3d.controls.enableDamping = true;
+      bim3d.controls.dampingFactor = 0.08;
+      bim3d.controls.maxPolarAngle = Math.PI / 2 - 0.02; // Prevent camera going below slab
+      bim3d.controls.target.set(7.0, 1.35, 4.5);
+      bim3d.controls.update();
+    }
+
+    // Directional Architectural Sunlight & Fill
+    bim3d.ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+    bim3d.scene.add(bim3d.ambientLight);
+
+    bim3d.dirLight = new THREE.DirectionalLight(0xfff8e7, 0.85);
+    bim3d.dirLight.position.set(18, 25, 20);
+    bim3d.dirLight.castShadow = true;
+    bim3d.dirLight.shadow.mapSize.width = 2048;
+    bim3d.dirLight.shadow.mapSize.height = 2048;
+    bim3d.dirLight.shadow.camera.near = 0.5;
+    bim3d.dirLight.shadow.camera.far = 100;
+    const d = 16;
+    bim3d.dirLight.shadow.camera.left = -d;
+    bim3d.dirLight.shadow.camera.right = d;
+    bim3d.dirLight.shadow.camera.top = d;
+    bim3d.dirLight.shadow.camera.bottom = -d;
+    bim3d.scene.add(bim3d.dirLight);
+
+    const fillLight = new THREE.DirectionalLight(0x38bdf8, 0.35);
+    fillLight.position.set(-15, 12, -12);
+    bim3d.scene.add(fillLight);
+
+    // Grid Helper at Y=0
+    bim3d.gridHelper = new THREE.GridHelper(30, 30, 0x334155, 0x1e293b);
+    bim3d.gridHelper.position.set(7.0, -0.01, 4.5);
+    bim3d.scene.add(bim3d.gridHelper);
+
+    // Geometry Groups
+    bim3d.elementsGroup = new THREE.Group();
+    bim3d.scene.add(bim3d.elementsGroup);
+
+    bim3d.survivabilityGroup = new THREE.Group();
+    bim3d.scene.add(bim3d.survivabilityGroup);
+
+    bim3d.isInitialized = true;
+
+    // Load initial 3D BIM scene
+    fetchBIMScene();
+  }
+
+  async function fetchBIMScene() {
+    if (!bim3d.isInitialized || state.bimSceneLoading) return;
+    try {
+      state.bimSceneLoading = true;
+      const res = await fetch(`${CONFIG.httpFallbackBase}/api/bim/scene`);
+      if (res.ok) {
+        const sceneData = await res.json();
+        state.bimSceneData = sceneData;
+        rebuildBIMMeshes(sceneData);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch BIM scene:', err);
+    } finally {
+      state.bimSceneLoading = false;
+    }
+  }
+
+  function rebuildBIMMeshes(sceneData) {
+    if (!bim3d.isInitialized || !sceneData || !sceneData.elements) return;
+
+    // Dispose old meshes
+    while (bim3d.elementsGroup.children.length > 0) {
+      const obj = bim3d.elementsGroup.children[0];
+      bim3d.elementsGroup.remove(obj);
+      if (obj.geometry) obj.geometry.dispose();
+      if (obj.material) {
+        if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+        else obj.material.dispose();
+      }
+    }
+
+    let sumX = 0, sumZ = 0, countPts = 0;
+
+    for (let i = 0; i < sceneData.elements.length; i++) {
+      const el = sceneData.elements[i];
+      if (!el.faces || el.faces.length === 0 || !el.vertices_3d) continue;
+
+      const positions = [];
+      for (let fIdx = 0; fIdx < el.faces.length; fIdx++) {
+        const [i0, i1, i2] = el.faces[fIdx];
+        if (i0 < el.vertices_3d.length && i1 < el.vertices_3d.length && i2 < el.vertices_3d.length) {
+          const v0 = el.vertices_3d[i0];
+          const v1 = el.vertices_3d[i1];
+          const v2 = el.vertices_3d[i2];
+          // Floor plan (x, y, z) -> Three.js (x, z_elevation, y_plan)
+          positions.push(v0[0], v0[2], v0[1]);
+          positions.push(v1[0], v1[2], v1[1]);
+          positions.push(v2[0], v2[2], v2[1]);
+
+          sumX += v0[0];
+          sumZ += v0[1];
+          countPts++;
+        }
+      }
+
+      if (positions.length === 0) continue;
+
+      const geom = new THREE.BufferGeometry();
+      geom.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geom.computeVertexNormals();
+
+      const col = new THREE.Color(el.color_hex || '#FFFFFF');
+      let mat;
+
+      if (el.element_type === 'window') {
+        mat = new THREE.MeshStandardMaterial({
+          color: col,
+          transparent: true,
+          opacity: el.opacity !== undefined ? el.opacity : 0.45,
+          roughness: 0.1,
+          metalness: 0.1,
+          side: THREE.DoubleSide,
+        });
+      } else if (el.element_type === 'conduit') {
+        mat = new THREE.MeshStandardMaterial({
+          color: col,
+          roughness: 0.25,
+          metalness: 0.7,
+          side: THREE.DoubleSide,
+        });
+      } else if (el.element_type === 'wall' || el.element_type === 'door_lintel') {
+        mat = new THREE.MeshStandardMaterial({
+          color: col,
+          roughness: 0.85,
+          metalness: 0.1,
+          side: THREE.DoubleSide,
+        });
+      } else if (el.element_type === 'slab') {
+        mat = new THREE.MeshStandardMaterial({
+          color: col,
+          roughness: 0.9,
+          metalness: 0.05,
+          side: THREE.DoubleSide,
+        });
+      } else {
+        // device pod, equipment cabinet
+        mat = new THREE.MeshStandardMaterial({
+          color: col,
+          roughness: 0.35,
+          metalness: 0.45,
+          side: THREE.DoubleSide,
+        });
+      }
+
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.name = el.element_id;
+      mesh.castShadow = (el.element_type !== 'slab');
+      mesh.receiveShadow = true;
+      mesh.userData = el;
+      bim3d.elementsGroup.add(mesh);
+    }
+
+    if (countPts > 0 && bim3d.controls) {
+      const centerX = sumX / countPts;
+      const centerZ = sumZ / countPts;
+      bim3d.controls.target.set(centerX, 1.35, centerZ);
+      if (bim3d.gridHelper) {
+        bim3d.gridHelper.position.set(centerX, -0.01, centerZ);
+      }
+    }
+
+    updateBIMSurvivability();
+  }
+
+  function updateBIMSurvivability() {
+    if (!bim3d.isInitialized || !bim3d.survivabilityGroup) return;
+
+    while (bim3d.survivabilityGroup.children.length > 0) {
+      const child = bim3d.survivabilityGroup.children[0];
+      bim3d.survivabilityGroup.remove(child);
+      if (child.geometry) child.geometry.dispose();
+      if (child.material) child.material.dispose();
+    }
+
+    if (!state.activeCutReport || !state.activeCutReport.cut_point) return;
+
+    const cutPt = state.activeCutReport.cut_point;
+    // Map cut point (x, y) to Three.js: (cutPt.x, 2.55, cutPt.y)
+    const cutGeom = new THREE.SphereGeometry(0.12, 16, 16);
+    const cutMat = new THREE.MeshBasicMaterial({ color: 0xff0055 });
+    const cutMesh = new THREE.Mesh(cutGeom, cutMat);
+    cutMesh.position.set(cutPt.x, 2.55, cutPt.y);
+    bim3d.survivabilityGroup.add(cutMesh);
+
+    // Glowing cut halo ring
+    const ringGeom = new THREE.RingGeometry(0.15, 0.28, 32);
+    ringGeom.rotateX(-Math.PI / 2);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xff1744, side: THREE.DoubleSide });
+    const ringMesh = new THREE.Mesh(ringGeom, ringMat);
+    ringMesh.position.set(cutPt.x, 2.56, cutPt.y);
+    bim3d.survivabilityGroup.add(ringMesh);
+  }
+
+  function render3D() {
+    if (!bim3d.isInitialized || !bim3d.renderer || state.viewMode === '2d') return;
+
+    if (bim3d.controls) {
+      bim3d.controls.update();
+    }
+
+    // Animate survivability pulse in 3D if wire cut is active
+    if (state.activeCutReport && bim3d.survivabilityGroup.children.length >= 2) {
+      const ring = bim3d.survivabilityGroup.children[1];
+      const scale = 1.0 + 0.3 * Math.sin(state.pulsePhase * 2);
+      ring.scale.set(scale, scale, scale);
+    }
+
+    bim3d.renderer.render(bim3d.scene, bim3d.camera);
+  }
+
+  function update3DDragMesh(target) {
+    if (!bim3d.isInitialized || !bim3d.elementsGroup || !target) return;
+    const meshName = target.type === 'node' ? `node_${target.id}` : `hub_${target.id}`;
+    const mesh = bim3d.elementsGroup.getObjectByName(meshName);
+    if (mesh) {
+      // In Three.js: X is x, Y is z_elevation, Z is y_plan
+      const dx = target.currentX - target.initialX;
+      const dz = target.currentY - target.initialY;
+      mesh.position.set(dx, 0, dz);
+    }
+  }
+
+  function reset3DDragMesh(target) {
+    if (!bim3d.isInitialized || !bim3d.elementsGroup || !target) return;
+    const meshName = target.type === 'node' ? `node_${target.id}` : `hub_${target.id}`;
+    const mesh = bim3d.elementsGroup.getObjectByName(meshName);
+    if (mesh) {
+      mesh.position.set(0, 0, 0);
+    }
+  }
+
+  function setCameraPreset(mode) {
+    if (!bim3d.isInitialized || !bim3d.controls || !bim3d.camera) return;
+
+    const target = bim3d.controls.target.clone();
+    ['btnCamIsometric', 'btnCamTopDown', 'btnCamPerspective'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.remove('active');
+    });
+
+    if (mode === 'isometric') {
+      const btn = document.getElementById('btnCamIsometric');
+      if (btn) btn.classList.add('active');
+      bim3d.camera.position.set(target.x + 12, target.y + 14, target.z + 14);
+      bim3d.camera.lookAt(target);
+    } else if (mode === 'topdown') {
+      const btn = document.getElementById('btnCamTopDown');
+      if (btn) btn.classList.add('active');
+      bim3d.camera.position.set(target.x, target.y + 26, target.z + 0.001);
+      bim3d.camera.lookAt(target);
+    } else if (mode === 'perspective') {
+      const btn = document.getElementById('btnCamPerspective');
+      if (btn) btn.classList.add('active');
+      bim3d.camera.position.set(target.x - 5, target.y + 1.2, target.z - 5);
+      bim3d.camera.lookAt(target);
+    } else if (mode === 'reset') {
+      setCameraPreset('isometric');
+    }
+    bim3d.controls.update();
+  }
+
+  function setViewMode(mode) {
+    state.viewMode = mode;
+    const vpContainer = document.getElementById('viewportContainer');
+    if (!vpContainer) return;
+
+    vpContainer.className = `viewport-container view-mode-${mode}`;
+
+    ['btnView2D', 'btnViewSplit', 'btnView3D'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.classList.remove('active');
+    });
+
+    if (mode === '2d') {
+      const b = document.getElementById('btnView2D');
+      if (b) b.classList.add('active');
+    } else if (mode === 'split') {
+      const b = document.getElementById('btnViewSplit');
+      if (b) b.classList.add('active');
+    } else if (mode === '3d') {
+      const b = document.getElementById('btnView3D');
+      if (b) b.classList.add('active');
+    }
+
+    setTimeout(() => {
+      resizeCanvas();
+      drawScene();
+      if (bim3d.isInitialized && bim3d.renderer && bim3d.container) {
+        const w = bim3d.container.clientWidth;
+        const h = bim3d.container.clientHeight;
+        bim3d.camera.aspect = w / (h || 1);
+        bim3d.camera.updateProjectionMatrix();
+        bim3d.renderer.setSize(w, h);
+      }
+    }, 50);
+  }
+
+  // --- Attach BIM and View Controls Listeners ---
+  const btnView2D = document.getElementById('btnView2D');
+  const btnViewSplit = document.getElementById('btnViewSplit');
+  const btnView3D = document.getElementById('btnView3D');
+  if (btnView2D) btnView2D.addEventListener('click', () => setViewMode('2d'));
+  if (btnViewSplit) btnViewSplit.addEventListener('click', () => setViewMode('split'));
+  if (btnView3D) btnView3D.addEventListener('click', () => setViewMode('3d'));
+
+  const btnCamIsometric = document.getElementById('btnCamIsometric');
+  const btnCamTopDown = document.getElementById('btnCamTopDown');
+  const btnCamPerspective = document.getElementById('btnCamPerspective');
+  const btnCamReset = document.getElementById('btnCamReset');
+  if (btnCamIsometric) btnCamIsometric.addEventListener('click', () => setCameraPreset('isometric'));
+  if (btnCamTopDown) btnCamTopDown.addEventListener('click', () => setCameraPreset('topdown'));
+  if (btnCamPerspective) btnCamPerspective.addEventListener('click', () => setCameraPreset('perspective'));
+  if (btnCamReset) btnCamReset.addEventListener('click', () => setCameraPreset('reset'));
+
+  const btnDownloadBimObj = document.getElementById('btnDownloadBimObj');
+  if (btnDownloadBimObj) {
+    btnDownloadBimObj.addEventListener('click', () => {
+      window.location.href = `${CONFIG.httpFallbackBase}/api/bim/export/obj`;
+    });
+  }
+
   // --- Window Resize & Initialization ---
   window.addEventListener('resize', () => {
     resizeCanvas();
     drawScene();
+    if (bim3d.isInitialized && bim3d.renderer && bim3d.container) {
+      const w = bim3d.container.clientWidth;
+      const h = bim3d.container.clientHeight;
+      if (w > 0 && h > 0) {
+        bim3d.camera.aspect = w / h;
+        bim3d.camera.updateProjectionMatrix();
+        bim3d.renderer.setSize(w, h);
+      }
+    }
   });
 
   window.addEventListener('DOMContentLoaded', () => {
     resizeCanvas();
+    initThreeEngine();
     connectWebSocket();
     requestAnimationFrame(renderLoop);
   });

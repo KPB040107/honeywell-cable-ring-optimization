@@ -27,6 +27,11 @@
       </div>
 
       <div class="header-status">
+        <div class="view-mode-switcher" id="viewModeSwitcher">
+          <button class="view-btn" data-mode="2d" id="btnView2D">2D Floor Plan</button>
+          <button class="view-btn active" data-mode="split" id="btnViewSplit">Split 2D / 3D BIM</button>
+          <button class="view-btn" data-mode="3d" id="btnView3D">Full 3D BIM</button>
+        </div>
         <div id="connPill" class="status-pill connecting">
           <span class="indicator-dot"></span>
           <span id="connStatus">Connecting...</span>
@@ -112,9 +117,23 @@
           </div>
         </div>
 
-        <!-- Canvas Element -->
-        <div class="canvas-wrapper" id="canvasWrapper">
-          <canvas id="studioCanvas"></canvas>
+        <!-- Split Viewport Container -->
+        <div class="viewport-container view-mode-split" id="viewportContainer">
+          <div class="canvas-pane canvas-2d-pane" id="pane2D">
+            <div class="canvas-wrapper" id="canvasWrapper">
+              <canvas id="studioCanvas"></canvas>
+            </div>
+          </div>
+          <div class="canvas-pane canvas-3d-pane" id="pane3D">
+            <div id="bimViewport"></div>
+            <!-- 3D Camera Preset Overlay Toolbar -->
+            <div class="bim-camera-toolbar" id="bimCameraToolbar">
+              <button class="bim-cam-btn active" id="btnCamIsometric" title="Isometric 3D BIM View">Isometric BIM</button>
+              <button class="bim-cam-btn" id="btnCamTopDown" title="Top-Down Plan View">Top Down</button>
+              <button class="bim-cam-btn" id="btnCamPerspective" title="Perspective Interior View">Perspective</button>
+              <button class="bim-cam-btn" id="btnCamReset" title="Reset 3D Camera">Reset View</button>
+            </div>
+          </div>
         </div>
 
         <!-- Interactive Legend Footer -->
@@ -158,6 +177,35 @@
             <h3>Competition Metrics Scoreboard</h3>
             <span class="formula-caption">J = L + 5X + O + 0.5B</span>
           </div>
+
+          <!-- Live Equation Breakdown Pills -->
+          <div class="formula-breakdown-bar" id="formulaBreakdownBar">
+            <div class="breakdown-pill pill-l" title="Cable Length (1.0x)">
+              <span class="pill-k">L:</span>
+              <span id="pillValL" class="pill-v">--</span>
+            </div>
+            <span class="formula-op">+</span>
+            <div class="breakdown-pill pill-x" title="Crossings Penalty (5.0x)">
+              <span class="pill-k">5X:</span>
+              <span id="pillValX" class="pill-v">--</span>
+            </div>
+            <span class="formula-op">+</span>
+            <div class="breakdown-pill pill-o" title="Overlap Penalty (1.0x)">
+              <span class="pill-k">1O:</span>
+              <span id="pillValO" class="pill-v">--</span>
+            </div>
+            <span class="formula-op">+</span>
+            <div class="breakdown-pill pill-b" title="Bends Penalty (0.5x)">
+              <span class="pill-k">0.5B:</span>
+              <span id="pillValB" class="pill-v">--</span>
+            </div>
+            <span class="formula-op">=</span>
+            <div class="breakdown-pill pill-j" title="Total Competition Objective">
+              <span class="pill-k">J:</span>
+              <span id="pillValJ" class="pill-v">--</span>
+            </div>
+          </div>
+
           <div class="scoreboard-grid">
             <div class="score-cell total-cost-cell">
               <div class="cell-label">TOTAL COST (J)</div>
@@ -167,22 +215,22 @@
             <div class="score-cell">
               <div class="cell-label">CABLE LENGTH (L)</div>
               <div id="metricL" class="cell-value">--</div>
-              <div class="cell-sub">metres</div>
+              <div class="cell-sub">metres (1.0 &times; L)</div>
             </div>
             <div class="score-cell">
-              <div class="cell-label">BENDS (B)</div>
-              <div id="metricB" class="cell-value">--</div>
-              <div class="cell-sub">&plusmn;90&deg; orthogonal turns</div>
-            </div>
-            <div class="score-cell">
-              <div class="cell-label">CROSSINGS (X)</div>
+              <div class="cell-label">CROSSINGS (5 &times; X)</div>
               <div id="metricX" class="cell-value">--</div>
-              <div class="cell-sub">transverse overlaps</div>
+              <div class="cell-sub" id="subMetricX">5.0 &times; X penalty</div>
             </div>
             <div class="score-cell">
-              <div class="cell-label">OVERLAP (O)</div>
+              <div class="cell-label">OVERLAP (1 &times; O)</div>
               <div id="metricO" class="cell-value">--</div>
-              <div class="cell-sub">co-linear cable metres</div>
+              <div class="cell-sub" id="subMetricO">1.0 &times; O penalty</div>
+            </div>
+            <div class="score-cell">
+              <div class="cell-label">BENDS (0.5 &times; B)</div>
+              <div id="metricB" class="cell-value">--</div>
+              <div class="cell-sub" id="subMetricB">0.5 &times; B penalty</div>
             </div>
             <div class="score-cell">
               <div class="cell-label">HUBS (H)</div>
@@ -348,6 +396,14 @@
             </svg>
             Export Slide 8 JSON
           </button>
+          <button id="btnDownloadBimObj" class="action-btn bim-download-btn" title="Download 3D BIM (.OBJ) Architectural Model">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+            Download 3D BIM (.OBJ)
+          </button>
           <div class="action-btn-row">
             <button id="btnResetBaseline" class="action-btn secondary" title="Reset to Slide 5 Baseline Schematic">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -367,6 +423,8 @@
     </main>
   </div>
 
+  <script src="vendor/three.min.js"></script>
+  <script src="vendor/OrbitControls.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

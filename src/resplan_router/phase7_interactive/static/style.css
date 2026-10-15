@@ -98,6 +98,41 @@ body {
   gap: 12px;
 }
 
+/* View Mode Switcher */
+.view-mode-switcher {
+  display: flex;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.view-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.view-btn:hover {
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.view-btn.active {
+  background: linear-gradient(135deg, #0284C7, #38BDF8);
+  color: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(56, 189, 248, 0.25);
+}
+
 .status-pill {
   display: flex;
   align-items: center;
@@ -268,10 +303,122 @@ body {
   padding: 4px 8px;
 }
 
+/* Split-Screen Viewport Container */
+.viewport-container {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.canvas-pane {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  transition: flex 0.2s ease;
+}
+
+.canvas-2d-pane {
+  background: #F1F5F9;
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas-3d-pane {
+  background: linear-gradient(135deg, #0B1120 0%, #111827 50%, #0F172A 100%);
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid var(--border-subtle);
+}
+
+/* View Mode States */
+.viewport-container.view-mode-split .canvas-2d-pane {
+  flex: 1 1 50%;
+  max-width: 50%;
+}
+.viewport-container.view-mode-split .canvas-3d-pane {
+  flex: 1 1 50%;
+  max-width: 50%;
+}
+
+.viewport-container.view-mode-2d .canvas-2d-pane {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+.viewport-container.view-mode-2d .canvas-3d-pane {
+  display: none !important;
+}
+
+.viewport-container.view-mode-3d .canvas-2d-pane {
+  display: none !important;
+}
+.viewport-container.view-mode-3d .canvas-3d-pane {
+  flex: 1 1 100%;
+  max-width: 100%;
+  border-left: none;
+}
+
+#bimViewport {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: grab;
+}
+
+#bimViewport:active {
+  cursor: grabbing;
+}
+
+/* 3D Camera Preset Overlay Toolbar */
+.bim-camera-toolbar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 4px 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  z-index: 6;
+}
+
+.bim-cam-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.bim-cam-btn:hover {
+  background-color: var(--border-subtle);
+  color: #FFFFFF;
+}
+
+.bim-cam-btn.active {
+  background: linear-gradient(135deg, #0284C7, #38BDF8);
+  color: #FFFFFF;
+}
+
 .canvas-wrapper {
   flex: 1;
   width: 100%;
   height: 100%;
+  position: relative;
   cursor: crosshair;
 }
 
@@ -433,6 +580,71 @@ body {
   font-weight: 700;
   padding: 2px 6px;
   font-family: var(--font-mono);
+}
+
+/* Formula Breakdown Bar */
+.formula-breakdown-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+}
+
+.breakdown-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.breakdown-pill .pill-k {
+  opacity: 0.8;
+  font-size: 10px;
+}
+
+.breakdown-pill.pill-l {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #38BDF8;
+}
+
+.breakdown-pill.pill-x {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #C084FC;
+}
+
+.breakdown-pill.pill-o {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #F87171;
+}
+
+.breakdown-pill.pill-b {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #FBBF24;
+}
+
+.breakdown-pill.pill-j {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  color: #34D399;
+}
+
+.formula-op {
+  color: var(--text-dim);
+  font-weight: 700;
+  font-size: 12px;
 }
 
 /* Scoreboard Grid */
@@ -642,6 +854,18 @@ body {
 
 .action-btn.primary:hover {
   background: linear-gradient(135deg, #0369A1, #075985);
+  transform: translateY(-1px);
+}
+
+.bim-download-btn {
+  background: linear-gradient(135deg, #2563EB, #38BDF8) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.bim-download-btn:hover {
+  filter: brightness(1.1);
   transform: translateY(-1px);
 }
 
