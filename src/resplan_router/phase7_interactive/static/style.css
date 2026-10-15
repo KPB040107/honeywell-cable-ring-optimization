@@ -876,3 +876,191 @@ body {
   50% { opacity: 1; }
   100% { opacity: 0.4; }
 }
+
+/* ==========================================================================
+   Wire-Cut Survivability Simulator Styles (Phase 9)
+   ========================================================================== */
+
+.scissors-btn {
+  background: rgba(255, 0, 127, 0.12);
+  color: #FF007F;
+  border: 1px solid rgba(255, 0, 127, 0.4);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.scissors-btn:hover {
+  background: rgba(255, 0, 127, 0.25);
+  box-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
+  transform: translateY(-1px);
+}
+
+.scissors-btn.active {
+  background: #FF007F;
+  color: #FFFFFF;
+  box-shadow: 0 0 12px rgba(255, 0, 127, 0.7);
+  border-color: #FF007F;
+}
+
+.canvas-wrapper.scissors-active {
+  cursor: crosshair;
+}
+
+/* Legend dots for dual-direction pulses */
+.legend-dot.pulse-outbound {
+  background-color: #00D2FF;
+  box-shadow: 0 0 8px #00D2FF;
+}
+
+.legend-dot.pulse-return {
+  background-color: #FFA500;
+  box-shadow: 0 0 8px #FFA500;
+}
+
+/* Survivability Monitor HUD Card */
+.survivability-card {
+  border-left: 3px solid #10B981;
+}
+
+.surv-shield-icon {
+  font-size: 16px;
+}
+
+.standard-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.standard-badge.compliant {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.surv-status-banner {
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+}
+
+.surv-status-banner.normal {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.surv-status-banner.severed {
+  background: rgba(230, 25, 75, 0.15);
+  border: 1px solid rgba(230, 25, 75, 0.5);
+  box-shadow: 0 0 12px rgba(230, 25, 75, 0.25);
+}
+
+.surv-gauge-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #10B981;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.surv-status-banner.severed .surv-gauge-val {
+  color: #34D399;
+}
+
+.surv-gauge-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.surv-fault-box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(230, 25, 75, 0.4);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fault-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF6B6B;
+}
+
+.fault-details {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.branch-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.branch-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.branch-tag.outbound-tag {
+  color: #00D2FF;
+  font-weight: 600;
+}
+
+.branch-tag.return-tag {
+  color: #FFA500;
+  font-weight: 600;
+}
+
+.branch-nodes {
+  color: #F8FAFC;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.btn-heal-circuit {
+  align-self: stretch;
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.btn-heal-circuit:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.45);
+}
+

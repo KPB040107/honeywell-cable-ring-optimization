@@ -72,6 +72,12 @@
     frameCount: 0,
     lastFpsTime: performance.now(),
     currentFps: 60,
+
+    // Wire-Cut Survivability (Phase 9)
+    scissorsMode: false,
+    hoveredCable: null,
+    activeCutReport: null,
+    pulsePhase: 0,
   };
 
   // --- DOM Elements ---
@@ -112,6 +118,9 @@
   const btnRefreshCopilot = document.getElementById('btnRefreshCopilot');
   const copilotContainer = document.getElementById('copilotContainer');
 
+  const btnScissorsTool = document.getElementById('btnScissorsTool');
+  const btnHealCircuit = document.getElementById('btnHealCircuit');
+
   const btnZoomIn = document.getElementById('btnZoomIn');
   const btnZoomOut = document.getElementById('btnZoomOut');
   const btnFitScreen = document.getElementById('btnFitScreen');
@@ -133,6 +142,49 @@
     const canvasH = canvas.height / window.devicePixelRatio;
     const wy = state.transform.minY + (canvasH - sy - state.transform.offsetY) / state.transform.scale;
     return { x: wx, y: wy };
+  }
+
+  function projectPointToSegment(pt, a, b) {
+    const abx = b.x - a.x;
+    const aby = b.y - a.y;
+    const lenSq = abx * abx + aby * aby;
+    if (lenSq === 0) return { x: a.x, y: a.y };
+    let t = ((pt.x - a.x) * abx + (pt.y - a.y) * aby) / lenSq;
+    t = Math.max(0, Math.min(1, t));
+    return {
+      x: a.x + t * abx,
+      y: a.y + t * aby,
+    };
+  }
+
+  function findNearestCablePoint(worldX, worldY, hitRadiusM = 0.35) {
+    if (!state.serverState || !state.serverState.routes) return null;
+    let closest = null;
+    let minD = hitRadiusM;
+
+    state.serverState.routes.forEach((ring, rIdx) => {
+      (ring.segments || []).forEach((seg, sIdx) => {
+        const pts = seg.polyline || [];
+        for (let i = 0; i < pts.length - 1; i++) {
+          const p1 = { x: pts[i][0], y: pts[i][1] };
+          const p2 = { x: pts[i + 1][0], y: pts[i + 1][1] };
+          const proj = projectPointToSegment({ x: worldX, y: worldY }, p1, p2);
+          const d = Math.hypot(proj.x - worldX, proj.y - worldY);
+          if (d < minD) {
+            minD = d;
+            closest = {
+              hubId: ring.hub_id,
+              ringIdx: rIdx,
+              segIdx: sIdx,
+              segment: seg,
+              cutPoint: proj,
+              distance: d,
+            };
+          }
+        }
+      });
+    });
+    return closest;
   }
 
   function fitToScreen() {
@@ -251,6 +303,16 @@
         });
       } else if (action === 'reset') {
         res = await fetch(`${CONFIG.httpFallbackBase}/api/reset`, { method: 'POST' });
+      } else if (action === 'wire_cut') {
+        res = await fetch(`${CONFIG.httpFallbackBase}/api/survivability/cut`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ hub_id: msg.hub_id, cut_x: msg.cut_x, cut_y: msg.cut_y }),
+        });
+      } else if (action === 'wire_heal') {
+        res = await fetch(`${CONFIG.httpFallbackBase}/api/survivability/heal`, {
+          method: 'POST',
+        });
       } else {
         res = await fetch(`${CONFIG.httpFallbackBase}/api/state`);
       }
@@ -286,12 +348,19 @@
     }
     state.inFlightAction = false;
 
-    if (data.type === 'state_update') {
+    if (data.type === 'survivability_update') {
+      state.serverState = data;
+      state.activeCutReport = data.report || data.survivability_report || null;
+      updateSurvivabilityHUD(state.activeCutReport);
+      updateHUD(data);
+    } else if (data.type === 'state_update') {
       const firstLoad = !state.serverState;
       state.serverState = data;
       if (firstLoad) {
         fitToScreen();
       }
+      state.activeCutReport = data.survivability_report || null;
+      updateSurvivabilityHUD(state.activeCutReport);
       updateHUD(data);
       if (state.activeProposalId) {
         state.activeProposalId = null;
@@ -303,6 +372,56 @@
       const report = data.report || {};
       state.copilotProposals = report.recommended_proposals || [];
       renderCopilotProposals(state.copilotProposals, report);
+    }
+  }
+
+  function updateSurvivabilityHUD(report) {
+    const survBanner = document.getElementById('survStatusBanner');
+    const survGaugeVal = document.getElementById('survGaugeVal');
+    const survGaugeSub = document.getElementById('survGaugeSub');
+    const survFaultBox = document.getElementById('survFaultBox');
+    const survStandardBadge = document.getElementById('survStandardBadge');
+    const faultLeg = document.getElementById('faultLeg');
+    const faultCoords = document.getElementById('faultCoords');
+    const outboundNodesList = document.getElementById('outboundNodesList');
+    const returnNodesList = document.getElementById('returnNodesList');
+
+    if (!survBanner) return;
+
+    if (report && report.is_severed) {
+      survBanner.className = 'surv-status-banner severed';
+      const pct = report.survivability_pct !== undefined ? report.survivability_pct.toFixed(0) : '100';
+      survGaugeVal.textContent = `${pct}% ONLINE — NFPA 72 CLASS A`;
+      survGaugeSub.textContent = `Fault Isolated: Hub ${report.hub_id} loop split into dual branches`;
+      if (survStandardBadge) {
+        survStandardBadge.textContent = report.nfpa72_class_a_compliant ? '100% SURVIVABILITY' : 'NON-COMPLIANT';
+        survStandardBadge.className = report.nfpa72_class_a_compliant ? 'standard-badge compliant' : 'standard-badge';
+      }
+
+      if (survFaultBox) survFaultBox.style.display = 'flex';
+      const cutLoc = report.cut_location;
+      if (cutLoc) {
+        if (faultLeg) faultLeg.textContent = `${cutLoc.from_node} ➔ ${cutLoc.to_node}`;
+        const pt = cutLoc.cut_point || {};
+        if (faultCoords) faultCoords.textContent = `X: ${(pt.x || 0).toFixed(2)}m, Y: ${(pt.y || 0).toFixed(2)}m`;
+      }
+      const pNodes = report.primary_branch_nodes || [];
+      const rNodes = report.return_branch_nodes || [];
+      if (outboundNodesList) {
+        outboundNodesList.textContent = pNodes.length > 0 ? pNodes.join(', ') : '(None — Cut at Hub Outbound)';
+      }
+      if (returnNodesList) {
+        returnNodesList.textContent = rNodes.length > 0 ? rNodes.join(', ') : '(None)';
+      }
+    } else {
+      survBanner.className = 'surv-status-banner normal';
+      if (survGaugeVal) survGaugeVal.textContent = '100% ONLINE — NFPA 72 CLASS A';
+      if (survGaugeSub) survGaugeSub.textContent = 'Closed-Loop Ring Normal (0 Severed Legs)';
+      if (survStandardBadge) {
+        survStandardBadge.textContent = 'NFPA 72 CLASS A';
+        survStandardBadge.className = 'standard-badge compliant';
+      }
+      if (survFaultBox) survFaultBox.style.display = 'none';
     }
   }
 
@@ -474,6 +593,9 @@
       drawHalos();
     }
 
+    // Advance 60 FPS pulse animation
+    state.pulsePhase = (state.pulsePhase + 0.3) % 30;
+
     // 4. Draw Cable Routes
     drawRoutes(state.serverState.routes || []);
 
@@ -635,37 +757,167 @@
     routes.forEach((ring, idx) => {
       const ringColor = CONFIG.hubColors[idx % CONFIG.hubColors.length];
       const segments = ring.segments || [];
+      const isRingCut = state.activeCutReport && state.activeCutReport.is_severed && state.activeCutReport.hub_id === ring.hub_id;
+      const cutLoc = isRingCut ? state.activeCutReport.cut_location : null;
 
       segments.forEach((seg, sIdx) => {
         const pts = seg.polyline || [];
         if (pts.length < 2) return;
 
+        const isHovered = state.scissorsMode && state.hoveredCable &&
+                          state.hoveredCable.ringIdx === idx && state.hoveredCable.segIdx === sIdx;
+
         ctx.save();
-        ctx.strokeStyle = ringColor;
-        ctx.lineWidth = 3.5;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
 
-        ctx.beginPath();
-        const p0 = worldToScreen(pts[0][0], pts[0][1]);
-        ctx.moveTo(p0.x, p0.y);
-        for (let i = 1; i < pts.length; i++) {
-          const pt = worldToScreen(pts[i][0], pts[i][1]);
-          ctx.lineTo(pt.x, pt.y);
-        }
-        ctx.stroke();
+        if (isRingCut && cutLoc) {
+          const cutLeg = cutLoc.leg_index;
+          let legColor = ringColor;
+          let isPulseOutbound = false;
+          let isPulseReturn = false;
 
-        // Directional flow arrow and sequence badge
-        if (state.showBadges && pts.length >= 2) {
-          const midIdx = Math.floor(pts.length / 2);
-          const pA = worldToScreen(pts[midIdx - 1][0], pts[midIdx - 1][1]);
-          const pB = worldToScreen(pts[midIdx][0], pts[midIdx][1]);
-          drawFlowArrow(pA, pB, ringColor);
+          if (sIdx < cutLeg) {
+            legColor = '#00D2FF';
+            isPulseOutbound = true;
+          } else if (sIdx > cutLeg) {
+            legColor = '#FFA500';
+            isPulseReturn = true;
+          } else {
+            legColor = '#64748B';
+          }
+
+          // Base polyline
+          ctx.strokeStyle = isHovered ? '#FF007F' : legColor;
+          ctx.lineWidth = isHovered ? 5.0 : 3.5;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+
+          ctx.beginPath();
+          const p0 = worldToScreen(pts[0][0], pts[0][1]);
+          ctx.moveTo(p0.x, p0.y);
+          for (let i = 1; i < pts.length; i++) {
+            const pt = worldToScreen(pts[i][0], pts[i][1]);
+            ctx.lineTo(pt.x, pt.y);
+          }
+          ctx.stroke();
+
+          // Dual-direction animated pulses
+          if (isPulseOutbound) {
+            ctx.strokeStyle = '#00D2FF';
+            ctx.lineWidth = 4.5;
+            ctx.setLineDash([8, 8]);
+            ctx.lineDashOffset = -state.pulsePhase * 2.5;
+            ctx.stroke();
+          } else if (isPulseReturn) {
+            ctx.strokeStyle = '#FFA500';
+            ctx.lineWidth = 4.5;
+            ctx.setLineDash([8, 8]);
+            ctx.lineDashOffset = state.pulsePhase * 2.5;
+            ctx.stroke();
+          } else if (sIdx === cutLeg && cutLoc.cut_point) {
+            const cp = cutLoc.cut_point;
+            const pStart = worldToScreen(pts[0][0], pts[0][1]);
+            const pCut = worldToScreen(cp.x, cp.y);
+            const pEnd = worldToScreen(pts[pts.length - 1][0], pts[pts.length - 1][1]);
+
+            // Upstream portion: cyan pulse flowing outward to cut
+            ctx.beginPath();
+            ctx.moveTo(pStart.x, pStart.y);
+            ctx.lineTo(pCut.x, pCut.y);
+            ctx.strokeStyle = '#00D2FF';
+            ctx.lineWidth = 4.5;
+            ctx.setLineDash([8, 8]);
+            ctx.lineDashOffset = -state.pulsePhase * 2.5;
+            ctx.stroke();
+
+            // Downstream portion: amber pulse flowing reverse to cut
+            ctx.beginPath();
+            ctx.moveTo(pEnd.x, pEnd.y);
+            ctx.lineTo(pCut.x, pCut.y);
+            ctx.strokeStyle = '#FFA500';
+            ctx.lineWidth = 4.5;
+            ctx.setLineDash([8, 8]);
+            ctx.lineDashOffset = -state.pulsePhase * 2.5;
+            ctx.stroke();
+          }
+        } else {
+          // Normal closed loop
+          ctx.strokeStyle = isHovered ? '#FF007F' : ringColor;
+          ctx.lineWidth = isHovered ? 5.0 : 3.5;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+
+          ctx.beginPath();
+          const p0 = worldToScreen(pts[0][0], pts[0][1]);
+          ctx.moveTo(p0.x, p0.y);
+          for (let i = 1; i < pts.length; i++) {
+            const pt = worldToScreen(pts[i][0], pts[i][1]);
+            ctx.lineTo(pt.x, pt.y);
+          }
+          ctx.stroke();
+
+          if (state.showBadges && pts.length >= 2) {
+            const midIdx = Math.floor(pts.length / 2);
+            const pA = worldToScreen(pts[midIdx - 1][0], pts[midIdx - 1][1]);
+            const pB = worldToScreen(pts[midIdx][0], pts[midIdx][1]);
+            drawFlowArrow(pA, pB, isHovered ? '#FF007F' : ringColor);
+          }
         }
 
         ctx.restore();
       });
+
+      // Render severed cut marker on canvas
+      if (isRingCut && cutLoc && cutLoc.cut_point) {
+        drawCutMarker(cutLoc.cut_point);
+      }
     });
+
+    // If scissors tool is active and hovering a cable, draw scissors target cursor
+    if (state.scissorsMode && state.hoveredCable && state.hoveredCable.cutPoint) {
+      drawScissorsCursor(state.hoveredCable.cutPoint);
+    }
+  }
+
+  function drawCutMarker(pt) {
+    const scr = worldToScreen(pt.x, pt.y);
+    ctx.save();
+
+    // Red spark pulse halo
+    const pulseRad = 15 + Math.sin(state.pulsePhase * 0.5) * 4;
+    ctx.beginPath();
+    ctx.arc(scr.x, scr.y, pulseRad, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(230, 25, 75, 0.35)';
+    ctx.fill();
+    ctx.strokeStyle = '#E6194B';
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    // Sever break symbol
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 15px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('✂️', scr.x, scr.y);
+
+    ctx.restore();
+  }
+
+  function drawScissorsCursor(pt) {
+    const scr = worldToScreen(pt.x, pt.y);
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(scr.x, scr.y, 10, 0, Math.PI * 2);
+    ctx.strokeStyle = '#FF007F';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 4]);
+    ctx.stroke();
+
+    ctx.fillStyle = '#FF007F';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('✂️', scr.x, scr.y);
+    ctx.restore();
   }
 
   function drawFlowArrow(fromPt, toPt, color) {
@@ -739,12 +991,43 @@
         ctx.shadowBlur = 10;
       }
 
+      // Check survivability status if cut is active
+      let nodeBorderColor = '#38BDF8';
+      let statusTag = null;
+      let statusColor = null;
+
+      if (state.activeCutReport && state.activeCutReport.node_statuses) {
+        const nStat = state.activeCutReport.node_statuses[node.node_id];
+        if (nStat) {
+          if (nStat.power_source === 'primary_outbound') {
+            nodeBorderColor = '#00D2FF';
+            statusTag = '⚡ OUT';
+            statusColor = '#00D2FF';
+          } else if (nStat.power_source === 'return_terminal') {
+            nodeBorderColor = '#FFA500';
+            statusTag = '⚡ RET';
+            statusColor = '#FFA500';
+          } else {
+            nodeBorderColor = '#E6194B';
+            statusTag = 'OFF';
+            statusColor = '#E6194B';
+          }
+
+          // Outer survivability halo
+          ctx.beginPath();
+          ctx.arc(scr.x, scr.y, 16, 0, Math.PI * 2);
+          ctx.strokeStyle = statusColor;
+          ctx.lineWidth = 2.0;
+          ctx.stroke();
+        }
+      }
+
       // Circle badge
       ctx.beginPath();
       ctx.arc(scr.x, scr.y, 11, 0, Math.PI * 2);
       ctx.fillStyle = '#0F172A';
       ctx.fill();
-      ctx.strokeStyle = '#38BDF8';
+      ctx.strokeStyle = nodeBorderColor;
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
@@ -754,6 +1037,13 @@
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(node.node_id, scr.x, scr.y);
+
+      // Status tag badge above node
+      if (statusTag && statusColor) {
+        ctx.fillStyle = statusColor;
+        ctx.font = '700 8px JetBrains Mono, monospace';
+        ctx.fillText(statusTag, scr.x, scr.y - 18);
+      }
 
       ctx.restore();
     });
@@ -898,6 +1188,20 @@
     }
 
     if (e.button === 0) {
+      if (state.scissorsMode) {
+        const worldPos = screenToWorld(pos.x, pos.y);
+        const cableHit = findNearestCablePoint(worldPos.x, worldPos.y, 0.45);
+        if (cableHit) {
+          sendWebSocketMessage({
+            action: 'wire_cut',
+            hub_id: cableHit.hubId,
+            cut_x: Math.round(cableHit.cutPoint.x * 100) / 100,
+            cut_y: Math.round(cableHit.cutPoint.y * 100) / 100,
+          });
+          return;
+        }
+      }
+
       const hit = findHitEntity(pos.x, pos.y);
       if (hit) {
         state.dragTarget = {
@@ -926,7 +1230,10 @@
       return;
     }
 
-    if (state.dragTarget) {
+    if (state.scissorsMode) {
+      state.hoveredCable = findNearestCablePoint(worldPos.x, worldPos.y, 0.45);
+      canvas.style.cursor = 'crosshair';
+    } else if (state.dragTarget) {
       canvas.style.cursor = 'grabbing';
       state.dragTarget.currentX = worldPos.x;
       state.dragTarget.currentY = worldPos.y;
@@ -950,16 +1257,17 @@
         }
       }
     } else {
+      state.hoveredCable = null;
       // Hover cursor
       const hit = findHitEntity(pos.x, pos.y);
-      canvas.style.cursor = hit ? 'pointer' : 'crosshair';
+      canvas.style.cursor = hit ? 'pointer' : 'default';
     }
   });
 
   window.addEventListener('mouseup', function () {
     if (state.isPanning) {
       state.isPanning = false;
-      canvas.style.cursor = 'crosshair';
+      canvas.style.cursor = state.scissorsMode ? 'crosshair' : 'default';
     }
     if (state.dragTarget) {
       // Send final position commit
@@ -1167,6 +1475,22 @@
 
   if (btnRefreshCopilot) {
     btnRefreshCopilot.addEventListener('click', requestCopilotSuggestions);
+  }
+
+  // --- Wire-Cut Survivability Scissors & Heal Listeners ---
+  if (btnScissorsTool) {
+    btnScissorsTool.addEventListener('click', () => {
+      state.scissorsMode = !state.scissorsMode;
+      btnScissorsTool.classList.toggle('active', state.scissorsMode);
+      canvasWrapper.classList.toggle('scissors-active', state.scissorsMode);
+      canvas.style.cursor = state.scissorsMode ? 'crosshair' : 'default';
+    });
+  }
+
+  if (btnHealCircuit) {
+    btnHealCircuit.addEventListener('click', () => {
+      sendWebSocketMessage({ action: 'wire_heal' });
+    });
   }
 
   // --- Action Buttons ---

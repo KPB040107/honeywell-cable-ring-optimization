@@ -101,6 +101,10 @@
               </svg>
               <span>Suggest Improvements</span>
             </button>
+            <button id="btnScissorsTool" class="tool-btn scissors-btn" title="Scissors Tool — Click cable to simulate cut" aria-label="Scissors Tool">
+              <span class="tool-icon">✂️</span>
+              <span>Cut Wire Tool</span>
+            </button>
           </div>
 
           <div class="toolbar-group canvas-info">
@@ -121,6 +125,8 @@
           <div class="legend-item"><span class="legend-dot halo-ok"></span> Halo &ge; 0.5m (Safe)</div>
           <div class="legend-item"><span class="legend-dot halo-bad"></span> Halo &lt; 0.5m (Rule 6 Breach)</div>
           <div class="legend-item"><span class="legend-dot ghost-door"></span> Ghost Doorway (Co-Pilot)</div>
+          <div class="legend-item"><span class="legend-dot pulse-outbound"></span> Primary Outbound (Cyan)</div>
+          <div class="legend-item"><span class="legend-dot pulse-return"></span> Return Terminal (Amber)</div>
         </div>
       </section>
 
@@ -282,6 +288,47 @@
           <div id="copilotContainer" class="copilot-proposals-container">
             <div class="copilot-empty-state">
               <span>Click "Suggest Improvements" to analyze layout perturbations.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Wire-Cut Survivability Monitor (NFPA 72 Class A) -->
+        <div class="hud-card survivability-card" id="survivabilityCard">
+          <div class="card-header">
+            <div class="header-with-badge">
+              <span class="surv-shield-icon">🛡️</span>
+              <h3>Wire-Cut Survivability</h3>
+            </div>
+            <span id="survStandardBadge" class="standard-badge compliant">NFPA 72 CLASS A</span>
+          </div>
+          <div class="survivability-body">
+            <div id="survStatusBanner" class="surv-status-banner normal">
+              <div class="surv-gauge-val" id="survGaugeVal">100% ONLINE — NFPA 72 CLASS A</div>
+              <div class="surv-gauge-sub" id="survGaugeSub">Closed-Loop Ring Normal (0 Severed Legs)</div>
+            </div>
+
+            <!-- Severed Fault Details Box (Dynamic) -->
+            <div id="survFaultBox" class="surv-fault-box" style="display: none;">
+              <div class="fault-header">
+                <span class="fault-icon">⚠️</span>
+                <span id="faultTitle">CABLE CUT DETECTED</span>
+              </div>
+              <div class="fault-details" id="faultDetails">
+                Severed Leg: <strong id="faultLeg">--</strong> at (<span id="faultCoords">--</span>)
+              </div>
+              <div class="branch-breakdown">
+                <div class="branch-row outbound">
+                  <span class="branch-tag outbound-tag">⚡ Primary Outbound:</span>
+                  <span id="outboundNodesList" class="branch-nodes">--</span>
+                </div>
+                <div class="branch-row return">
+                  <span class="branch-tag return-tag">⚡ Return Terminal:</span>
+                  <span id="returnNodesList" class="branch-nodes">--</span>
+                </div>
+              </div>
+              <button id="btnHealCircuit" class="btn-heal-circuit" title="Restore severed wire and heal circuit">
+                🔄 Restore Circuit / Heal Wire
+              </button>
             </div>
           </div>
         </div>
