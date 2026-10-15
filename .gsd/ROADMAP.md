@@ -102,9 +102,13 @@ updated: 2026-10-15T23:30:00+05:30
 > Note: Phases 7–10 build directly on the V1 core engine once all V1 regression gates pass.
 
 ### Phase 7: Live Floor-Plan Co-Design Canvas (`< 50 ms` Re-Routing)
-**Status:** ⬜ Later Milestone  
+**Status:** 🔄 In Progress  
 **Objective:** Real-time WebSockets canvas allowing interactive dragging of walls, doors, hubs, and nodes with live $0.5\text{ m}$ clearance haloes and instantaneous recalculation ($< 35\text{ ms}$).  
 **Requirements:** REQ-V2-01  
+
+**Plans:**
+- [ ] Plan 7.1: `incremental_router.py` & `halo_tracker.py` (Sub-50 ms incremental re-routing engine, live wall-clearance halo, FastAPI WebSockets server)
+- [ ] Plan 7.2: `index.html`, `app.js`, `style.css` (Browser co-design canvas, live reviewer HUD, one-click Slide 8 export, `--serve` CLI launcher)
 
 ---
 
@@ -139,7 +143,7 @@ updated: 2026-10-15T23:30:00+05:30
 | **Phase 4** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 5** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 6** | V1 Foundation | ✅ Complete | 2/2 | 100% |
-| **Phase 7** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
+| **Phase 7** | V2 Extension | 🔄 In Progress | 0/2 | 0% |
 | **Phase 8** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
 | **Phase 9** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
 | **Phase 10** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
