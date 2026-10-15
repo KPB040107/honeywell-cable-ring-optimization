@@ -599,7 +599,7 @@ class BIM3DGenerator:
                 horizontal_segments_count = 0
                 # 1. Horizontal conduit runs along route segments at z = conduit_elevation_m
                 for seg in ring.route_segments:
-                    pts = seg.points
+                    pts = getattr(seg, "polyline", getattr(seg, "points", []))
                     for i in range(len(pts) - 1):
                         p1, p2 = pts[i], pts[i + 1]
                         dx = abs(p2.x - p1.x)
