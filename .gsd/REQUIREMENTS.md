@@ -71,7 +71,7 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 |----|-------------|----------|-------|--------|
 | **REQ-V2-01** | Live Floor-Plan Co-Design Canvas (< 50 ms incremental re-routing over WebSockets on wall/door/node drag). | Interactive UX | 7 | Complete |
 | **REQ-V2-02** | "Architectural Co-Pilot" Doorway & Wall Optimizer recommending structural changes to lower $H$ or $J$. | Optimization | 8 | Complete |
-| **REQ-V2-03** | Interactive Wire-Cut NFPA 72 Class A Survivability Simulator demonstrating signal loop recovery. | Simulation | 9 | Deferred |
+| **REQ-V2-03** | Interactive Wire-Cut NFPA 72 Class A Survivability Simulator demonstrating signal loop recovery. | Simulation | 9 | Complete |
 | **REQ-V2-04** | Synchronized 2D/3D BIM Split-Screen with live checker HUD and one-click JSON export. | 3D Visualization | 10 | Deferred |
 
 ---
