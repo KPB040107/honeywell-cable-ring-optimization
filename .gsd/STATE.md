@@ -7,20 +7,20 @@ updated: 2026-10-15T23:30:00+05:30
 ## Current Position
 
 **Milestone:** V1 Foundation (Phases 1–6)  
-**Phase:** Phase 1 — Ingestion, Scale Normalization, Polygon Healing & Fixed Node Loading (Completed)  
-**Status:** verified  
-**Plan:** 1-1-PLAN.md, 1-2-PLAN.md (Wave 1 & Wave 2 completed & verified)
+**Phase:** Phase 2 — Door & Open-Passage Topology Extraction & Parallel-Lane Portal Waypoints  
+**Status:** ready_for_execution  
+**Plan:** 2-1-PLAN.md, 2-2-PLAN.md (Wave 1 & Wave 2)
 
 ## Last Action
 
-Executed and independently verified Phase 1:
-- Wave 1 (Plan 1.1): Packaging, centralized `SystemConfig`, Pydantic v2 `MetricFloorPlan` contracts, and Slide 4 scale converter (`scale = sqrt(inner.area / area)`).
-- Wave 2 (Plan 1.2): Polygon healing via `make_valid()`, free-space/obstacle extraction, fixed node loader with $0.5\text{ m}$ clearance verification and `polylabel` fallback.
-- Independent Verification: `gsd-verifier` ran full test suite (`tests/test_phase1_scale.py`, `tests/test_phase1_ingestion.py`), confirming 5/5 must-haves pass with 0 errors.
+Completed Phase 2 planning following `v2.md` Section 5.2 and GSD guidelines:
+- Created `.gsd/phases/2/RESEARCH.md` detailing door threshold geometry, open passage detection, and $\ge 20\text{ mm}$ parallel doorway lane math for $O = 0$.
+- Created `.gsd/phases/2/2-1-PLAN.md` (Wave 1: Contracts, `portal_extractor.py`, portal unit tests).
+- Created `.gsd/phases/2/2-2-PLAN.md` (Wave 2: `macro_graph.py`, Slide 5 dual graph, parallel lane validation, Phase 2 test suite).
 
 ## Next Steps
 
-1. `/plan 2` — Plan Phase 2 (Door & Open-Passage Topology Extraction & Parallel-Lane Portal Waypoints).
+1. `/execute 2` — Execute Plan 2.1 and Plan 2.2 sequentially to implement Phase 2.
 
 ## Active Decisions
 
