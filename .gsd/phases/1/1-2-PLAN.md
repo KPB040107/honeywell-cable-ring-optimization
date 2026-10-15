@@ -1,7 +1,7 @@
 # Phase 1 Plan 2: Provisional Benchmark Fixture, ResPlan Parser, Scale Normalization & Deterministic Polylabel Node Placement
 
 <objective>
-Construct the synthetic 6-room benchmark fixture based on PRD Section 5.4.3 area and topology requirements, explicitly declaring all unverified coordinates as provisional. Implement the ResPlan geometry parser with explicit unit handling and targeted repair logging, the metric scale normalizer, and the deterministic polylabel device node placement engine with strict 0.20 m post-snap clearance enforcement. Verify all Phase 1 gates via automated pytest suite.
+Construct the synthetic 6-room benchmark fixture based on PRD Section 5.4.3 area and topology requirements, explicitly declaring all unverified coordinates as provisional. Implement the ResPlan geometry parser with documented schema definitions (exact required fields, geometry representation, coordinate-unit source, and area metadata), targeted repair logging, the metric scale normalizer, and the deterministic polylabel device node placement engine with strict 0.20 m post-snap clearance enforcement. Verify all Phase 1 gates via automated pytest suite.
 </objective>
 
 <context>
@@ -13,13 +13,15 @@ Construct the synthetic 6-room benchmark fixture based on PRD Section 5.4.3 area
 
 <tasks>
 <task id="1">
-<title>Synthesize provisional 6-room benchmark fixture and implement ResPlan parser with targeted repair</title>
+<title>Synthesize provisional 6-room benchmark fixture and implement ResPlan parser with documented schemas</title>
 <description>
 Create `tests/fixtures/schematic_6room.json` representing the 6 eligible rooms (118 m² total area: Living 40 m², Bed 1 16 m², Bed 2 16 m², Bed 3 15 m², Kitchen 16 m², Storage 15 m²) and 1 excluded Bathroom, with doors matching the PRD adjacency topology.
 Mark the fixture explicitly with top-level metadata `is_provisional: true` and document all unverified coordinate, wall dimension, and door placement assumptions in `tests/fixtures/README.md`.
 Implement `src/resplan_router/phase1_ingestion/parser.py`:
-- Support documented ResPlan WKT and coordinate dictionary schemas.
-- Explicit Unit Handling: Reject inputs with ambiguous or missing unit definitions with `AmbiguousCoordinateUnitError`. Only apply unit conversions when explicitly declared in metadata (`coordinate_unit: "pixel"` or `"meter"`) or when raw geometries match a documented dataset convention.
+- Document exact supported input schemas:
+  1. `resplan_wkt_v1`: Required fields (`id`, `area`, `wall_depth`, `coordinate_unit`: "meter"|"pixel"), WKT geometry per category (`living`, `bedroom`, etc.).
+  2. `resplan_geo_v1`: Structured coordinate polygons (`coordinates`: `[[[x, y], ...]]`), required metadata (`id`, `area`, `wall_depth`, `coordinate_unit`).
+- Explicit Unit Handling: Reject inputs with ambiguous or missing unit definitions with `AmbiguousCoordinateUnitError`.
 - Targeted Geometry Repair: Do NOT blindly chain `make_valid()` and `buffer(0)` on all geometries. Test `geom.is_valid` first. If invalid, apply minimal repair, log the operation (original issue, before/after area delta), and verify `repaired_geom.is_valid`. If the area change exceeds a 1% threshold or topology degrades, reject with `GeometryRepairError`.
 - Deterministic Polygon Decomposition: Break MultiPolygons into valid single Polygons, filter out slivers (< 0.5 m²), and sort deterministically by (min_x, min_y).
 </description>
@@ -51,7 +53,7 @@ Create `src/resplan_router/phase1_ingestion/node_placer.py`:
 <title>Create automated Phase 1 test suite</title>
 <description>
 Implement `tests/test_phase1_ingestion.py` covering:
-1. `test_schema_validation_and_unit_rejection`: Validates valid JSON, asserts rejection of ambiguous unit metadata with `AmbiguousCoordinateUnitError`.
+1. `test_schema_validation_and_unit_rejection`: Validates valid JSON, asserts rejection of ambiguous unit metadata with `AmbiguousCoordinateUnitError`. Include representative valid and invalid examples for both supported formats.
 2. `test_provisional_fixture_ingestion`: Ingests `schematic_6room.json`, asserts exactly 7 rooms (6 eligible, 1 excluded), and verifies `is_provisional` metadata flag.
 3. `test_targeted_repair_logging`: Asserts valid geometries are untouched and invalid geometries trigger logged repair with area drift checks.
 4. `test_scale_normalization_explicit`: Confirms metric scaling when explicit metadata is provided and rejection when ambiguous.
@@ -67,6 +69,7 @@ Implement `tests/test_phase1_ingestion.py` covering:
 
 <success_criteria>
 - `schematic_6room.json` created with `is_provisional: true` and documented in `tests/fixtures/README.md`.
+- Supported input schemas documented with exact fields, geometry representations, and unit rules.
 - `parser.py`, `scale_normalizer.py`, and `node_placer.py` implemented with explicit unit handling and strict post-snap clearance validation.
 - `tests/test_phase1_ingestion.py` passes 100% with pytest.
 </success_criteria>
