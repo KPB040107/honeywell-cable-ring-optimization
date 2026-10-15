@@ -7,8 +7,8 @@ updated: 2026-10-15T23:30:00+05:30
 # ROADMAP.md
 
 > **Current Milestone:** V1 Foundation (Core Algorithmic Engine & Reference Checker)  
-> **Current Phase:** Phase 1 — Ingestion, Scale Normalization, Polygon Healing & Fixed Node Loading  
-> **Status:** ⬜ Not Started (Awaiting Spec Finalization)
+> **Current Phase:** Phase 2 — Door & Open-Passage Topology Extraction & Parallel-Lane Portal Waypoints  
+> **Status:** ⬜ Ready for Planning
 
 ---
 
@@ -27,13 +27,13 @@ updated: 2026-10-15T23:30:00+05:30
 ## Milestone 1: V1 Foundation (Phases 1–6)
 
 ### Phase 1: Ingestion, Scale Normalization, Polygon Healing & Fixed Node Loading
-**Status:** ⬜ Not Started  
+**Status:** ✅ Complete  
 **Objective:** Parse raw ResPlan floor plan JSONs, normalize units/scale using $\text{scale} = \sqrt{\text{inner.area} / \text{area}}$, heal polygons via Shapely `make_valid`, classify eligible vs. excluded rooms, construct free space $\mathcal{F} = \text{inner} \setminus (\text{wall} \cup \text{window})$, and load/validate fixed interior nodes ($\ge 0.5\text{ m}$ clearance).  
 **Requirements:** REQ-INGEST-01, REQ-INGEST-02, REQ-INGEST-03, REQ-INGEST-04, REQ-INGEST-05  
 
 **Plans:**
-- [ ] Plan 1.1: `scale_converter.py` & `contracts.py` (Metric scale transform, lower-left coordinate frame, Pydantic contracts)
-- [ ] Plan 1.2: `parser.py` & `node_loader.py` (Polygon healing, room classification, obstacle/free-space union, node validation & polylabel fallback)
+- [x] Plan 1.1: `scale_converter.py` & `contracts.py` (Metric scale transform, lower-left coordinate frame, Pydantic contracts)
+- [x] Plan 1.2: `parser.py` & `node_loader.py` (Polygon healing, room classification, obstacle/free-space union, node validation & polylabel fallback)
 
 ---
 
@@ -133,7 +133,7 @@ updated: 2026-10-15T23:30:00+05:30
 
 | Phase | Milestone | Status | Plans | Complete |
 |---|---|---|---|---|
-| **Phase 1** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
+| **Phase 1** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 2** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
 | **Phase 3** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
 | **Phase 4** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |

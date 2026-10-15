@@ -1,8 +1,8 @@
 # SPEC.md — Project Specification
 
-> **Status**: `DRAFT (Pending Source & Dataset Verification)`
+> **Status**: `FINALIZED`
 >
-> ⚠️ **Planning Lock**: No implementation code may be written until this spec is marked `FINALIZED`. The claims flagged in Section 7 must be verified against official organizer challenge materials and sample datasets prior to finalization.
+> **Source of truth**: `v2.md`. The challenge slides and ResPlan archive provide implementation evidence. The organiser input JSON schema remains an adapter detail to confirm when a sample is available.
 
 ---
 
@@ -65,22 +65,14 @@ A solution receives a score of 0 if any of the following 6 hard validity rules i
 
 ---
 
-## 7. Claims Flagged for Source or Dataset Verification Prior to Spec Finalization
+## 7. Source Evidence and Open Input-Format Detail
 
-The following 9 claims extracted from `v2.md` require verification against official organizer materials (`Cable Ring Challenge - Problem Statement4.pptx`) and sample evaluation dataset files before finalizing `SPEC.md`:
+`v2.md` defines the build sequence and requirements. The attached challenge deck confirms the fixed-node rule, 100 m² and 5-node hub limits, six hard rules, scale formula, ranking metric, 1 mm tolerance, and the illustrated output JSON fields (slides 1–8 and speaker notes). The attached ResPlan archive provides raw floor-plan geometry in `ResPlan.pkl`, with `split.json` containing dataset indices and `croissant.json` containing metadata.
 
-| # | Flagged Claim | Stated Rule / Source in `v2.md` | Verification Required & Risk Analysis | Verification Action |
-|---|---------------|--------------------------------|---------------------------------------|---------------------|
-| **F-01** | **Input Node Format: Fixed vs Algorithmic** | "Node points are fixed inputs provided in the input JSON... Teams cannot move them. Phase 1 reads fixed node coordinates directly..." | **Risk**: Raw ResPlan JSONs do *not* contain device node coordinates. If the hackathon provides raw ResPlan files without node keys, the algorithm must place nodes (e.g. via $0.5\text{ m}$ `polylabel`). If the organizer provides pre-annotated fixtures, the exact JSON key schema (`nodes` vs `points`) must be confirmed. | Inspect sample input JSON from hackathon organizer package to verify key structure. |
-| **F-02** | **Hub Capacity Node Limit: 5 vs 20** | "Each hub serves <= 100 m² ... AND <= 5 nodes at once ... (Note: updated from 20 to 5 in official deck...)" | **Risk**: If the official evaluation engine still enforces the original 20-node limit rather than 5, artificially constraining the solver to 5 nodes could force $H=3$ instead of $H=2$, losing primary ranking points! | Check Problem Statement Slide 2/3 text for whether `max_nodes_per_hub` is 5 or 20, or make it a configurable parameter defaulting to the official deck value. |
-| **F-03** | **Scale Normalization Formula & Origin** | "scale = sqrt(plan['inner'].area / plan['area'])" and "Origin is lower-left, y up. Never use net_area." | **Risk**: If `inner` is a polygon in drawing units squared and `area` is in $m^2$, the formula yields $\text{units}/\text{m}$. But does the organizer test harness provide unscaled drawing units or pre-scaled metres? Does ResPlan follow lower-left origin or standard SVG/image upper-left origin ($y$ downwards)? | Inspect raw ResPlan JSON schema and sample test fixtures to verify bounding box orientation and area fields. |
-| **F-04** | **Corridor / Foyer / Hallway Room Classification** | "Eligible: living, bedroom, kitchen, storage. Excluded: bathroom, balcony, stair, garden, pool, parking, land." | **Risk**: How are corridors, hallways, and entry foyers labeled in the dataset? If treated as excluded, cabling cannot pass through them unless explicitly defined as transit free space. If treated as eligible, they require device nodes. | Verify the complete set of room category strings occurring in the ResPlan dataset and define corridor transit rules. |
-| **F-05** | **Zero-Overlap Parallel Lanes in Narrow Doorways** | "Parallel runs on different lines (> 1 mm apart, e.g. 20 mm offset) do NOT count as overlap (O = 0)!" | **Risk**: Does the organizer checker strictly measure line coincidence within $1\text{ mm}$, or is there a minimum cable-to-cable physical clearance? If $20\text{ mm}$ spacing in a $0.8\text{ m}$ door is valid, $O=0$ is achieved; if door retrace must be on the centerline, $O$ is incurred. | Confirm with Slide 7 diagram and text whether parallel lines separated by $> 1\text{ mm}$ have $O = 0$. |
-| **F-06** | **Crossings ($X$) Definition at Nodes and Hubs** | "Legs meeting at a node or hub do not count as crossings (X = 0)... counted away from a node or hub (> 1 mm)." | **Risk**: If two distinct loops touch the same node or pass near a hub, does the checker enforce $X=0$ strictly for legs assigned to that node, or does any line intersecting within $1\text{ mm}$ of the node count as $X=0$? | Review Slide 7 crossing example and checker implementation. |
-| **F-07** | **Doorway and Open Passage Geometric Representation** | "buffer by 0.05m and intersect with room polygons... open passages have unobstructed gap >= 0.50m..." | **Risk**: Are doors explicit polygon objects with category `"door"` in the JSON, or line segments? Are open passages explicitly labeled, or must they be inferred from boundary gaps between rooms? | Inspect input dataset JSON to confirm door schema and presence of open passages. |
-| **F-08** | **Benchmark Filter Guarantees** | "<= 10 eligible rooms per plan; every eligible room between 2 m² and 100 m²; single connected component." | **Risk**: If an unseen evaluation plan has an eligible room $> 100\text{ m}^2$, Rule 2 makes a valid single-hub assignment impossible without room subdivision. | Confirm whether organizer test suite guarantees room area $\le 100\text{ m}^2$ or requires multi-hub splitting of oversized rooms. |
-| **F-09** | **Slide 8 Output Schema Field Exactness** | Specific keys: `plan_id`, `units`, `hubs`, `assigned_rooms`, `assigned_nodes`, `closed_sequence`, `route_segments`, `ring_length_m`, `reported_metrics`. | **Risk**: Automated checkers often perform strict key validation. Any slight difference (`sequence` vs `closed_sequence`, `total_length` vs `total_length_m`) causes automated scoring rejection. | Cross-check output schema against Problem Statement Slide 8 JSON snippet. |
+The organiser's one-plan input JSON is not present. Its exact geometry and node key names remain unknown. This does not block Phase 1 planning: define a narrow input adapter and test it with synthetic JSON matching the documented fields, while keeping the fixed-node coordinates immutable. For raw ResPlan plans, generate deterministic benchmark nodes only in a separate fixture/conversion path, as `v2.md` specifies. Confirm the adapter against an organiser sample if one arrives; do not claim that raw ResPlan data is the organiser JSON.
+
+Corridor labels and door/open-passage representations require dataset inspection during Phases 1–2. Record observed variants and keep these parsing details behind adapters rather than changing the six hard rules.
 
 ---
 
-*Last updated: 2026-10-15 (GSD Project Initialization)*
+*Last updated: 2026-10-15 (aligned to `v2.md` and supplied evidence)*

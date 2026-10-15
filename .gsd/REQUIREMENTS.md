@@ -15,11 +15,11 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 ### Phase 1: Ingestion, Scale Normalization, Polygon Healing & Node Loading
 | ID | Requirement | Source | Phase | Status |
 |----|-------------|--------|-------|--------|
-| **REQ-INGEST-01** | Apply exact scale conversion $\text{scale} = \sqrt{\text{inner.area} / \text{area}}$, converting all coordinates to metres and setting lower-left origin with $y$ pointing upwards. Strictly ignore `net_area`. | SPEC Goal 1 | 1 | Pending |
-| **REQ-INGEST-02** | Repair non-simple geometries using `shapely.make_valid()` and filter degenerate slivers ($< 2.0\text{ m}^2$). | SPEC Goal 1 | 1 | Pending |
-| **REQ-INGEST-03** | Classify rooms into eligible (`living`, `bedroom`, `kitchen`, `storage`) and excluded (`bathroom`, `balcony`, `stair`, `garden`, `pool`, `parking`, `land`). | SPEC Goal 1 | 1 | Pending |
-| **REQ-INGEST-04** | Construct impassable obstacle union $\mathcal{O} = \text{wall} \cup \text{window} \cup \text{front\_door}$ and routable free space $\mathcal{F} = \text{inner} \setminus (\text{wall} \cup \text{window})$. | SPEC Goal 1 | 1 | Pending |
-| **REQ-INGEST-05** | Load immutable fixed interior nodes ($1$ per eligible room, $0$ for excluded rooms) and verify $\ge 0.5\text{ m}$ wall clearance. Provide deterministic $0.5\text{ m}$ `polylabel` generator for raw test fixtures. | SPEC Goal 1 | 1 | Pending |
+| **REQ-INGEST-01** | Apply exact scale conversion $\text{scale} = \sqrt{\text{inner.area} / \text{area}}$, converting all coordinates to metres and setting lower-left origin with $y$ pointing upwards. Strictly ignore `net_area`. | SPEC Goal 1 | 1 | Complete |
+| **REQ-INGEST-02** | Repair non-simple geometries using `shapely.make_valid()` and filter degenerate slivers ($< 2.0\text{ m}^2$). | SPEC Goal 1 | 1 | Complete |
+| **REQ-INGEST-03** | Classify rooms into eligible (`living`, `bedroom`, `kitchen`, `storage`) and excluded (`bathroom`, `balcony`, `stair`, `garden`, `pool`, `parking`, `land`). | SPEC Goal 1 | 1 | Complete |
+| **REQ-INGEST-04** | Construct impassable obstacle union $\mathcal{O} = \text{wall} \cup \text{window} \cup \text{front\_door}$ and routable free space $\mathcal{F} = \text{inner} \setminus (\text{wall} \cup \text{window})$. | SPEC Goal 1 | 1 | Complete |
+| **REQ-INGEST-05** | Load immutable fixed interior nodes ($1$ per eligible room, $0$ for excluded rooms) and verify $\ge 0.5\text{ m}$ wall clearance. Provide deterministic $0.5\text{ m}$ `polylabel` generator for raw test fixtures. | SPEC Goal 1 | 1 | Complete |
 
 ### Phase 2: Door & Open-Passage Topology Extraction & Portal Waypoints
 | ID | Requirement | Source | Phase | Status |
@@ -107,11 +107,11 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 
 | Requirement | Phase | Primary Module | Test Case | Status |
 |---|---|---|---|---|
-| REQ-INGEST-01 | 1 | `scale_converter.py` | `test_slide4_exact_scale_conversion` | Pending |
-| REQ-INGEST-02 | 1 | `parser.py` | `test_polygon_healing` | Pending |
-| REQ-INGEST-03 | 1 | `parser.py` | `test_eligible_and_excluded_rooms` | Pending |
-| REQ-INGEST-04 | 1 | `parser.py` | `test_obstacle_and_freespace_union` | Pending |
-| REQ-INGEST-05 | 1 | `node_loader.py` | `test_fixed_node_immutability_and_clearance` | Pending |
+| REQ-INGEST-01 | 1 | `scale_converter.py` | `test_slide4_exact_scale_conversion` | Complete |
+| REQ-INGEST-02 | 1 | `parser.py` | `test_polygon_healing` | Complete |
+| REQ-INGEST-03 | 1 | `parser.py` | `test_eligible_and_excluded_rooms` | Complete |
+| REQ-INGEST-04 | 1 | `parser.py` | `test_obstacle_and_freespace_union` | Complete |
+| REQ-INGEST-05 | 1 | `node_loader.py` | `test_fixed_node_immutability_and_clearance` | Complete |
 | REQ-TOPO-01 | 2 | `portal_extractor.py` | `test_slide5_door_connectivity` | Pending |
 | REQ-TOPO-02 | 2 | `portal_extractor.py` | `test_open_passage_detection` | Pending |
 | REQ-TOPO-03 | 2 | `macro_graph.py` | `test_window_wall_entrance_rejection` | Pending |
