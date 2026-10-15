@@ -610,5 +610,60 @@ class SynthesizedRingsBundle(BaseModel):
     )
 
 
+class RuleViolation(BaseModel):
+    """Diagnostic detail of a single hard rule violation."""
+
+    model_config = ConfigDict(frozen=True)
+
+    rule_number: int = Field(description="Hard rule number violated (1 to 6)", ge=1, le=6)
+    rule_name: str = Field(description="Canonical hard rule name")
+    hub_id: Optional[str] = Field(default=None, description="Hub ID associated with violation, if applicable")
+    room_id: Optional[str] = Field(default=None, description="Room ID associated with violation, if applicable")
+    location: Optional[Point2D] = Field(default=None, description="Spatial coordinates of violation, if applicable")
+    message: str = Field(description="Human-readable violation description")
+
+
+class EvaluatedHubMetrics(BaseModel):
+    """Recomputed evaluation metrics for an individual hub ring."""
+
+    model_config = ConfigDict(frozen=True)
+
+    hub_id: str = Field(description="Unique hub identifier")
+    room_id: str = Field(description="Assigned eligible room hosting the hub")
+    location: Point2D = Field(description="Metric coordinates of the hub")
+    assigned_rooms: list[str] = Field(default_factory=list, description="Rooms served by this hub")
+    assigned_nodes: list[str] = Field(default_factory=list, description="Fixed nodes served by this hub")
+    closed_sequence: list[str] = Field(default_factory=list, description="Ordered ring sequence")
+    length_m: float = Field(description="Recomputed ring cable length in metres", ge=0.0)
+    crossings: int = Field(default=0, description="Recomputed crossings within this ring", ge=0)
+    overlap_m: float = Field(default=0.0, description="Recomputed overlap length in metres", ge=0.0)
+    bends: int = Field(default=0, description="Recomputed total bend count", ge=0)
+    cost_J: float = Field(description="Recomputed composite cost J = L + 5X + O + 0.5B", ge=0.0)
+    zone_area_m2: float = Field(default=0.0, description="Total floor area of assigned rooms", ge=0.0)
+
+
+class EvaluationReport(BaseModel):
+    """Official Slide 3, 6 & 7 Independent Evaluation Checker Report."""
+
+    model_config = ConfigDict(frozen=True)
+
+    plan_id: str = Field(description="Floor plan identifier")
+    is_valid: bool = Field(description="True iff 0 rule violations")
+    violations: list[RuleViolation] = Field(default_factory=list, description="List of rule violations")
+    hub_count: int = Field(description="Total number of hubs", ge=0)
+    hub_metrics: list[EvaluatedHubMetrics] = Field(default_factory=list, description="Per-hub evaluated metrics")
+    total_length_m: float = Field(description="Total cable length L in metres across all rings", ge=0.0)
+    total_crossings: int = Field(description="Total crossings X across all rings", ge=0)
+    total_overlap_m: float = Field(description="Total overlap length O in metres across all rings", ge=0.0)
+    total_bends: int = Field(description="Total bends B across all rings", ge=0)
+    total_cost_J: float = Field(description="Total composite cost J = L + 5X + O + 0.5B", ge=0.0)
+    area_gap_m2: float = Field(description="Assigned room area gap delta_A_gap = max(A) - min(A)", ge=0.0)
+    rules_passed: dict[str, bool] = Field(
+        default_factory=dict,
+        description="Dictionary mapping Rule 1..Rule 6 to pass/fail boolean status",
+    )
+
+
+
 
 
