@@ -7,7 +7,7 @@ updated: 2026-10-15T23:30:00+05:30
 # ROADMAP.md
 
 > **Current Milestone:** V1 Foundation (Core Algorithmic Engine & Reference Checker)  
-> **Current Phase:** Phase 2 — Door & Open-Passage Topology Extraction & Parallel-Lane Portal Waypoints  
+> **Current Phase:** Phase 3 — Obstacle-Aware Axis-Aligned Micro-Router & Directional Cost Tensor  
 > **Status:** ⬜ Ready for Planning
 
 ---
@@ -38,14 +38,14 @@ updated: 2026-10-15T23:30:00+05:30
 ---
 
 ### Phase 2: Door & Open-Passage Topology Extraction & Parallel-Lane Portal Waypoints
-**Status:** ⬜ Not Started  
+**Status:** ✅ Complete  
 **Objective:** Construct the room-portal dual graph $G_{\text{macro}}$ in NetworkX connecting rooms exclusively across doors and open passages ($\ge 0.5\text{ m}$ width, excluding windows/walls/entrance), and synthesize parallel doorway lanes separated by $\ge 20\text{ mm}$ to guarantee zero overlap ($O = 0$) on single-door runs.  
 **Depends on:** Phase 1  
 **Requirements:** REQ-TOPO-01, REQ-TOPO-02, REQ-TOPO-03, REQ-TOPO-04  
 
 **Plans:**
-- [ ] Plan 2.1: `portal_extractor.py` (Door polygon buffering, room-pair intersection, open passage detection)
-- [ ] Plan 2.2: `macro_graph.py` (Dual graph construction, connectivity verification, $20\text{ mm}$ parallel lane generation)
+- [x] Plan 2.1: `portal_extractor.py` (Door polygon buffering, room-pair intersection, open passage detection)
+- [x] Plan 2.2: `macro_graph.py` (Dual graph construction, connectivity verification, $20\text{ mm}$ parallel lane generation)
 
 ---
 
@@ -134,7 +134,7 @@ updated: 2026-10-15T23:30:00+05:30
 | Phase | Milestone | Status | Plans | Complete |
 |---|---|---|---|---|
 | **Phase 1** | V1 Foundation | ✅ Complete | 2/2 | 100% |
-| **Phase 2** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
+| **Phase 2** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 3** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
 | **Phase 4** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
 | **Phase 5** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |

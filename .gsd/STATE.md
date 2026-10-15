@@ -7,21 +7,20 @@ updated: 2026-10-15T23:30:00+05:30
 ## Current Position
 
 **Milestone:** V1 Foundation (Phases 1–6)  
-**Phase:** Phase 2 — Door & Open-Passage Topology Extraction & Parallel-Lane Portal Waypoints  
-**Status:** complete  
-**Plan:** 2-1-PLAN.md, 2-2-PLAN.md (Wave 1 & Wave 2 completed)
+**Phase:** Phase 2 — Door & Open-Passage Topology Extraction & Parallel-Lane Portal Waypoints (Completed)  
+**Status:** verified  
+**Plan:** 2-1-PLAN.md, 2-2-PLAN.md (Wave 1 & Wave 2 completed & verified)
 
 ## Last Action
 
-Executed and verified Plan 2.2:
-- Built `MacroTopologyGraph` dual graph in NetworkX with dual class/instance dispatch and `TopologyError` validation.
-- Identified single-door degree-1 leaf rooms (`Bedroom 2` and `Storage` on Slide 5).
-- Implemented `validate_parallel_lane_clearance` checking $\ge 20\text{ mm}$ lateral separation strictly in free space.
-- Implemented and verified full Phase 2 test suite `tests/test_phase2_topology.py` (all 6 tests passing, 23 suite tests passing).
+Executed and independently verified Phase 2:
+- Wave 1 (Plan 2.1): Pydantic contracts for portals (`DoorOrPassagePortal`, `PortalTopologyGraph`), `portal_extractor.py` detecting interior doors via STRtree and open passages $\ge 0.50\text{ m}$ in free space.
+- Wave 2 (Plan 2.2): NetworkX dual graph `MacroTopologyGraph`, single connected component verification, degree-1 leaf identification (`Bedroom 2`, `Storage`), parallel doorway lanes $\ge 20\text{ mm}$ for zero overlap ($O = 0$).
+- Independent Verification: `gsd-verifier` ran full test suite (`tests/test_phase2_portals.py`, `tests/test_phase2_topology.py`), confirming 6/6 must-haves pass with 0 errors.
 
 ## Next Steps
 
-1. Run Phase 2 verification gate `/verify 2` and transition to Phase 3 (Obstacle-Aware Axis-Aligned Micro-Router & Directional Cost Tensor).
+1. `/plan 3` — Plan Phase 3 (Obstacle-Aware Axis-Aligned Micro-Router & Directional Cost Tensor).
 
 ## Active Decisions
 

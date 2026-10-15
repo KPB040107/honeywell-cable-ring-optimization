@@ -24,10 +24,10 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 ### Phase 2: Door & Open-Passage Topology Extraction & Portal Waypoints
 | ID | Requirement | Source | Phase | Status |
 |----|-------------|--------|-------|--------|
-| **REQ-TOPO-01** | Detect interior door connections by buffering door polygons by $0.05\text{ m}$ and intersecting with room polygons using `STRtree`, excluding `front_door`. | SPEC Goal 2 | 2 | Pending |
-| **REQ-TOPO-02** | Identify open-passage portals for adjacent room boundaries inside $\mathcal{F}$ having an unobstructed gap of width $\ge 0.50\text{ m}$ without a door polygon. | SPEC Goal 2 | 2 | Pending |
-| **REQ-TOPO-03** | Construct dual graph $G_{\text{macro}}$ and verify all eligible room nodes belong to a single connected component. Reject connectivity across walls, windows, or front entrance. | SPEC Goal 2 | 2 | Pending |
-| **REQ-TOPO-04** | Synthesize three portal tracks across each doorway/passage gap: centerline ($p_0$), Parallel Lane A ($p_A$), and Parallel Lane B ($p_B$), with lateral offset $\ge 20\text{ mm}$ to guarantee $O = 0$ on single-door retraces. | SPEC Goal 2 | 2 | Pending |
+| **REQ-TOPO-01** | Detect interior door connections by buffering door polygons by $0.05\text{ m}$ and intersecting with room polygons using `STRtree`, excluding `front_door`. | SPEC Goal 2 | 2 | Complete |
+| **REQ-TOPO-02** | Identify open-passage portals for adjacent room boundaries inside $\mathcal{F}$ having an unobstructed gap of width $\ge 0.50\text{ m}$ without a door polygon. | SPEC Goal 2 | 2 | Complete |
+| **REQ-TOPO-03** | Construct dual graph $G_{\text{macro}}$ and verify all eligible room nodes belong to a single connected component. Reject connectivity across walls, windows, or front entrance. | SPEC Goal 2 | 2 | Complete |
+| **REQ-TOPO-04** | Synthesize three portal tracks across each doorway/passage gap: centerline ($p_0$), Parallel Lane A ($p_A$), and Parallel Lane B ($p_B$), with lateral offset $\ge 20\text{ mm}$ to guarantee $O = 0$ on single-door retraces. | SPEC Goal 2 | 2 | Complete |
 
 ### Phase 3: Obstacle-Aware Axis-Aligned Micro-Routing & Cost Tensor
 | ID | Requirement | Source | Phase | Status |
@@ -112,10 +112,10 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 | REQ-INGEST-03 | 1 | `parser.py` | `test_eligible_and_excluded_rooms` | Complete |
 | REQ-INGEST-04 | 1 | `parser.py` | `test_obstacle_and_freespace_union` | Complete |
 | REQ-INGEST-05 | 1 | `node_loader.py` | `test_fixed_node_immutability_and_clearance` | Complete |
-| REQ-TOPO-01 | 2 | `portal_extractor.py` | `test_slide5_door_connectivity` | Pending |
-| REQ-TOPO-02 | 2 | `portal_extractor.py` | `test_open_passage_detection` | Pending |
-| REQ-TOPO-03 | 2 | `macro_graph.py` | `test_window_wall_entrance_rejection` | Pending |
-| REQ-TOPO-04 | 2 | `macro_graph.py` | `test_parallel_door_lanes_exceed_1mm_tolerance` | Pending |
+| REQ-TOPO-01 | 2 | `portal_extractor.py` | `test_slide5_door_connectivity` | Complete |
+| REQ-TOPO-02 | 2 | `portal_extractor.py` | `test_open_passage_detection` | Complete |
+| REQ-TOPO-03 | 2 | `macro_graph.py` | `test_window_wall_entrance_rejection` | Complete |
+| REQ-TOPO-04 | 2 | `macro_graph.py` | `test_parallel_door_lanes_exceed_1mm_tolerance` | Complete |
 | REQ-ROUTE-01 | 3 | `rectilinear_grid.py` | `test_hanan_grid_construction` | Pending |
 | REQ-ROUTE-02 | 3 | `rectilinear_grid.py` | `test_strict_horizontal_vertical_runs` | Pending |
 | REQ-ROUTE-03 | 3 | `astar_rectilinear.py` | `test_slide7_bend_and_reversal_counting` | Pending |
