@@ -113,9 +113,13 @@ updated: 2026-10-15T23:30:00+05:30
 ---
 
 ### Phase 8: "Architectural Co-Pilot" Doorway & Wall Optimizer
-**Status:** ⬜ Later Milestone  
+**Status:** 🔄 In Progress  
 **Objective:** Automated perturbation engine proposing structural tweaks (sliding doors, adding open passages) to reduce required hubs $H$ or lower total cost $J$.  
 **Requirements:** REQ-V2-02  
+
+**Plans:**
+- [ ] Plan 8.1: `wall_optimizer.py` & `candidate_generator.py` (Perturbation search engine, shared interior wall detector, ranking core by $\Delta H$ and $\Delta J$)
+- [ ] Plan 8.2: `server.py`, `app.js`, `index.html` (Studio HUD integration, canvas ghost doorway overlays with floating savings pills, one-click Apply)
 
 ---
 
@@ -144,7 +148,7 @@ updated: 2026-10-15T23:30:00+05:30
 | **Phase 5** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 6** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 7** | V2 Extension | ✅ Complete | 2/2 | 100% |
-| **Phase 8** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
+| **Phase 8** | V2 Extension | 🔄 In Progress | 0/2 | 0% |
 | **Phase 9** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
 | **Phase 10** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
 

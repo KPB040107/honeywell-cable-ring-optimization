@@ -7,23 +7,21 @@ updated: 2026-10-15T23:30:00+05:30
 ## Current Position
 
 **Milestone:** V2 Interactive Extension (Phases 7–10)  
-**Phase:** Phase 7 — Live Floor-Plan Co-Design Canvas (`< 50 ms` Re-Routing)  
-**Status:** complete (verified 7/7 must-haves passed)  
-**Plan:** 7-1-PLAN.md, 7-2-PLAN.md (Wave 1 & Wave 2 completed and independently verified)  
+**Phase:** Phase 8 — "Architectural Co-Pilot" Doorway & Wall Optimizer  
+**Status:** ready for execution  
+**Plan:** 8-1-PLAN.md (Wave 1: Perturbation Search & Ranking Core), 8-2-PLAN.md (Wave 2: Studio HUD Integration, Ghost Overlays & One-Click Apply)  
 
 ## Last Action
 
-Completed and verified Phase 7 (Plan 7.1 & Plan 7.2):
-- Implemented `IncrementalCoDesignEngine` (`incremental_router.py`) achieving $\sim 5.6\text{ ms}$ average latency on live node and hub pointer drags (well below $< 50\text{ ms}$ threshold).
-- Implemented `ClearanceHaloTracker` (`halo_tracker.py`) dynamically evaluating $0.5\text{ m}$ wall clearance and turning green (`#2ECC71`) when valid and red (`#E6194B`) when violating Rule 6.
-- Implemented FastAPI server (`server.py`) with bidirectional `/ws/co-design` WebSocket streaming and REST mutation endpoints.
-- Implemented browser-based 60 FPS Architectural Co-Design Studio frontend (`index.html`, `app.js`, `style.css`) with draggable nodes/hubs, live halos, competition scoreboard, Slide 3 checklist, and one-click Slide 8 export.
-- Extended CLI with `--serve` launcher (`cli.py`).
-- Independent verification report `.gsd/phases/7/VERIFICATION.md` confirmed 7/7 must-haves passed; 78/78 tests passing with zero regressions.
+Authored Phase 8 execution plans:
+- Plan 8.1 (Wave 1): Co-Pilot perturbation search engine (`wall_optimizer.py`), shared interior wall detector (`candidate_generator.py`), and data contracts (`StructuralProposal`, `CoPilotReport`).
+- Plan 8.2 (Wave 2): Studio HUD integration with "Suggest Floor-Plan Improvements", interactive cyan dashed ghost doorway canvas overlays with floating savings pills, and one-click "Apply Tweak" mutation (`static/index.html`, `static/app.js`, `server.py`).
+- Committed plans in `6184134`.
 
 ## Next Steps
 
-1. Proceed to Phase 8 (`/plan 8`): "Architectural Co-Pilot" Doorway & Wall Optimizer proposing structural tweaks to lower $H$ or $J$.
+1. Execute Phase 8 (`/execute 8`): Run Plan 8.1 (Wave 1) then Plan 8.2 (Wave 2).
+2. Verify Phase 8 with `gsd-verifier`.
 
 ## Active Decisions
 
