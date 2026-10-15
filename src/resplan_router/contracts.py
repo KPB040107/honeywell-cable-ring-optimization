@@ -171,3 +171,96 @@ class MetricFloorPlan(BaseModel):
     @property
     def obstacles_geom(self) -> shapely.MultiPolygon:
         return shapely.from_wkt(self.obstacles_wkt)
+
+
+class PortalType(str, Enum):
+    """Classification of topological connections between rooms."""
+
+    DOOR = "door"
+    OPEN_PASSAGE = "open_passage"
+
+
+class DoorOrPassagePortal(BaseModel):
+    """Immutable portal connection (door or open passage) between two adjacent rooms.
+
+    Provides center and zero-overlap parallel doorway lane waypoints (>= 20mm separation)
+    for single-door leaf room transits and orthogonal room step points.
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    portal_id: str = Field(description="Unique portal identifier (e.g. P01)")
+    portal_type: PortalType = Field(description="Portal type: DOOR or OPEN_PASSAGE")
+    room1_id: str = Field(description="First connected room ID")
+    room2_id: str = Field(description="Second connected room ID")
+    center_point: Point2D = Field(description="Midpoint coordinates of the threshold")
+    threshold_wkt: str = Field(
+        description="WKT LineString representing the physical doorway or open threshold segment"
+    )
+    width_m: float = Field(
+        description="Width of the doorway gap in metres (> 0.0)",
+        gt=0.0,
+    )
+    lane_a_point: Point2D = Field(
+        description="Parallel lane A waypoint offset along threshold for incoming transit"
+    )
+    lane_b_point: Point2D = Field(
+        description="Parallel lane B waypoint offset along threshold for outgoing transit"
+    )
+    step_room1: Point2D = Field(
+        description="Orthogonal step waypoint inset into room1 for clean 90-degree turns"
+    )
+    step_room2: Point2D = Field(
+        description="Orthogonal step waypoint inset into room2 for clean 90-degree turns"
+    )
+    lateral_offset_m: float = Field(
+        description="Lateral offset distance between centerline and lane waypoint (>= 0.02m)",
+        ge=0.02,
+    )
+
+    @field_validator("threshold_wkt")
+    @classmethod
+    def validate_threshold_wkt(cls, v: str) -> str:
+        if not v or not isinstance(v, str):
+            raise ValueError("Threshold WKT string must not be empty")
+        try:
+            geom = shapely.from_wkt(v)
+        except Exception as exc:
+            raise ValueError(f"Invalid Shapely WKT geometry: {exc}") from exc
+        if geom.is_empty:
+            raise ValueError("Threshold LineString cannot be empty")
+        if not isinstance(geom, (shapely.LineString, shapely.MultiLineString)):
+            raise ValueError(f"Threshold geometry must be LineString, got {geom.geom_type}")
+        return v
+
+    @property
+    def threshold_geom(self) -> shapely.LineString:
+        return shapely.from_wkt(self.threshold_wkt)
+
+
+class PortalTopologyGraph(BaseModel):
+    """Room adjacency dual graph G_macro capturing interior door and open passage connectivity."""
+
+    model_config = ConfigDict(frozen=True)
+
+    plan_id: str = Field(description="Floor plan identifier")
+    eligible_room_ids: list[str] = Field(
+        default_factory=list,
+        description="List of room IDs eligible for nodes and hubs",
+    )
+    portals: list[DoorOrPassagePortal] = Field(
+        default_factory=list,
+        description="List of portals linking interior rooms",
+    )
+    adjacency: dict[str, list[str]] = Field(
+        default_factory=dict,
+        description="Adjacency list mapping room_id to list of neighboring room_ids",
+    )
+    is_fully_connected: bool = Field(
+        description="True if the eligible room subgraph forms a single connected component"
+    )
+    leaf_room_ids: list[str] = Field(
+        default_factory=list,
+        description="List of room IDs having degree 1 in topology (single-door leaf rooms)",
+    )
+
