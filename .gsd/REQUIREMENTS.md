@@ -57,11 +57,11 @@ Requirements derived from `v2.md` and `SPEC.md` for full traceability, test veri
 ### Phase 6: Independent Evaluation Checker, JSON Export & Visualization
 | ID | Requirement | Source | Phase | Status |
 |----|-------------|--------|-------|--------|
-| **REQ-OUT-01** | Build standalone evaluation checker `checker.py` that recomputes Hard Rules 1–6 independently from raw exported polylines using $1\text{ mm}$ spatial tolerance. | SPEC Goal 6 | 6 | Pending |
-| **REQ-OUT-02** | Recompute exact metrics $L$, $X$ ($> 1\text{ mm}$ from nodes/hubs), $O$ ($\le 1\text{ mm}$ lateral distance), $B$ (direction changes including nodes and hubs), and cost $J = L + 5X + O + 0.5B$. | SPEC Goal 6 | 6 | Pending |
-| **REQ-OUT-03** | Serialize output to exact Slide 8 schema with keys `plan_id`, `units`, `hubs`, `assigned_rooms`, `assigned_nodes`, `closed_sequence`, `route_segments`, `ring_length_m`, and `reported_metrics`. | SPEC Goal 6 | 6 | Pending |
-| **REQ-OUT-04** | Render two-column floor-plan overlay matching Slide 5 with pastel zone fills, room labels, numbered leg badges, per-hub summary cards, and reviewer checklists. | SPEC Goal 6 | 6 | Pending |
-| **REQ-OUT-05** | Highlight any hard rule violations in bright red (`#E6194B`) with diagnostic callout badges per Slide 3 requirements. | SPEC Goal 6 | 6 | Pending |
+| **REQ-OUT-01** | Build standalone evaluation checker `checker.py` that recomputes Hard Rules 1–6 independently from raw exported polylines using $1\text{ mm}$ spatial tolerance. | SPEC Goal 6 | 6 | Complete |
+| **REQ-OUT-02** | Recompute exact metrics $L$, $X$ ($> 1\text{ mm}$ from nodes/hubs), $O$ ($\le 1\text{ mm}$ lateral distance), $B$ (direction changes including nodes and hubs), and cost $J = L + 5X + O + 0.5B$. | SPEC Goal 6 | 6 | Complete |
+| **REQ-OUT-03** | Serialize output to exact Slide 8 schema with keys `plan_id`, `units`, `hubs`, `assigned_rooms`, `assigned_nodes`, `closed_sequence`, `route_segments`, `ring_length_m`, and `reported_metrics`. | SPEC Goal 6 | 6 | Complete |
+| **REQ-OUT-04** | Render two-column floor-plan overlay matching Slide 5 with pastel zone fills, room labels, numbered leg badges, per-hub summary cards, and reviewer checklists. | SPEC Goal 6 | 6 | Complete |
+| **REQ-OUT-05** | Highlight any hard rule violations in bright red (`#E6194B`) with diagnostic callout badges per Slide 3 requirements. | SPEC Goal 6 | 6 | Complete |
 
 ---
 

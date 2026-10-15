@@ -86,14 +86,14 @@ updated: 2026-10-15T23:30:00+05:30
 ---
 
 ### Phase 6: Official $1\text{ mm}$ Evaluation Checker, Slide 8 JSON Exporter & Visual Overlay Renderer
-**Status:** ⬜ Not Started  
+**Status:** ✅ Complete  
 **Objective:** Build an independent evaluation checker (`checker.py`) replicating Slide 3 & 6-7 rules at $1\text{ mm}$ tolerance, serialize the solution into the exact Slide 8 JSON schema, and render the Slide 5 floor-plan overlay with red violation highlights and reviewer scorecards.  
 **Depends on:** Phase 5  
 **Requirements:** REQ-OUT-01, REQ-OUT-02, REQ-OUT-03, REQ-OUT-04, REQ-OUT-05  
 
 **Plans:**
-- [ ] Plan 6.1: `checker.py` (Independent $1\text{ mm}$ rule & metric recomputation: $H, L, X, O, B, J, \Delta A_{\text{gap}}$)
-- [ ] Plan 6.2: `json_exporter.py` & `visualizer.py` (Slide 8 serialization, 2-column Matplotlib schematic, red violation highlighter, CLI entrypoint)
+- [x] Plan 6.1: `checker.py` (Independent $1\text{ mm}$ rule & metric recomputation: $H, L, X, O, B, J, \Delta A_{\text{gap}}$)
+- [x] Plan 6.2: `json_exporter.py` & `visualizer.py` (Slide 8 serialization, 2-column Matplotlib schematic, red violation highlighter, CLI entrypoint)
 
 ---
 
@@ -138,7 +138,7 @@ updated: 2026-10-15T23:30:00+05:30
 | **Phase 3** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 4** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 5** | V1 Foundation | ✅ Complete | 2/2 | 100% |
-| **Phase 6** | V1 Foundation | ⬜ Not Started | 0/2 | 0% |
+| **Phase 6** | V1 Foundation | ✅ Complete | 2/2 | 100% |
 | **Phase 7** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
 | **Phase 8** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
 | **Phase 9** | V2 Extension | ⬜ Later Milestone | 0/1 | 0% |
