@@ -28,6 +28,31 @@ class TopologyError(Exception):
     pass
 
 
+class _BuildTopologyDispatcher:
+    """Descriptor enabling build_topology to work as both an instance method and a classmethod."""
+
+    def __get__(self, instance: Any, owner: type) -> Any:
+        if instance is None:
+            def class_build_topology(
+                plan: MetricFloorPlan,
+                portals: Sequence[DoorOrPassagePortal],
+                require_connected: bool = False,
+            ) -> PortalTopologyGraph:
+                inst = owner()
+                return inst._build(plan, portals, require_connected=require_connected)
+
+            return class_build_topology
+        else:
+            def instance_build_topology(
+                plan: MetricFloorPlan,
+                portals: Sequence[DoorOrPassagePortal],
+                require_connected: bool = False,
+            ) -> PortalTopologyGraph:
+                return instance._build(plan, portals, require_connected=require_connected)
+
+            return instance_build_topology
+
+
 class MacroTopologyGraph:
     """NetworkX dual graph G_macro capturing room-portal connectivity and doorway lanes.
 
@@ -56,17 +81,15 @@ class MacroTopologyGraph:
         self.topology: Optional[PortalTopologyGraph] = None
 
         if plan is not None and portals is not None:
-            self.build_topology(plan, portals, require_connected=require_connected)
+            self._build(plan, portals, require_connected=require_connected)
 
-    def build_topology(
-        self_or_cls,
+    def _build(
+        self,
         plan: MetricFloorPlan,
         portals: Sequence[DoorOrPassagePortal],
         require_connected: bool = False,
     ) -> PortalTopologyGraph:
         """Build and populate the room-portal dual graph and return PortalTopologyGraph.
-
-        Can be invoked as an instance method (populating `self.graph`) or as a classmethod.
 
         Args:
             plan: Normalized metric floor plan contract.
@@ -82,11 +105,6 @@ class MacroTopologyGraph:
             TopologyError: If `require_connected` is True and the eligible room subgraph
                 is disconnected into multiple components.
         """
-        if isinstance(self_or_cls, type):
-            instance = self_or_cls()
-            return instance.build_topology(plan, portals, require_connected=require_connected)
-
-        self = self_or_cls
         self.plan = plan
         self.portals = list(portals)
         self.graph = nx.Graph()
@@ -158,6 +176,8 @@ class MacroTopologyGraph:
         )
         self.topology = topology
         return topology
+
+    build_topology = _BuildTopologyDispatcher()
 
     @staticmethod
     def get_portal_lanes(
