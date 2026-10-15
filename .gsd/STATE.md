@@ -8,20 +8,23 @@ updated: 2026-10-15T23:30:00+05:30
 
 **Milestone:** V2 Interactive Extension (Phases 7–10)  
 **Phase:** Phase 8 — "Architectural Co-Pilot" Doorway & Wall Optimizer  
-**Status:** ready for execution  
-**Plan:** 8-1-PLAN.md (Wave 1: Perturbation Search & Ranking Core), 8-2-PLAN.md (Wave 2: Studio HUD Integration, Ghost Overlays & One-Click Apply)  
+**Status:** Phase 8 Complete (Waves 1 & 2); Ready for Phase 8 Verification  
+**Plan:** 8-1-PLAN.md (Wave 1 - COMPLETED), 8-2-PLAN.md (Wave 2 - COMPLETED)  
 
 ## Last Action
 
-Authored Phase 8 execution plans:
-- Plan 8.1 (Wave 1): Co-Pilot perturbation search engine (`wall_optimizer.py`), shared interior wall detector (`candidate_generator.py`), and data contracts (`StructuralProposal`, `CoPilotReport`).
-- Plan 8.2 (Wave 2): Studio HUD integration with "Suggest Floor-Plan Improvements", interactive cyan dashed ghost doorway canvas overlays with floating savings pills, and one-click "Apply Tweak" mutation (`static/index.html`, `static/app.js`, `server.py`).
-- Committed plans in `6184134`.
+Completed Plan 8.2 (Wave 2):
+- Implemented Co-Pilot REST API endpoints (`POST /api/copilot/suggest`, `POST /api/copilot/apply`) and WebSockets actions in `server.py` and `incremental_router.py`.
+- Integrated Co-Design Studio HUD: "Suggest Floor-Plan Improvements" buttons in toolbar and actions, Co-Pilot recommendation drawer in Reviewer HUD.
+- Implemented HTML5 canvas ghost doorway rendering: glowing cyan dashed openings with floating metric savings badges.
+- Implemented one-click "Apply Tweak" floor-plan mutation and live route re-calculation with scoreboard refresh.
+- Added comprehensive integration tests in `tests/test_phase8_studio_copilot.py` (4/4 passed). Full regression suite passing (87/87 passed).
+- Committed changes in `b71b3a6` and `e1bef8b`.
 
 ## Next Steps
 
-1. Execute Phase 8 (`/execute 8`): Run Plan 8.1 (Wave 1) then Plan 8.2 (Wave 2).
-2. Verify Phase 8 with `gsd-verifier`.
+1. Verify Phase 8 with `gsd-verifier`.
+2. Proceed to Phase 9 ("Auto-Zone" Dynamic Multi-Floor Expansion & Boundary Synthesizer).
 
 ## Active Decisions
 
