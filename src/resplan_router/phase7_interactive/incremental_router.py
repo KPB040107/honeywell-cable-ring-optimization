@@ -20,6 +20,7 @@ from shapely.geometry import LineString, Point, Polygon
 from resplan_router.contracts import (
     CompassDirection,
     CompletedHubRing,
+    CoPilotReport,
     DoorOrPassagePortal,
     EvaluationReport,
     FixedNode,
@@ -29,7 +30,9 @@ from resplan_router.contracts import (
     Point2D,
     PortalTopologyGraph,
     PortalType,
+    ProposalType,
     RouteSegment,
+    StructuralProposal,
     SynthesizedRingsBundle,
 )
 from resplan_router.phase1_ingestion.parser import parse_floor_plan
@@ -39,10 +42,15 @@ from resplan_router.phase3_micro_routing.astar_rectilinear import (
     DirectionStateRouter,
     compress_polyline,
 )
+from resplan_router.phase3_micro_routing.cost_matrix import PairwiseCostTensor
 from resplan_router.phase3_micro_routing.rectilinear_grid import (
     HananRoutingGrid,
     build_hanan_grid,
 )
+from resplan_router.phase4_partitioning.hub_candidates import (
+    generate_all_room_hub_candidates,
+)
+from resplan_router.phase4_partitioning.zone_milp import ZonePartitioner
 from resplan_router.phase5_ring_sequencing.loop_synthesizer import (
     LoopSynthesizer,
     compute_crossings,
@@ -52,6 +60,7 @@ from resplan_router.phase5_ring_sequencing.loop_synthesizer import (
 from resplan_router.phase6_output.checker import FloorPlanChecker
 from resplan_router.phase6_output.json_exporter import export_slide8_json
 from resplan_router.phase7_interactive.halo_tracker import ClearanceHaloTracker
+from resplan_router.phase8_copilot.wall_optimizer import ArchitecturalCoPilot
 
 
 def _find_fixture_path() -> Path:
@@ -77,6 +86,10 @@ class IncrementalCoDesignEngine:
         partition: Optional[HubZonePartition] = None,
         bundle: Optional[SynthesizedRingsBundle] = None,
     ) -> None:
+        self.halo_tracker = ClearanceHaloTracker()
+        self._active_proposals: Dict[str, StructuralProposal] = {}
+        self._raw_doors: Optional[Sequence[Any]] = None
+        self._raw_entrance: Optional[Any] = None
         if plan is None or topology is None or partition is None or bundle is None:
             self._load_slide5_baseline()
         else:
@@ -92,7 +105,6 @@ class IncrementalCoDesignEngine:
                 extra_points=[h.location for h in self.partition.hubs],
             )
 
-        self.halo_tracker = ClearanceHaloTracker()
         self._last_report = FloorPlanChecker.evaluate(
             self.plan, self.bundle, topology=self.topology
         )
@@ -103,8 +115,11 @@ class IncrementalCoDesignEngine:
         with open(fixture_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 
+        self._raw_doors = data.get("doors")
+        self._raw_entrance = data.get("front_door")
+        self._active_proposals = {}
         self.plan = parse_floor_plan(data)
-        portals = extract_all_portals(self.plan, data.get("doors"), data.get("front_door"))
+        portals = extract_all_portals(self.plan, self._raw_doors, self._raw_entrance)
         self.topology = MacroTopologyGraph.build_topology(self.plan, portals)
 
         h1_pt = Point2D(x=5.2, y=3.6)
@@ -146,6 +161,7 @@ class IncrementalCoDesignEngine:
         """Reset canvas to baseline Slide 5 schematic."""
         t0 = time.perf_counter()
         self._load_slide5_baseline()
+        self._active_proposals = {}
         self._last_report = FloorPlanChecker.evaluate(
             self.plan, self.bundle, topology=self.topology
         )
@@ -744,3 +760,103 @@ class IncrementalCoDesignEngine:
                 "obstacles": obstacles_data,
             },
         }
+
+    def get_copilot_recommendations(
+        self,
+        max_proposals: int = 5,
+    ) -> CoPilotReport:
+        """Analyze current floor plan and generate ranked architectural improvement proposals.
+
+        Args:
+            max_proposals: Maximum number of ranked recommendations to return.
+
+        Returns:
+            CoPilotReport: Validated report containing baseline metrics and ranked proposals.
+        """
+        copilot = ArchitecturalCoPilot()
+        report = copilot.analyze_floor_plan(
+            plan=self.plan,
+            topology=self.topology,
+            baseline_partition=self.partition,
+            baseline_bundle=self.bundle,
+            max_recommendations=max_proposals,
+        )
+        self._active_proposals = {p.proposal_id: p for p in report.recommended_proposals}
+        return report
+
+    def apply_structural_proposal(
+        self,
+        proposal_id: str,
+    ) -> Tuple[Dict[str, Any], float]:
+        """Apply a recommended structural proposal, updating geometry, topology, partition, and rings.
+
+        Args:
+            proposal_id: Unique proposal identifier to apply.
+
+        Returns:
+            Tuple of (serializable state dictionary, elapsed latency in ms).
+        """
+        t0 = time.perf_counter()
+
+        if proposal_id not in self._active_proposals:
+            self.get_copilot_recommendations()
+
+        if proposal_id not in self._active_proposals:
+            raise ValueError(f"Structural proposal '{proposal_id}' not found in active proposals.")
+
+        proposal = self._active_proposals[proposal_id]
+        copilot = ArchitecturalCoPilot()
+
+        # 1. Mutate in-memory floor plan geometry
+        self.plan = copilot.apply_proposal(proposal, self.plan)
+
+        # 2. Re-extract portals and rebuild topology
+        raw_doors = getattr(self, "_raw_doors", None)
+        raw_entrance = getattr(self, "_raw_entrance", None)
+        portals = extract_all_portals(self.plan, raw_doors=raw_doors, raw_entrance=raw_entrance)
+        self.topology = MacroTopologyGraph.build_topology(self.plan, portals)
+
+        # 3. Rebuild Hanan routing grid and cost tensor
+        hub_locs = [h.location for h in self.partition.hubs]
+        self.grid = build_hanan_grid(self.plan, self.topology, extra_points=hub_locs)
+        cost_tensor = PairwiseCostTensor.build_from_plan(
+            self.plan, self.topology, grid=self.grid, include_portals=False
+        )
+
+        # 4. Re-solve partition and synthesized rings
+        candidates = generate_all_room_hub_candidates(
+            self.plan, margin_m=0.505, topology=self.topology
+        )
+        try:
+            self.partition = ZonePartitioner.solve_partition(
+                self.plan,
+                self.topology,
+                cost_tensor,
+                candidates,
+                max_area=100.0,
+                max_nodes=5,
+            )
+        except Exception:
+            pass
+
+        self.bundle = self.synthesizer.synthesize_all_rings(
+            self.partition,
+            self.plan,
+            self.topology,
+            self.router,
+            self.grid,
+            cost_tensor,
+        )
+
+        # 5. Evaluate with FloorPlanChecker
+        report = FloorPlanChecker.evaluate(
+            self.plan, self.bundle, topology=self.topology
+        )
+        self._last_report = report
+
+        # Clear stale proposals cache
+        self._active_proposals = {}
+
+        latency_ms = (time.perf_counter() - t0) * 1000
+        return self.get_state(latency_ms=latency_ms, report=report), latency_ms
+
