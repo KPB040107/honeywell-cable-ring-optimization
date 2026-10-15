@@ -7,23 +7,21 @@ updated: 2026-10-15T23:30:00+05:30
 ## Current Position
 
 **Milestone:** V2 Interactive Extension (Phases 7–10)  
-**Phase:** Phase 8 — "Architectural Co-Pilot" Doorway & Wall Optimizer  
-**Status:** complete (verified 8/8 must-haves passed)  
-**Plan:** 8-1-PLAN.md, 8-2-PLAN.md (Wave 1 & Wave 2 completed and independently verified)  
+**Phase:** Phase 9 — Interactive Wire-Cut Survivability Simulator (NFPA 72 Class A)  
+**Status:** ready for execution  
+**Plan:** 9-1-PLAN.md (Wave 1: Circuit Graph Engine & Simulation Core), 9-2-PLAN.md (Wave 2: Studio Scissors Tool, Dual-Direction Pulses & E2E Integration)  
 
 ## Last Action
 
-Completed and verified Phase 8 (Plan 8.1 & Plan 8.2):
-- Implemented `PerturbationCandidateGenerator` (`candidate_generator.py`) detecting candidate ghost doorways and movable doors on shared interior walls.
-- Implemented `ArchitecturalCoPilot` (`wall_optimizer.py`) evaluating candidate perturbations and lexicographically ranking them by hub reduction $\Delta H$ and cost savings $\Delta J$.
-- Implemented REST API (`POST /api/copilot/suggest`, `POST /api/copilot/apply`) and WebSockets actions in `server.py` and `incremental_router.py`.
-- Integrated Co-Design Studio HUD: interactive cyan glowing dashed ghost doorways on HTML5 canvas with floating metric savings badges, recommendation cards in Reviewer HUD, and one-click "Apply Tweak" live floor-plan mutation.
-- Verified on Slide 5 schematic: top ghost doorway recommendation eliminated leaf-room out-and-back dead-end, saving $5.04\text{ m}$ cable and 2 bends ($\Delta J = -6.04$), dropping cost from $59.0$ to $45.48$ with 100% valid rule compliance.
-- Independent verification report `.gsd/phases/8/VERIFICATION.md` confirmed 8/8 must-haves passed; 87/87 tests passing with zero regressions.
+Authored Phase 9 execution plans:
+- Plan 9.1 (Wave 1): NFPA 72 Class A circuit simulator (`circuit_simulator.py`), split-branch path length calculations, and 100% device survivability proofs on Slide 5 closed loops.
+- Plan 9.2 (Wave 2): Interactive Scissors Tool (✂️) on HTML5 canvas, dual-direction animated signal pulse flows (electric blue outbound, amber return terminal), live survivability HUD gauge, and circuit restore mechanics (`server.py`, `app.js`, `index.html`, `style.css`).
+- Committed plans in `1ceb218`.
 
 ## Next Steps
 
-1. Proceed to Phase 9 (`/plan 9`): Interactive Wire-Cut Survivability Simulator (NFPA 72 Class A).
+1. Execute Phase 9 (`/execute 9`): Run Plan 9.1 (Wave 1) then Plan 9.2 (Wave 2).
+2. Verify Phase 9 with `gsd-verifier`.
 
 ## Active Decisions
 
