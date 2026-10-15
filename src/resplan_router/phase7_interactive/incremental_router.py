@@ -18,6 +18,7 @@ import shapely
 from shapely.geometry import LineString, Point, Polygon
 
 from resplan_router.contracts import (
+    ClassASimulationReport,
     CompassDirection,
     CompletedHubRing,
     CoPilotReport,
@@ -61,6 +62,7 @@ from resplan_router.phase6_output.checker import FloorPlanChecker
 from resplan_router.phase6_output.json_exporter import export_slide8_json
 from resplan_router.phase7_interactive.halo_tracker import ClearanceHaloTracker
 from resplan_router.phase8_copilot.wall_optimizer import ArchitecturalCoPilot
+from resplan_router.phase9_survivability.circuit_simulator import ClassACircuitSimulator
 
 
 def _find_fixture_path() -> Path:
@@ -87,6 +89,8 @@ class IncrementalCoDesignEngine:
         bundle: Optional[SynthesizedRingsBundle] = None,
     ) -> None:
         self.halo_tracker = ClearanceHaloTracker()
+        self.circuit_simulator = ClassACircuitSimulator()
+        self._active_cut: Optional[ClassASimulationReport] = None
         self._active_proposals: Dict[str, StructuralProposal] = {}
         self._raw_doors: Optional[Sequence[Any]] = None
         self._raw_entrance: Optional[Any] = None
@@ -162,6 +166,7 @@ class IncrementalCoDesignEngine:
         t0 = time.perf_counter()
         self._load_slide5_baseline()
         self._active_proposals = {}
+        self._active_cut = None
         self._last_report = FloorPlanChecker.evaluate(
             self.plan, self.bundle, topology=self.topology
         )
@@ -171,6 +176,57 @@ class IncrementalCoDesignEngine:
     def export_slide8(self) -> Dict[str, Any]:
         """Serialize current state to official Slide 8 JSON format."""
         return export_slide8_json(self.plan, self.bundle, partition=self.partition)
+
+    def cut_wire(
+        self,
+        hub_id: str,
+        cut_x: float,
+        cut_y: float,
+    ) -> Tuple[Dict[str, Any], float]:
+        """Sever cable leg near (cut_x, cut_y) and compute bidirectional Class A survivability."""
+        t0 = time.perf_counter()
+        target_ring: Optional[CompletedHubRing] = None
+        if hub_id:
+            for ring in self.bundle.hub_rings:
+                if ring.hub_id == hub_id:
+                    target_ring = ring
+                    break
+
+        if target_ring is None and self.bundle.hub_rings:
+            # Find closest ring to cut coordinate
+            cut_pt = Point(cut_x, cut_y)
+            min_dist = float("inf")
+            for ring in self.bundle.hub_rings:
+                for seg in ring.route_segments:
+                    if len(seg.polyline) >= 2:
+                        ls = LineString([(p.x, p.y) for p in seg.polyline])
+                        d = ls.distance(cut_pt)
+                        if d < min_dist:
+                            min_dist = d
+                            target_ring = ring
+            if target_ring is None:
+                target_ring = self.bundle.hub_rings[0]
+
+        if target_ring is None:
+            raise ValueError("No routing rings available for wire cut simulation")
+
+        plan_id = self.plan.plan_id if self.plan else ""
+        report = self.circuit_simulator.simulate_arbitrary_cut_point(
+            target_ring,
+            cut_x=cut_x,
+            cut_y=cut_y,
+            plan_id=plan_id,
+        )
+        self._active_cut = report
+        latency_ms = (time.perf_counter() - t0) * 1000
+        return self.get_state(latency_ms=latency_ms), latency_ms
+
+    def heal_wire(self) -> Tuple[Dict[str, Any], float]:
+        """Clear active wire cut, restoring full closed-loop circuit topology."""
+        t0 = time.perf_counter()
+        self._active_cut = None
+        latency_ms = (time.perf_counter() - t0) * 1000
+        return self.get_state(latency_ms=latency_ms), latency_ms
 
     def _route_orthogonal_leg(
         self,
@@ -724,7 +780,7 @@ class IncrementalCoDesignEngine:
                         [round(pt[0], 4), round(pt[1], 4)] for pt in g.exterior.coords
                     ])
 
-        return {
+        state_payload = {
             "type": "state_update",
             "latency_ms": round(float(latency_ms), 2),
             "is_valid": is_valid,
@@ -760,6 +816,13 @@ class IncrementalCoDesignEngine:
                 "obstacles": obstacles_data,
             },
         }
+
+        if self._active_cut is not None:
+            state_payload["survivability_report"] = self._active_cut.model_dump()
+        else:
+            state_payload["survivability_report"] = None
+
+        return state_payload
 
     def get_copilot_recommendations(
         self,

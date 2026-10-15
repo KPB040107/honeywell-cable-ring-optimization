@@ -69,6 +69,12 @@ class ProposalApplyRequest(BaseModel):
     proposal_id: str
 
 
+class WireCutRequest(BaseModel):
+    hub_id: Optional[str] = "H1"
+    cut_x: float
+    cut_y: float
+
+
 @app.get("/health")
 def health_check() -> Dict[str, str]:
     """Health check endpoint confirming engine availability."""
@@ -124,6 +130,22 @@ def copilot_suggest_http(req: Optional[SuggestRequest] = None) -> Dict[str, Any]
 def copilot_apply_http(req: ProposalApplyRequest) -> Dict[str, Any]:
     """Apply an architectural co-pilot recommendation and re-route floor plan."""
     state, _ = engine.apply_structural_proposal(req.proposal_id)
+    return state
+
+
+@app.post("/api/survivability/cut")
+def cut_wire_http(req: WireCutRequest) -> Dict[str, Any]:
+    """Sever a cable leg and compute NFPA 72 Class A device survivability."""
+    state, _ = engine.cut_wire(req.hub_id or "H1", req.cut_x, req.cut_y)
+    if engine._active_cut is not None:
+        return engine._active_cut.model_dump()
+    return state
+
+
+@app.post("/api/survivability/heal")
+def heal_wire_http() -> Dict[str, Any]:
+    """Restore severed wire cuts to normal closed loop."""
+    state, _ = engine.heal_wire()
     return state
 
 
@@ -195,6 +217,16 @@ def mutate_http(req: MutationRequest) -> Any:
 
     elif action == "get_state":
         return engine.get_state()
+
+    elif action == "wire_cut":
+        cut_x = req.x if req.x is not None else 0.0
+        cut_y = req.y if req.y is not None else 0.0
+        state, _ = engine.cut_wire(req.hub_id or "H1", cut_x, cut_y)
+        return state
+
+    elif action == "wire_heal":
+        state, _ = engine.heal_wire()
+        return state
 
     else:
         return JSONResponse(
@@ -281,6 +313,23 @@ async def websocket_co_design(websocket: WebSocket) -> None:
             elif action == "get_state":
                 state = engine.get_state()
                 await websocket.send_json(state)
+
+            elif action == "wire_cut":
+                hub_id = str(data.get("hub_id", ""))
+                cut_x = float(data.get("cut_x", data.get("x", 0.0)))
+                cut_y = float(data.get("cut_y", data.get("y", 0.0)))
+                state, _ = engine.cut_wire(hub_id, cut_x, cut_y)
+                report_dict = engine._active_cut.model_dump() if engine._active_cut else {}
+                resp = dict(state)
+                resp["type"] = "survivability_update"
+                resp["report"] = report_dict
+                await websocket.send_json(resp)
+
+            elif action == "wire_heal":
+                state, _ = engine.heal_wire()
+                resp = dict(state)
+                resp["type"] = "state_update"
+                await websocket.send_json(resp)
 
             else:
                 await websocket.send_json({
