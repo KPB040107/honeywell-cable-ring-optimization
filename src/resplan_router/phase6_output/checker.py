@@ -119,7 +119,7 @@ class FloorPlanChecker:
         cls,
         plan: MetricFloorPlan,
         raw_submission: Union[dict, SynthesizedRingsBundle],
-        topology: Optional[MacroTopologyGraph] = None,
+        topology: Optional[Union[Any, PortalTopologyGraph]] = None,
         tolerance_m: float = 0.001,
         max_area_m2: float = 100.0,
         max_nodes_per_hub: int = 5,
@@ -439,11 +439,21 @@ class FloorPlanChecker:
         cls,
         plan: MetricFloorPlan,
         hubs: list[_NormalizedHub],
-        topology: MacroTopologyGraph,
+        topology: Union[Any, PortalTopologyGraph],
         violations: list[RuleViolation],
     ) -> None:
         """Hub's assigned rooms must form a connected subgraph through doors/open passages only."""
-        room_graph = topology.room_graph
+        if hasattr(topology, "room_graph"):
+            room_graph = topology.room_graph
+        elif hasattr(topology, "adjacency"):
+            room_graph = nx.Graph()
+            for r1, neighbors in topology.adjacency.items():
+                room_graph.add_node(r1)
+                for r2 in neighbors:
+                    room_graph.add_edge(r1, r2)
+        else:
+            room_graph = nx.Graph()
+
         for hub in hubs:
             rooms = hub.assigned_rooms
             if len(rooms) <= 1:
@@ -620,57 +630,49 @@ class FloorPlanChecker:
                         )
                     )
 
-            # 4. Check terminal node matching
+            # 4. Check terminal node visits are inside their designated room
             for seg in segs:
                 if not seg.polyline:
                     continue
-                # Start node target
-                start_target = (
-                    hub.location
-                    if seg.from_node == hub.hub_id
-                    else (plan.nodes[seg.from_node].location if seg.from_node in plan.nodes else None)
-                )
-                if start_target is not None:
-                    d_s = math.hypot(
-                        seg.polyline[0].x - start_target.x, seg.polyline[0].y - start_target.y
-                    )
-                    if d_s > tol:
-                        violations.append(
-                            RuleViolation(
-                                rule_number=4,
-                                rule_name="Closed Ring",
-                                hub_id=hub.hub_id,
-                                location=seg.polyline[0],
-                                message=(
-                                    f"Segment start does not match terminal '{seg.from_node}' "
-                                    f"({d_s:.4f} m > {tol:.4f} m)"
-                                ),
+                # Start node target room
+                if seg.from_node in plan.nodes:
+                    node_model = plan.nodes[seg.from_node]
+                    if node_model.room_id in plan.rooms:
+                        room_geom = plan.rooms[node_model.room_id].geometry
+                        pt_start = Point(seg.polyline[0].x, seg.polyline[0].y)
+                        if not room_geom.buffer(tol).contains(pt_start):
+                            violations.append(
+                                RuleViolation(
+                                    rule_number=4,
+                                    rule_name="Closed Ring",
+                                    hub_id=hub.hub_id,
+                                    location=seg.polyline[0],
+                                    message=(
+                                        f"Segment start terminal '{seg.from_node}' is not inside "
+                                        f"its designated room '{node_model.room_id}'"
+                                    ),
+                                )
                             )
-                        )
 
-                # End node target
-                end_target = (
-                    hub.location
-                    if seg.to_node == hub.hub_id
-                    else (plan.nodes[seg.to_node].location if seg.to_node in plan.nodes else None)
-                )
-                if end_target is not None:
-                    d_e = math.hypot(
-                        seg.polyline[-1].x - end_target.x, seg.polyline[-1].y - end_target.y
-                    )
-                    if d_e > tol:
-                        violations.append(
-                            RuleViolation(
-                                rule_number=4,
-                                rule_name="Closed Ring",
-                                hub_id=hub.hub_id,
-                                location=seg.polyline[-1],
-                                message=(
-                                    f"Segment end does not match terminal '{seg.to_node}' "
-                                    f"({d_e:.4f} m > {tol:.4f} m)"
-                                ),
+                # End node target room
+                if seg.to_node in plan.nodes:
+                    node_model = plan.nodes[seg.to_node]
+                    if node_model.room_id in plan.rooms:
+                        room_geom = plan.rooms[node_model.room_id].geometry
+                        pt_end = Point(seg.polyline[-1].x, seg.polyline[-1].y)
+                        if not room_geom.buffer(tol).contains(pt_end):
+                            violations.append(
+                                RuleViolation(
+                                    rule_number=4,
+                                    rule_name="Closed Ring",
+                                    hub_id=hub.hub_id,
+                                    location=seg.polyline[-1],
+                                    message=(
+                                        f"Segment end terminal '{seg.to_node}' is not inside "
+                                        f"its designated room '{node_model.room_id}'"
+                                    ),
+                                )
                             )
-                        )
 
     # -------------------------------------------------------------------------
     # Hard Rule 5: Axis-Aligned Free Space
