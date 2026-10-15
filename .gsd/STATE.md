@@ -8,19 +8,20 @@ updated: 2026-10-15T23:30:00+05:30
 
 **Milestone:** V1 Foundation (Phases 1–6)  
 **Phase:** Phase 5 — Direction-Aware Closed-Ring Sequencing & Zero-Overlap Route Synthesis  
-**Status:** ready_for_execution  
-**Plan:** 5-1-PLAN.md, 5-2-PLAN.md (Wave 1 & Wave 2)
+**Status:** complete  
+**Plan:** 5-1-PLAN.md, 5-2-PLAN.md (Wave 1 & Wave 2 completed)
 
 ## Last Action
 
-Completed Phase 5 planning following `v2.md` Section 5.5 and GSD guidelines:
-- Created `.gsd/phases/5/RESEARCH.md` detailing direction-aware Held-Karp dynamic programming, parallel doorway lane routing for $O = 0$, and Slide 5 target metrics ($L=49.0\text{ m}, J=59.0$).
-- Created `.gsd/phases/5/5-1-PLAN.md` (Wave 1: Contracts, `exact_ring_tsp.py`, ring TSP unit tests).
-- Created `.gsd/phases/5/5-2-PLAN.md` (Wave 2: `loop_synthesizer.py`, Slide 5 validation, zero-overlap leaf routing, Phase 5 test suite).
+Completed Phase 5 execution (Plan 5.1 & Plan 5.2):
+- Implemented `exact_ring_tsp.py` (direction-aware Held-Karp DP ring TSP solver for $m \le 5$).
+- Implemented `loop_synthesizer.py` (sequential conflict-free polyline synthesis, single-door parallel lane routing $O = 0.0\text{ m}$, dynamic usage marking).
+- Validated Slide 5 benchmark metrics ($L = 49.0\text{ m}, B = 20, X = 0, O = 0.0\text{ m}, J = 59.0$).
+- Built full Phase 5 test suite (`tests/test_phase5_tsp.py`, `tests/test_phase5_ring_sequencing.py`); all 53 tests pass.
 
 ## Next Steps
 
-1. `/execute 5` — Execute Plan 5.1 and Plan 5.2 sequentially to implement Phase 5.
+1. Phase 6 — Official $1\text{ mm}$ Evaluation Checker, Slide 8 JSON Exporter & Visual Overlay Renderer (`/plan 6`).
 
 ## Active Decisions
 
