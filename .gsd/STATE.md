@@ -8,19 +8,20 @@ updated: 2026-10-15T23:30:00+05:30
 
 **Milestone:** V1 Foundation (Phases 1–6)  
 **Phase:** Phase 2 — Door & Open-Passage Topology Extraction & Parallel-Lane Portal Waypoints  
-**Status:** ready_for_execution  
-**Plan:** 2-1-PLAN.md, 2-2-PLAN.md (Wave 1 & Wave 2)
+**Status:** complete  
+**Plan:** 2-1-PLAN.md, 2-2-PLAN.md (Wave 1 & Wave 2 completed)
 
 ## Last Action
 
-Completed Phase 2 planning following `v2.md` Section 5.2 and GSD guidelines:
-- Created `.gsd/phases/2/RESEARCH.md` detailing door threshold geometry, open passage detection, and $\ge 20\text{ mm}$ parallel doorway lane math for $O = 0$.
-- Created `.gsd/phases/2/2-1-PLAN.md` (Wave 1: Contracts, `portal_extractor.py`, portal unit tests).
-- Created `.gsd/phases/2/2-2-PLAN.md` (Wave 2: `macro_graph.py`, Slide 5 dual graph, parallel lane validation, Phase 2 test suite).
+Executed and verified Plan 2.2:
+- Built `MacroTopologyGraph` dual graph in NetworkX with dual class/instance dispatch and `TopologyError` validation.
+- Identified single-door degree-1 leaf rooms (`Bedroom 2` and `Storage` on Slide 5).
+- Implemented `validate_parallel_lane_clearance` checking $\ge 20\text{ mm}$ lateral separation strictly in free space.
+- Implemented and verified full Phase 2 test suite `tests/test_phase2_topology.py` (all 6 tests passing, 23 suite tests passing).
 
 ## Next Steps
 
-1. `/execute 2` — Execute Plan 2.1 and Plan 2.2 sequentially to implement Phase 2.
+1. Run Phase 2 verification gate `/verify 2` and transition to Phase 3 (Obstacle-Aware Axis-Aligned Micro-Router & Directional Cost Tensor).
 
 ## Active Decisions
 
