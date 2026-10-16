@@ -10,7 +10,7 @@ import io
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from fastapi import FastAPI, File, Request, Response, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -112,6 +112,62 @@ def export_bim_obj_endpoint() -> Response:
         media_type="text/plain",
         headers={"Content-Disposition": 'attachment; filename="resplan_model.obj"'},
     )
+
+
+@app.get("/api/dataset/status")
+def get_dataset_status() -> Dict[str, Any]:
+    """Return status, readiness, and record count of bundled ResPlan dataset."""
+    from resplan_router.phase1_ingestion.dataset_repository import DatasetRepository
+
+    repo = DatasetRepository.get_instance()
+    return repo.get_status()
+
+
+@app.post("/api/dataset/plans/{plan_id}/load")
+def load_dataset_plan_endpoint(plan_id: str) -> Any:
+    """Load a specific Plan ID from the ResPlan dataset into unrouted preview mode."""
+    from resplan_router.phase1_ingestion.dataset_repository import (
+        DatasetRepository,
+        DatasetUnavailableError,
+        InvalidPlanIdError,
+        MalformedRecordError,
+        PlanNotFoundError,
+    )
+
+    try:
+        state, latency_ms = engine.load_dataset_plan(plan_id)
+        repo = DatasetRepository.get_instance()
+        preview = repo.get_preview_geojson(plan_id)
+        return {
+            "status": "ok",
+            "message": f"Dataset plan '{plan_id}' loaded into preview mode",
+            "metadata": {
+                "plan_id": preview["plan_id"],
+                "total_area_m2": preview["total_area_m2"],
+                "net_area_m2": preview["net_area_m2"],
+                "eligible_rooms_count": preview["eligible_rooms_count"],
+                "device_count": preview["device_count"],
+            },
+            "preview": preview,
+            "state": state,
+            "latency_ms": round(latency_ms, 2),
+        }
+    except PlanNotFoundError as exc:
+        return JSONResponse(
+            status_code=404,
+            content={"status": "error", "error": str(exc), "message": str(exc)},
+        )
+    except (InvalidPlanIdError, MalformedRecordError, DatasetUnavailableError) as exc:
+        return JSONResponse(
+            status_code=400,
+            content={"status": "error", "error": str(exc), "message": str(exc)},
+        )
+    except Exception as exc:
+        logger.exception("Failed to load dataset plan %s", plan_id)
+        return JSONResponse(
+            status_code=500,
+            content={"status": "error", "error": str(exc), "message": str(exc)},
+        )
 
 
 @app.post("/api/reset")
@@ -312,6 +368,7 @@ def heal_wire_http() -> Dict[str, Any]:
 
 class MutationRequest(BaseModel):
     action: str
+    plan_id: Optional[Union[str, int]] = None
     node_id: Optional[str] = None
     hub_id: Optional[str] = None
     door_id: Optional[str] = None
@@ -396,6 +453,13 @@ def mutate_http(req: MutationRequest) -> Any:
     elif action == "load_demo":
         d_id = req.demo_id or "slide5"
         state, _ = engine.load_demo_plan(d_id, generate=True)
+        return state
+
+    elif action in ("load_plan_id", "load_dataset_plan"):
+        target_pid = req.plan_id or req.demo_id
+        if not target_pid:
+            return JSONResponse(status_code=400, content={"error": "load_plan_id requires plan_id"})
+        state, _ = engine.load_dataset_plan(target_pid)
         return state
 
     elif action == "reset":
@@ -560,6 +624,14 @@ async def websocket_co_design(websocket: WebSocket) -> None:
                 gen = bool(data.get("generate", False))
                 try:
                     state, _ = engine.load_demo_plan(demo_id, generate=gen)
+                    await websocket.send_json(state)
+                except Exception as exc:
+                    await websocket.send_json({"type": "error", "message": str(exc)})
+
+            elif action in ("load_plan_id", "load_dataset_plan"):
+                plan_id = data.get("plan_id")
+                try:
+                    state, _ = engine.load_dataset_plan(plan_id)
                     await websocket.send_json(state)
                 except Exception as exc:
                     await websocket.send_json({"type": "error", "message": str(exc)})

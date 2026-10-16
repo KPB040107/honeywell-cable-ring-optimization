@@ -1741,3 +1741,231 @@ body {
   }
 }
 
+/* --- Plan ID Selector & Dataset Status --- */
+.plan-id-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.plan-id-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.plan-id-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+.plan-id-input {
+  background: #0F172A;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 10px;
+  width: 90px;
+  text-align: center;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.plan-id-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
+}
+
+.load-plan-btn {
+  background: linear-gradient(135deg, #0284C7, #0EA5E9);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.load-plan-btn:hover {
+  background: linear-gradient(135deg, #0369A1, #0284C7);
+  transform: translateY(-1px);
+}
+
+.dataset-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.dataset-status-pill .status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #64748B;
+}
+
+.dataset-status-pill .status-dot.ready {
+  background: #10B981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+/* --- Preview Metadata Chips --- */
+.preview-metadata-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.meta-chip {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 5px;
+  padding: 2px 7px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.meta-chip strong {
+  color: #F8FAFC;
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.preview-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.opt-stage-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #38BDF8;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.spinner-small {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(56, 189, 248, 0.2);
+  border-top-color: #38BDF8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- Phase 11 Optimization Scoreboard Card --- */
+.phase11-scoreboard-card {
+  margin-top: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.hub-proof-badge {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10B981;
+  color: #10B981;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.scoreboard-comparison-table {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 12px 0 10px 0;
+}
+
+.comp-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 0.9fr;
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  align-items: center;
+}
+
+.comp-header {
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 10px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+  padding-bottom: 6px;
+}
+
+.comp-highlight-row {
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.comp-metric-col {
+  font-weight: 600;
+}
+
+.comp-val-col {
+  font-family: var(--font-mono);
+  text-align: right;
+}
+
+.comp-diff-col {
+  font-family: var(--font-mono);
+  text-align: right;
+  color: #10B981;
+  font-weight: 700;
+}
+
+.comp-diff-col.highlight {
+  color: #38BDF8;
+  font-size: 12px;
+}
+
+.optimization-bounds-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.bound-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bound-item strong {
+  color: #F8FAFC;
+  font-family: var(--font-mono);
+}
+
+

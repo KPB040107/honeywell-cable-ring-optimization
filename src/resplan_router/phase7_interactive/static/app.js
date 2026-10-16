@@ -160,6 +160,20 @@
   const btnResetBaseline = document.getElementById('btnResetBaseline');
   const btnAutoOptimize = document.getElementById('btnAutoOptimize');
 
+  // ResPlan Plan ID & Dataset DOM Elements
+  const inputPlanId = document.getElementById('inputPlanId');
+  const btnLoadPlan = document.getElementById('btnLoadPlan');
+  const datasetStatusDot = document.getElementById('datasetStatusDot');
+  const datasetStatusText = document.getElementById('datasetStatusText');
+  const metaPlanId = document.getElementById('metaPlanId');
+  const metaTotalArea = document.getElementById('metaTotalArea');
+  const metaNetArea = document.getElementById('metaNetArea');
+  const metaEligibleRooms = document.getElementById('metaEligibleRooms');
+  const metaDeviceCount = document.getElementById('metaDeviceCount');
+  const optimizationStageProgress = document.getElementById('optimizationStageProgress');
+  const optStageText = document.getElementById('optStageText');
+  const phase11ScoreboardCard = document.getElementById('phase11ScoreboardCard');
+
   // Floor Plan Upload & Preview DOM Elements
   const btnUploadFloorPlan = document.getElementById('btnUploadFloorPlan');
   const fileUploadInput = document.getElementById('fileUploadInput');
@@ -175,6 +189,11 @@
   const previewDetails = document.getElementById('previewDetails');
   const btnGenerateRings = document.getElementById('btnGenerateRings');
   const btnGenerateRingsSidebar = document.getElementById('btnGenerateRingsSidebar');
+
+  function setText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+  }
 
   // --- Coordinate Transformation Utilities ---
   function worldToScreen(wx, wy) {
@@ -568,15 +587,70 @@
       if (isPreview) {
         previewActionBar.style.display = 'flex';
         const plan = data.plan || {};
-        const roomsCount = (plan.rooms || []).length;
+        const rooms = plan.rooms || [];
+        const eligibleCount = rooms.filter(r => r.is_eligible !== false).length;
         const nodesCount = (data.nodes || []).length;
-        if (previewPlanId) previewPlanId.textContent = plan.plan_id || 'UPLOADED_PLAN';
-        if (previewDetails) previewDetails.textContent = `${roomsCount} rooms | ${nodesCount} fixed devices — Unrouted Preview`;
+        const totalArea = plan.total_area_m2 || 0;
+        const netArea = (data.metadata && data.metadata.net_area_m2) || totalArea;
+
+        setText('metaPlanId', plan.plan_id || (inputPlanId ? inputPlanId.value : '14433'));
+        setText('metaTotalArea', Number(totalArea).toFixed(1));
+        setText('metaNetArea', Number(netArea).toFixed(1));
+        setText('metaEligibleRooms', eligibleCount);
+        setText('metaDeviceCount', nodesCount);
       } else {
         previewActionBar.style.display = 'none';
       }
       if (prevDisplay !== previewActionBar.style.display) {
         window.dispatchEvent(new Event('resize'));
+      }
+    }
+
+    // Phase 11 Optimization Scoreboard Card Update
+    const sc = data.phase11_scoreboard;
+    if (phase11ScoreboardCard) {
+      if (sc && !isPreview) {
+        phase11ScoreboardCard.style.display = 'block';
+        const badgeHub = document.getElementById('badgeHubOptimality');
+        if (badgeHub) {
+          badgeHub.textContent = sc.hub_optimality_status || 'PROVEN OPTIMAL HUB COUNT';
+          badgeHub.className = sc.hub_optimality_status === 'PROVEN OPTIMAL HUB COUNT' ? 'hub-proof-badge' : 'hub-proof-badge warning';
+        }
+        const greedy = sc.greedy_metrics || {};
+        const opt = sc.optimized_metrics || {};
+
+        setText('scGreedyJ', greedy.J !== undefined ? greedy.J.toFixed(2) : '--');
+        setText('scOptJ', opt.J !== undefined ? opt.J.toFixed(2) : '--');
+        const impPct = sc.improvement_percent !== undefined ? sc.improvement_percent : 0;
+        setText('scImprovementPct', impPct > 0 ? `-${impPct.toFixed(1)}%` : '0.0%');
+
+        setText('scGreedyH', greedy.H !== undefined ? greedy.H : '--');
+        setText('scOptH', opt.H !== undefined ? opt.H : '--');
+        setText('scDiffH', (greedy.H !== undefined && opt.H !== undefined) ? `${opt.H - greedy.H}` : '--');
+
+        setText('scGreedyL', greedy.L !== undefined ? `${greedy.L.toFixed(2)}m` : '--');
+        setText('scOptL', opt.L !== undefined ? `${opt.L.toFixed(2)}m` : '--');
+        setText('scDiffL', (greedy.L !== undefined && opt.L !== undefined) ? `${(opt.L - greedy.L).toFixed(2)}m` : '--');
+
+        setText('scGreedyB', greedy.B !== undefined ? greedy.B : '--');
+        setText('scOptB', opt.B !== undefined ? opt.B : '--');
+        setText('scDiffB', (greedy.B !== undefined && opt.B !== undefined) ? `${opt.B - greedy.B}` : '--');
+
+        setText('scGreedyX', greedy.X !== undefined ? greedy.X : '--');
+        setText('scOptX', opt.X !== undefined ? opt.X : '--');
+        setText('scDiffX', (greedy.X !== undefined && opt.X !== undefined) ? `${opt.X - greedy.X}` : '--');
+
+        setText('scGreedyO', greedy.O !== undefined ? `${greedy.O.toFixed(2)}m` : '--');
+        setText('scOptO', opt.O !== undefined ? `${opt.O.toFixed(2)}m` : '--');
+        setText('scDiffO', (greedy.O !== undefined && opt.O !== undefined) ? `${(opt.O - greedy.O).toFixed(2)}m` : '--');
+
+        setText('scOptAreaGap', opt.delta_area_gap_m2 !== undefined ? `${opt.delta_area_gap_m2.toFixed(2)}m²` : '--');
+
+        setText('scLowerBoundJ', sc.relaxed_j_lower_bound !== undefined ? sc.relaxed_j_lower_bound.toFixed(2) : '--');
+        setText('scGapPct', sc.estimated_j_gap_percent !== undefined ? `${sc.estimated_j_gap_percent.toFixed(1)}%` : '0.0%');
+        setText('scRuntime', sc.total_runtime_s !== undefined ? `${sc.total_runtime_s.toFixed(2)}s` : '--');
+      } else {
+        phase11ScoreboardCard.style.display = 'none';
       }
     }
 
@@ -1767,6 +1841,70 @@
     }
   }
 
+  // --- ResPlan Dataset Plan Ingestion & Routing ---
+  async function loadDatasetPlan(planId) {
+    if (!planId) return;
+    hideUploadError();
+    if (btnLoadPlan) {
+      btnLoadPlan.disabled = true;
+      btnLoadPlan.textContent = 'Loading...';
+    }
+
+    try {
+      const res = await fetch(`${CONFIG.httpFallbackBase}/api/dataset/plans/${encodeURIComponent(planId)}/load`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const errMsg = data.error || data.message || `Failed to load Plan ID '${planId}'`;
+        showUploadError('Plan Load Error', errMsg);
+        return;
+      }
+      if (data.metadata) {
+        setText('metaPlanId', data.metadata.plan_id);
+        setText('metaTotalArea', Number(data.metadata.total_area_m2).toFixed(1));
+        setText('metaNetArea', Number(data.metadata.net_area_m2).toFixed(1));
+        setText('metaEligibleRooms', data.metadata.eligible_rooms_count);
+        setText('metaDeviceCount', data.metadata.device_count);
+      }
+      if (data.state) {
+        data.state.metadata = data.metadata;
+        handleServerPayload(data.state);
+        fitToScreen();
+      }
+    } catch (err) {
+      showUploadError('Plan Load Error', err.message || 'Network error loading plan.');
+    } finally {
+      if (btnLoadPlan) {
+        btnLoadPlan.disabled = false;
+        btnLoadPlan.innerHTML = `
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+          <span>Load Plan</span>
+        `;
+      }
+    }
+  }
+
+  async function checkDatasetStatus() {
+    try {
+      const res = await fetch(`${CONFIG.httpFallbackBase}/api/dataset/status`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.ready) {
+          if (datasetStatusDot) datasetStatusDot.className = 'status-dot ready';
+          if (datasetStatusText) datasetStatusText.textContent = `${Number(data.record_count).toLocaleString()} Plans Ready`;
+        } else {
+          if (datasetStatusDot) datasetStatusDot.className = 'status-dot';
+          if (datasetStatusText) datasetStatusText.textContent = 'Dataset Unavailable';
+        }
+      }
+    } catch (e) {
+      console.warn('Could not query dataset status:', e);
+    }
+  }
+
   // --- Cable Ring Generation ---
   async function generateCableRings() {
     hideUploadError();
@@ -1776,6 +1914,8 @@
       b.dataset.origText = b.textContent;
       b.textContent = 'Routing Cables...';
     });
+    if (optimizationStageProgress) optimizationStageProgress.style.display = 'flex';
+    if (optStageText) optStageText.textContent = 'Running Phase 11 Optimizer...';
 
     try {
       const res = await fetch(`${CONFIG.httpFallbackBase}/api/generate`, {
@@ -1793,6 +1933,7 @@
     } catch (err) {
       showUploadError('Cable Routing Error', err.message || 'Failed to generate cable rings.');
     } finally {
+      if (optimizationStageProgress) optimizationStageProgress.style.display = 'none';
       btns.forEach(b => {
         b.disabled = false;
         if (b.dataset.origText) b.textContent = b.dataset.origText;
@@ -1902,6 +2043,20 @@
           </svg>
           Download Overlay PNG
         `;
+      }
+    });
+  }
+
+  // --- ResPlan Plan ID Selector Listeners ---
+  if (btnLoadPlan && inputPlanId) {
+    btnLoadPlan.addEventListener('click', () => {
+      const pid = inputPlanId.value.trim();
+      if (pid) loadDatasetPlan(pid);
+    });
+    inputPlanId.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const pid = inputPlanId.value.trim();
+        if (pid) loadDatasetPlan(pid);
       }
     });
   }
@@ -2363,5 +2518,10 @@
     initThreeEngine();
     connectWebSocket();
     requestAnimationFrame(renderLoop);
+    checkDatasetStatus();
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialPlanId = urlParams.get('plan_id') || '14433';
+    if (inputPlanId) inputPlanId.value = initialPlanId;
+    loadDatasetPlan(initialPlanId);
   });
 })();

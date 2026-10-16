@@ -224,11 +224,97 @@ class IncrementalCoDesignEngine:
         latency_ms = (time.perf_counter() - t0) * 1000
         return self.get_state(latency_ms=latency_ms), latency_ms
 
+    def load_dataset_plan(self, plan_id: Any) -> Tuple[Dict[str, Any], float]:
+        """Load floor plan from process-wide DatasetRepository in unrouted preview mode."""
+        t0 = time.perf_counter()
+        from resplan_router.phase1_ingestion.dataset_repository import DatasetRepository
+
+        repo = DatasetRepository.get_instance()
+        metric_plan = repo.get_floor_plan(plan_id)
+
+        self._raw_data = {"id": metric_plan.plan_id, "area": metric_plan.total_area_m2}
+        self._raw_doors = None
+        self._raw_entrance = None
+        self._active_proposals = {}
+        self._active_cut = None
+        self._cached_bim_scene = None
+        self._preview_mode = True
+        self._phase11_result = None
+
+        self.plan = metric_plan
+        portals = extract_all_portals(self.plan)
+        self.topology = MacroTopologyGraph.build_topology(self.plan, portals)
+
+        self.partition = HubZonePartition(
+            plan_id=self.plan.plan_id,
+            hub_count=0,
+            lower_bound_hubs=0,
+            area_gap_m2=0.0,
+            hubs=[],
+        )
+        self.bundle = SynthesizedRingsBundle(
+            plan_id=self.plan.plan_id,
+            hub_rings=[],
+            total_length_m=0.0,
+            total_bends=0,
+            total_crossings=0,
+            total_overlap_m=0.0,
+            total_cost_J=0.0,
+        )
+        self._last_report = EvaluationReport(
+            plan_id=self.plan.plan_id,
+            is_valid=True,
+            violations=[],
+            hub_count=0,
+            hub_metrics=[],
+            total_length_m=0.0,
+            total_crossings=0,
+            total_overlap_m=0.0,
+            total_bends=0,
+            total_cost_J=0.0,
+            area_gap_m2=0.0,
+            rules_passed={
+                "Rule 1": True,
+                "Rule 2": True,
+                "Rule 3": True,
+                "Rule 4": True,
+                "Rule 5": True,
+                "Rule 6": True,
+            },
+        )
+        latency_ms = (time.perf_counter() - t0) * 1000
+        return self.get_state(latency_ms=latency_ms), latency_ms
+
     def generate_cable_rings(self) -> Tuple[Dict[str, Any], float]:
         """Execute full autonomous routing pipeline on active plan."""
         t0 = time.perf_counter()
-        if not self._raw_data:
+        if not self._raw_data and not getattr(self, "plan", None):
             raise ValueError("No floor plan loaded to route")
+
+        # Primary optimizer: Phase 11 hybrid optimization
+        try:
+            from resplan_router.phase11_optimization.phase11_solver import optimize_floor_plan
+
+            opt_res = optimize_floor_plan(
+                plan=self.plan,
+                topology=self.topology,
+                raw_doors=self._raw_doors,
+                raw_front_door=self._raw_entrance,
+                time_limit_s=10.0,
+            )
+            self.partition = opt_res.partition
+            self.bundle = opt_res.bundle
+            self._last_report = opt_res.report
+            self._phase11_result = opt_res
+            self._preview_mode = False
+            self._cached_bim_scene = None
+            self._active_cut = None
+
+            latency_ms = (time.perf_counter() - t0) * 1000
+            return self.get_state(latency_ms=latency_ms, report=opt_res.report), latency_ms
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).warning("Phase 11 solver fallback: %s", exc)
 
         # 1. Macro topology portals
         portals = extract_all_portals(self.plan, self._raw_doors, self._raw_entrance)
@@ -992,10 +1078,15 @@ class IncrementalCoDesignEngine:
                     ])
 
         preview_mode = getattr(self, "_preview_mode", False)
+        scoreboard_dict = None
+        if hasattr(self, "_phase11_result") and self._phase11_result is not None:
+            scoreboard_dict = self._phase11_result.as_dict()
+
         state_payload = {
             "type": "state_update",
             "latency_ms": round(float(latency_ms), 2),
             "preview_mode": preview_mode,
+            "phase11_scoreboard": scoreboard_dict,
             "is_valid": is_valid,
             "metrics": {
                 "H": rep.hub_count,

@@ -24,6 +24,11 @@ visualizations/
 # OS artifacts
 .DS_Store
 Thumbs.db
-# Local ResPlan source archive (too large for ordinary GitHub files)
+# Local ResPlan source archive and dataset (too large for ordinary GitHub files: 246MB)
 /archive (1).zip
 /archive (1)/
+/ResPlan.pkl
+
+# Presentation build artifacts
+tests/.deck_build/
+

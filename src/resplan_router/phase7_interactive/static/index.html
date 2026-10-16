@@ -63,42 +63,64 @@
           <button id="btnCloseUploadError" class="btn-close-error" title="Dismiss error">&times;</button>
         </div>
 
-        <!-- Floor Plan Preview State Action Bar -->
+        <!-- Floor Plan Preview State Action Bar with ResPlan Metadata -->
         <div id="previewActionBar" class="preview-action-bar" style="display: none;">
           <div class="preview-info">
-            <span class="preview-tag">FLOOR PLAN PREVIEW</span>
-            <span id="previewPlanId" class="preview-plan-id">PLAN_NAME</span>
-            <span id="previewDetails" class="preview-details">3 rooms | 3 nodes — Unrouted</span>
+            <span class="preview-tag" id="previewBadgeTag">PLAN PREVIEW</span>
+            <div class="preview-metadata-chips" id="previewMetadataChips">
+              <span class="meta-chip">Plan ID: <strong id="metaPlanId">--</strong></span>
+              <span class="meta-chip">Total Area: <strong id="metaTotalArea">--</strong> m²</span>
+              <span class="meta-chip">Net Area: <strong id="metaNetArea">--</strong> m²</span>
+              <span class="meta-chip">Eligible Rooms: <strong id="metaEligibleRooms">--</strong></span>
+              <span class="meta-chip">Generated Devices: <strong id="metaDeviceCount">--</strong></span>
+            </div>
           </div>
-          <button id="btnGenerateRings" class="btn-generate-rings" title="Run autonomous cable routing pipeline">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-            </svg>
-            <span>Generate Cable Rings</span>
-          </button>
+          <div class="preview-actions-right">
+            <div id="optimizationStageProgress" class="opt-stage-progress" style="display: none;">
+              <span class="spinner-small"></span>
+              <span id="optStageText">Optimizing...</span>
+            </div>
+            <button id="btnGenerateRings" class="btn-generate-rings" title="Run Phase 11 optimized cable routing pipeline">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+              <span>Generate Cable Rings</span>
+            </button>
+          </div>
         </div>
 
         <!-- Floating Canvas Toolbar -->
         <div class="canvas-toolbar">
-          <div class="toolbar-group upload-group">
-            <input type="file" id="fileUploadInput" accept=".json" style="display: none;">
-            <button id="btnUploadFloorPlan" class="tool-btn upload-btn" title="Upload floor plan JSON file (or drag & drop anywhere)">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
-              <span>Upload JSON</span>
-            </button>
-            <div class="demo-select-wrapper" title="Load example benchmark floor plan">
-              <span class="demo-label">Demo:</span>
-              <select id="demoSelectDropdown" class="demo-dropdown">
-                <option value="slide5">Slide 5 Schematic</option>
-                <option value="demo_three_rooms_window">3 Rooms Window Demo</option>
-                <option value="demo_six_rooms_capacity">6 Rooms Capacity Demo</option>
-                <option value="demo_disconnected_zones">Disconnected Zones Demo</option>
-                <option value="new_four_room_plan">4 Rooms Demo</option>
-              </select>
-              <button id="btnLoadDemoPlan" class="tool-btn demo-load-btn" title="Load Selected Demo Plan">Load</button>
+          <!-- Primary Interface: Numeric ResPlan Plan ID Selector -->
+          <div class="toolbar-group plan-id-group">
+            <div class="plan-id-input-wrapper">
+              <label for="inputPlanId" class="plan-id-label">Plan ID:</label>
+              <input type="text" id="inputPlanId" class="plan-id-input" placeholder="e.g. 14433" value="14433" aria-label="ResPlan Plan ID">
+              <button id="btnLoadPlan" class="tool-btn load-plan-btn" title="Load ResPlan Floor Plan Preview">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+                <span>Load Plan</span>
+              </button>
             </div>
+            <div class="dataset-status-pill" id="datasetStatusPill" title="Dataset Repository Status">
+              <span class="status-dot ready" id="datasetStatusDot"></span>
+              <span class="status-text" id="datasetStatusText">17k Plans Ready</span>
+            </div>
+          </div>
+
+          <!-- Hidden Legacy Upload/Demo Controls for Backwards-Compatibility with Automated Tests -->
+          <div class="legacy-controls" style="display: none;">
+            <input type="file" id="fileUploadInput" accept=".json">
+            <button id="btnUploadFloorPlan" class="tool-btn upload-btn">Upload JSON</button>
+            <select id="demoSelectDropdown" class="demo-dropdown">
+              <option value="slide5">Slide 5 Schematic</option>
+              <option value="demo_three_rooms_window">3 Rooms Window Demo</option>
+              <option value="demo_six_rooms_capacity">6 Rooms Capacity Demo</option>
+              <option value="demo_disconnected_zones">Disconnected Zones Demo</option>
+              <option value="new_four_room_plan">4 Rooms Demo</option>
+            </select>
+            <button id="btnLoadDemoPlan" class="tool-btn demo-load-btn">Load</button>
           </div>
 
           <div class="toolbar-divider"></div>
@@ -300,6 +322,85 @@
               <div class="cell-label">HUBS (H)</div>
               <div id="metricH" class="cell-value">--</div>
               <div class="cell-sub">independent rings</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Phase 11 Optimization Scoreboard Card -->
+        <div class="hud-card phase11-scoreboard-card" id="phase11ScoreboardCard" style="display: none;">
+          <div class="card-header">
+            <div class="header-with-badge">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20V10M18 20V4M6 20v-4"/>
+              </svg>
+              <h3>Phase 11 Optimization Scoreboard</h3>
+            </div>
+            <span id="badgeHubOptimality" class="hub-proof-badge">PROVEN OPTIMAL HUB COUNT</span>
+          </div>
+
+          <div class="scoreboard-comparison-table">
+            <div class="comp-row comp-header">
+              <span class="comp-metric-col">Metric</span>
+              <span class="comp-val-col">Greedy Incumbent</span>
+              <span class="comp-val-col">Optimized (Phase 11)</span>
+              <span class="comp-diff-col">Improvement</span>
+            </div>
+            <div class="comp-row comp-highlight-row">
+              <span class="comp-metric-col"><strong>Objective (J)</strong></span>
+              <span class="comp-val-col" id="scGreedyJ">--</span>
+              <span class="comp-val-col" id="scOptJ">--</span>
+              <span class="comp-diff-col highlight" id="scImprovementPct">--%</span>
+            </div>
+            <div class="comp-row">
+              <span class="comp-metric-col">Hubs (H)</span>
+              <span class="comp-val-col" id="scGreedyH">--</span>
+              <span class="comp-val-col" id="scOptH">--</span>
+              <span class="comp-diff-col" id="scDiffH">--</span>
+            </div>
+            <div class="comp-row">
+              <span class="comp-metric-col">Cable Length (L)</span>
+              <span class="comp-val-col" id="scGreedyL">--</span>
+              <span class="comp-val-col" id="scOptL">--</span>
+              <span class="comp-diff-col" id="scDiffL">--</span>
+            </div>
+            <div class="comp-row">
+              <span class="comp-metric-col">Bends (B)</span>
+              <span class="comp-val-col" id="scGreedyB">--</span>
+              <span class="comp-val-col" id="scOptB">--</span>
+              <span class="comp-diff-col" id="scDiffB">--</span>
+            </div>
+            <div class="comp-row">
+              <span class="comp-metric-col">Crossings (X)</span>
+              <span class="comp-val-col" id="scGreedyX">--</span>
+              <span class="comp-val-col" id="scOptX">--</span>
+              <span class="comp-diff-col" id="scDiffX">--</span>
+            </div>
+            <div class="comp-row">
+              <span class="comp-metric-col">Overlap (O)</span>
+              <span class="comp-val-col" id="scGreedyO">--</span>
+              <span class="comp-val-col" id="scOptO">--</span>
+              <span class="comp-diff-col" id="scDiffO">--</span>
+            </div>
+            <div class="comp-row">
+              <span class="comp-metric-col">Area Gap (ΔA)</span>
+              <span class="comp-val-col">--</span>
+              <span class="comp-val-col" id="scOptAreaGap">--</span>
+              <span class="comp-diff-col">--</span>
+            </div>
+          </div>
+
+          <div class="optimization-bounds-footer">
+            <div class="bound-item">
+              <span class="bound-label">Relaxed J Lower Bound:</span>
+              <strong id="scLowerBoundJ">--</strong>
+            </div>
+            <div class="bound-item">
+              <span class="bound-label">Estimated J Gap:</span>
+              <strong id="scGapPct">--%</strong>
+            </div>
+            <div class="bound-item">
+              <span class="bound-label">Solver Runtime:</span>
+              <strong id="scRuntime">--s</strong>
             </div>
           </div>
         </div>

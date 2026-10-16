@@ -38,14 +38,21 @@ def compress_polyline(points: Sequence[Point2D]) -> List[Point2D]:
     Returns:
         List[Point2D]: Compressed sequence with at least start and end (if len >= 2).
     """
-    if len(points) <= 2:
-        return list(points)
+    if not points:
+        return []
+    # Deduplicate consecutive nearly identical points (< 0.1 mm)
+    dedup: List[Point2D] = [points[0]]
+    for p in points[1:]:
+        if abs(p.x - dedup[-1].x) > 1e-4 or abs(p.y - dedup[-1].y) > 1e-4:
+            dedup.append(p)
+    if len(dedup) <= 2:
+        return list(dedup)
 
-    compressed: List[Point2D] = [points[0]]
-    for i in range(1, len(points) - 1):
+    compressed: List[Point2D] = [dedup[0]]
+    for i in range(1, len(dedup) - 1):
         prev = compressed[-1]
-        curr = points[i]
-        nxt = points[i + 1]
+        curr = dedup[i]
+        nxt = dedup[i + 1]
 
         # Check directions of (prev -> curr) and (curr -> nxt)
         dx1 = curr.x - prev.x
@@ -64,7 +71,7 @@ def compress_polyline(points: Sequence[Point2D]) -> List[Point2D]:
         if d1 != d2:
             compressed.append(curr)
 
-    compressed.append(points[-1])
+    compressed.append(dedup[-1])
     return compressed
 
 
@@ -151,10 +158,15 @@ class SingleSourceResult:
 
         actual_start_dir: Optional[CompassDirection] = None
         if len(compressed) >= 2:
-            actual_start_dir = CompassDirection.from_delta(
-                compressed[1].x - compressed[0].x,
-                compressed[1].y - compressed[0].y,
-            )
+            for k in range(1, len(compressed)):
+                dx = compressed[k].x - compressed[0].x
+                dy = compressed[k].y - compressed[0].y
+                if abs(dx) >= 1e-4 or abs(dy) >= 1e-4:
+                    try:
+                        actual_start_dir = CompassDirection.from_delta(dx, dy)
+                        break
+                    except ValueError:
+                        pass
 
         return PairRouteMetric(
             start_id=start_id,

@@ -1,0 +1,260 @@
+{
+  "plan_id": "14433",
+  "units": "m",
+  "hubs": [
+    {
+      "hub_id": "H1",
+      "room_id": "living_01",
+      "location": {
+        "x": 6.5439,
+        "y": 4.9963
+      },
+      "assigned_rooms": [
+        "kitchen_01",
+        "living_01"
+      ],
+      "assigned_nodes": [
+        "N4",
+        "N5"
+      ],
+      "closed_sequence": [
+        "H1",
+        "N4",
+        "N5",
+        "H1"
+      ],
+      "route_segments": [
+        {
+          "from": "H1",
+          "to": "N4",
+          "length_m": 0.0024,
+          "polyline": [
+            [
+              6.5439,
+              4.9963
+            ],
+            [
+              6.544,
+              4.994
+            ]
+          ]
+        },
+        {
+          "from": "N4",
+          "to": "N5",
+          "length_m": 7.009,
+          "polyline": [
+            [
+              6.544,
+              4.994
+            ],
+            [
+              6.544,
+              7.144
+            ],
+            [
+              11.403,
+              7.144
+            ]
+          ]
+        },
+        {
+          "from": "N5",
+          "to": "H1",
+          "length_m": 7.0068,
+          "polyline": [
+            [
+              11.403,
+              7.144
+            ],
+            [
+              6.544,
+              7.144
+            ],
+            [
+              6.5439,
+              4.9963
+            ]
+          ]
+        }
+      ],
+      "ring_length_m": 14.0182
+    },
+    {
+      "hub_id": "H2",
+      "room_id": "bedroom_03",
+      "location": {
+        "x": 2.5623,
+        "y": 9.2693
+      },
+      "assigned_rooms": [
+        "bedroom_03"
+      ],
+      "assigned_nodes": [
+        "N3"
+      ],
+      "closed_sequence": [
+        "H2",
+        "N3",
+        "H2"
+      ],
+      "route_segments": [
+        {
+          "from": "H2",
+          "to": "N3",
+          "length_m": 0.0006,
+          "polyline": [
+            [
+              2.5623,
+              9.2693
+            ],
+            [
+              2.562,
+              9.2693
+            ],
+            [
+              2.562,
+              9.269
+            ]
+          ]
+        },
+        {
+          "from": "N3",
+          "to": "H2",
+          "length_m": 0.0006,
+          "polyline": [
+            [
+              2.562,
+              9.269
+            ],
+            [
+              2.5623,
+              9.269
+            ],
+            [
+              2.5623,
+              9.2693
+            ]
+          ]
+        }
+      ],
+      "ring_length_m": 0.0012
+    },
+    {
+      "hub_id": "H3",
+      "room_id": "bedroom_02",
+      "location": {
+        "x": 11.1069,
+        "y": 1.7757
+      },
+      "assigned_rooms": [
+        "bedroom_02"
+      ],
+      "assigned_nodes": [
+        "N2"
+      ],
+      "closed_sequence": [
+        "H3",
+        "N2",
+        "H3"
+      ],
+      "route_segments": [
+        {
+          "from": "H3",
+          "to": "N2",
+          "length_m": 0.0004,
+          "polyline": [
+            [
+              11.1069,
+              1.7757
+            ],
+            [
+              11.107,
+              1.776
+            ]
+          ]
+        },
+        {
+          "from": "N2",
+          "to": "H3",
+          "length_m": 0.0004,
+          "polyline": [
+            [
+              11.107,
+              1.776
+            ],
+            [
+              11.1069,
+              1.7757
+            ]
+          ]
+        }
+      ],
+      "ring_length_m": 0.0008
+    },
+    {
+      "hub_id": "H4",
+      "room_id": "bedroom_01",
+      "location": {
+        "x": 1.8345,
+        "y": 1.7728
+      },
+      "assigned_rooms": [
+        "bedroom_01"
+      ],
+      "assigned_nodes": [
+        "N1"
+      ],
+      "closed_sequence": [
+        "H4",
+        "N1",
+        "H4"
+      ],
+      "route_segments": [
+        {
+          "from": "H4",
+          "to": "N1",
+          "length_m": 0.0387,
+          "polyline": [
+            [
+              1.8345,
+              1.7728
+            ],
+            [
+              1.8345,
+              1.779
+            ],
+            [
+              1.867,
+              1.779
+            ]
+          ]
+        },
+        {
+          "from": "N1",
+          "to": "H4",
+          "length_m": 0.0387,
+          "polyline": [
+            [
+              1.867,
+              1.779
+            ],
+            [
+              1.867,
+              1.7728
+            ],
+            [
+              1.8345,
+              1.7728
+            ]
+          ]
+        }
+      ],
+      "ring_length_m": 0.0774
+    }
+  ],
+  "reported_metrics": {
+    "hub_count": 4,
+    "total_length_m": 14.0976
+  }
+}
