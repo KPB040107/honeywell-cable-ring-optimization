@@ -193,6 +193,13 @@ def load_fixed_nodes(
                         f"{dist_to_obs:.4f} m < {clearance_tol:.4f} m"
                     )
 
+            if node_id in nodes_dict:
+                raise ValueError(f"Duplicate fixed node ID '{node_id}' in input plan")
+            if matched_room_id in assigned_rooms:
+                raise ValueError(
+                    f"Room '{matched_room_id}' has more than one fixed node in input plan"
+                )
+
             nodes_dict[node_id] = FixedNode(
                 node_id=node_id,
                 room_id=matched_room_id,

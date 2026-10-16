@@ -194,7 +194,7 @@ def test_cut_at_arbitrary_spatial_coordinate(
     assert status_n1.is_online is True
     assert status_n1.power_source == PowerSource.PRIMARY_OUTBOUND
     assert status_n1.hop_count == 1
-    assert status_n1.path_length_m == pytest.approx(4.8, abs=0.5)
+    assert status_n1.path_length_m == pytest.approx(ring1.route_segments[0].length_m)
 
     # Return terminal branch powers N2 and N3
     assert set(report.return_branch_nodes) == {"N2", "N3"}
@@ -204,19 +204,23 @@ def test_cut_at_arbitrary_spatial_coordinate(
     assert status_n2.is_online is True
     assert status_n2.power_source == PowerSource.RETURN_TERMINAL
     assert status_n2.hop_count == 1
-    assert status_n2.path_length_m == pytest.approx(6.6, abs=0.5)
+    assert status_n2.path_length_m == pytest.approx(ring1.route_segments[-1].length_m)
 
     status_n3 = report.node_statuses["N3"]
     assert status_n3.is_online is True
     assert status_n3.power_source == PowerSource.RETURN_TERMINAL
     assert status_n3.hop_count == 2
-    assert status_n3.path_length_m == pytest.approx(11.9, abs=0.5)
+    assert status_n3.path_length_m == pytest.approx(
+        ring1.route_segments[-1].length_m + ring1.route_segments[-2].length_m
+    )
 
     # Overall resilience
     assert report.survivability_pct == 100.0
     assert report.offline_nodes == []
     assert report.nfpa72_class_a_compliant is True
-    assert report.max_latency_path_m == pytest.approx(11.9, abs=0.5)
+    assert report.max_latency_path_m == pytest.approx(
+        max(status.path_length_m for status in report.node_statuses.values())
+    )
 
 
 def test_multi_cut_degradation_detection(

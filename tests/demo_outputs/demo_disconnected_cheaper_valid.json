@@ -1,0 +1,34 @@
+{
+  "plan_id": "demo_disconnected_zones",
+  "units": "m",
+  "hubs": [
+    {
+      "hub_id": "H1",
+      "room_id": "R01",
+      "location": {"x": 3.5, "y": 2.5},
+      "assigned_rooms": ["R01", "R02"],
+      "assigned_nodes": ["N1", "N2"],
+      "closed_sequence": ["H1", "N1", "N2", "H1"],
+      "route_segments": [
+        {"from": "H1", "to": "N1", "length_m": 1.5, "polyline": [[3.5, 2.5], [2.5, 2.5], [2.5, 2.0]]},
+        {"from": "N1", "to": "N2", "length_m": 5.0, "polyline": [[2.5, 2.0], [7.5, 2.0]]},
+        {"from": "N2", "to": "H1", "length_m": 4.5, "polyline": [[7.5, 2.0], [7.5, 2.3], [3.5, 2.3], [3.5, 2.5]]}
+      ],
+      "ring_length_m": 11.0
+    },
+    {
+      "hub_id": "H2",
+      "room_id": "R03",
+      "location": {"x": 12.825, "y": 2.0},
+      "assigned_rooms": ["R03"],
+      "assigned_nodes": ["N3"],
+      "closed_sequence": ["H2", "N3", "H2"],
+      "route_segments": [
+        {"from": "H2", "to": "N3", "length_m": 0.325, "polyline": [[12.825, 2.0], [12.5, 2.0]]},
+        {"from": "N3", "to": "H2", "length_m": 0.325, "polyline": [[12.5, 2.0], [12.825, 2.0]]}
+      ],
+      "ring_length_m": 0.65
+    }
+  ],
+  "reported_metrics": {"hub_count": 2, "total_length_m": 11.65}
+}

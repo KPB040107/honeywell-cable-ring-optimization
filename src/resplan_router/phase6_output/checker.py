@@ -324,10 +324,25 @@ class FloorPlanChecker:
                         )
                     )
 
-            # Fixed nodes
+            # Fixed nodes must be assigned with their own room.
             for n_id in hub.assigned_nodes:
                 if n_id in node_assignment_counts:
                     node_assignment_counts[n_id].append(hub.hub_id)
+                    node_room = plan.nodes[n_id].room_id
+                    if node_room not in hub.assigned_rooms:
+                        violations.append(
+                            RuleViolation(
+                                rule_number=1,
+                                rule_name="Full Coverage",
+                                hub_id=hub.hub_id,
+                                room_id=node_room,
+                                location=plan.nodes[n_id].location,
+                                message=(
+                                    f"Fixed node '{n_id}' belongs to room '{node_room}', "
+                                    f"which is not assigned to hub '{hub.hub_id}'"
+                                ),
+                            )
+                        )
                 else:
                     violations.append(
                         RuleViolation(
@@ -554,6 +569,76 @@ class FloorPlanChecker:
                     )
                 )
                 continue
+
+            # A sequence alone is not proof that the cable visits those fixed
+            # terminals. Every physical leg must have the matching labels and
+            # terminate at the hub or the input node point within 1 mm.
+            if len(segs) != len(seq) - 1:
+                violations.append(
+                    RuleViolation(
+                        rule_number=4,
+                        rule_name="Closed Ring",
+                        hub_id=hub.hub_id,
+                        message=(
+                            f"Hub '{hub.hub_id}' has {len(segs)} route segments for "
+                            f"{len(seq) - 1} sequence legs"
+                        ),
+                    )
+                )
+
+            for i, seg in enumerate(segs):
+                if i < len(seq) - 1 and (seg.from_node, seg.to_node) != (seq[i], seq[i + 1]):
+                    violations.append(
+                        RuleViolation(
+                            rule_number=4,
+                            rule_name="Closed Ring",
+                            hub_id=hub.hub_id,
+                            message=(
+                                f"Hub '{hub.hub_id}' segment {i} labels "
+                                f"{seg.from_node}->{seg.to_node} do not match "
+                                f"sequence leg {seq[i]}->{seq[i + 1]}"
+                            ),
+                        )
+                    )
+                if len(seg.polyline) < 2:
+                    violations.append(
+                        RuleViolation(
+                            rule_number=4,
+                            rule_name="Closed Ring",
+                            hub_id=hub.hub_id,
+                            message=f"Hub '{hub.hub_id}' segment {i} has fewer than two points",
+                        )
+                    )
+                    continue
+                for label, actual in ((seg.from_node, seg.polyline[0]), (seg.to_node, seg.polyline[-1])):
+                    if label == hub.hub_id:
+                        expected = hub.location
+                    elif label in plan.nodes:
+                        expected = plan.nodes[label].location
+                    else:
+                        violations.append(
+                            RuleViolation(
+                                rule_number=4,
+                                rule_name="Closed Ring",
+                                hub_id=hub.hub_id,
+                                message=f"Hub '{hub.hub_id}' segment {i} names unknown terminal '{label}'",
+                            )
+                        )
+                        continue
+                    error = math.hypot(actual.x - expected.x, actual.y - expected.y)
+                    if error > tol:
+                        violations.append(
+                            RuleViolation(
+                                rule_number=4,
+                                rule_name="Closed Ring",
+                                hub_id=hub.hub_id,
+                                location=actual,
+                                message=(
+                                    f"Hub '{hub.hub_id}' segment {i} misses fixed terminal "
+                                    f"'{label}' by {error:.4f} m (limit {tol:.4f} m)"
+                                ),
+                            )
+                        )
 
             # 1. First segment start point must match hub.location
             first_pt = segs[0].polyline[0] if segs[0].polyline else None

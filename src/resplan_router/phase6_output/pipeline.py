@@ -99,7 +99,20 @@ def route_floor_plan(
         max_nodes=sys_config.max_nodes_per_hub,
     )
 
-    # 5. Held-Karp Ring Sequencing & Zero-Overlap Loop Synthesis (Phase 5)
+    # 5. Include the selected hub coordinates in the final routing grid.
+    # The partitioning tensor was built before those locations were known, so
+    # reusing it can fail to snap a legal hub to a grid vertex.
+    selected_hubs = {hub.hub_id: hub.location for hub in partition.hubs}
+    ring_grid = build_hanan_grid(
+        plan=plan, topology=topology, extra_points=list(selected_hubs.values())
+    )
+    ring_cost_tensor = PairwiseCostTensor.build_from_plan(
+        plan=plan,
+        topology=topology,
+        grid=ring_grid,
+        candidate_hubs=selected_hubs,
+        include_portals=False,
+    )
     router = DirectionStateRouter()
     synthesizer = LoopSynthesizer()
     bundle = synthesizer.synthesize_all_rings(
@@ -107,8 +120,8 @@ def route_floor_plan(
         plan=plan,
         topology=topology,
         router=router,
-        grid=grid,
-        cost_tensor=cost_tensor,
+        grid=ring_grid,
+        cost_tensor=ring_cost_tensor,
     )
 
     # 6. Evaluation Checker, Slide 8 JSON Export & Visualizer (Phase 6)

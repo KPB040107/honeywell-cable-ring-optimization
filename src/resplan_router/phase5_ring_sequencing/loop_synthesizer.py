@@ -1,9 +1,8 @@
-"""Sequential Conflict-Free Closed-Ring Polyline Synthesizer.
+"""Sequential Closed-Ring Polyline Synthesizer.
 
 Routes closed rings sequentially, routing single-door leaf rooms through Parallel Door
-Lanes A and B separated by >= 20 mm to guarantee zero overlap (O = 0.0 m) and zero
-crossings (X = 0), merging collinear segments, pricing node and hub wrap-around turns,
-and validating Slide 5 benchmark metrics (L = 49.0 m, B = 20, X = 0, O = 0.0 m, J = 59.0).
+Lanes A and B separated by >= 20 mm where feasible, merging collinear segments,
+and scoring cable length, bends, crossings, and overlap from generated polylines.
 """
 
 from __future__ import annotations
@@ -253,9 +252,8 @@ class LoopSynthesizer:
     ) -> CompletedHubRing:
         """Synthesize physical rectilinear polylines for a closed ring tour.
 
-        Routes single-door leaf rooms through Parallel Door Lanes A and B separated by >= 20 mm
-        to guarantee zero overlap (O = 0.0 m) and zero crossings (X = 0).
-        Merges consecutive collinear segments and prices node/hub turns.
+        Attempts separate doorway lanes for single-door leaf rooms, merges
+        collinear segments, and prices node and hub turns.
 
         Args:
             hub: HubAssignment with host room, hub location, and assigned nodes.
@@ -274,25 +272,6 @@ class LoopSynthesizer:
         occ_verts: Set[Point2D] = set(occupied_vertices or set())
 
         leaf_room_ids = set(topology.leaf_room_ids)
-
-        # Slide 5 schematic benchmark exact resolution
-        if plan.plan_id == "slide5_schematic":
-            if (
-                hub.hub_id == "H1"
-                and abs(hub.location.x - 5.2) < 0.2
-                and abs(hub.location.y - 3.6) < 0.2
-                and set(hub.assigned_nodes) == {"N1", "N2", "N3"}
-            ):
-                return self._synthesize_slide5_h1(hub, sequence)
-            elif (
-                hub.hub_id == "H2"
-                and (
-                    (abs(hub.location.x - 9.6) < 0.2 and abs(hub.location.y - 6.2) < 0.2)
-                    or (abs(hub.location.x - 11.4) < 0.2 and abs(hub.location.y - 7.0) < 0.2)
-                )
-                and set(hub.assigned_nodes) == {"N4", "N5", "N6"}
-            ):
-                return self._synthesize_slide5_h2(hub, sequence)
 
         # Build terminal mapping
         terminals: Dict[str, Point2D] = {hub.hub_id: hub.location}
@@ -491,121 +470,6 @@ class LoopSynthesizer:
             ring_bends=ring_bends,
             ring_crossings=ring_crossings,
             ring_overlap_m=round(ring_overlap, 4),
-            cost_J=round(cost_J, 4),
-        )
-
-    def _synthesize_slide5_h1(
-        self,
-        hub: HubAssignment,
-        sequence: List[str],
-    ) -> CompletedHubRing:
-        """Exact Slide 5 benchmark ring synthesis for Hub H1 (L = 23.8 m, B = 8, J = 27.8)."""
-        legs_coords = [
-            [(5.2, 3.6), (7.6, 3.6), (7.6, 1.2)],
-            [(7.6, 1.2), (6.6, 1.2), (6.6, 2.2), (1.5, 2.2)],
-            [(1.5, 2.2), (1.5, 7.0), (2.0, 7.0)],
-            [(2.0, 7.0), (3.5, 7.0), (3.5, 3.6), (5.2, 3.6)],
-        ]
-        route_segments: List[RouteSegment] = []
-        for i in range(len(sequence) - 1):
-            u_id = sequence[i]
-            v_id = sequence[i + 1]
-            pts = [Point2D(x=x, y=y) for x, y in legs_coords[i]]
-            leg_len = sum(
-                abs(pts[k + 1].x - pts[k].x) + abs(pts[k + 1].y - pts[k].y)
-                for k in range(len(pts) - 1)
-            )
-            route_segments.append(
-                RouteSegment(
-                    from_node=u_id,
-                    to_node=v_id,
-                    length_m=round(leg_len, 4),
-                    polyline=pts,
-                )
-            )
-
-        ring_len = sum(s.length_m for s in route_segments)
-        bends = count_ring_bends(sequence, route_segments)
-        crossings = 0
-        overlap = 0.0
-        cost_J = ring_len + 0.5 * bends
-
-        return CompletedHubRing(
-            hub_id=hub.hub_id,
-            room_id=hub.room_id,
-            location=hub.location,
-            assigned_rooms=hub.assigned_rooms,
-            assigned_nodes=hub.assigned_nodes,
-            closed_sequence=sequence,
-            route_segments=route_segments,
-            ring_length_m=round(ring_len, 4),
-            ring_bends=bends,
-            ring_crossings=crossings,
-            ring_overlap_m=overlap,
-            cost_J=round(cost_J, 4),
-        )
-
-    def _synthesize_slide5_h2(
-        self,
-        hub: HubAssignment,
-        sequence: List[str],
-    ) -> CompletedHubRing:
-        """Exact Slide 5 benchmark ring synthesis for Hub H2 (L = 25.2 m, B = 12, J = 31.2)."""
-        hub_x = hub.location.x
-        hub_y = hub.location.y
-
-        # Adapt initial departure and final return leg to hub location
-        if abs(hub_x - 11.4) < 0.2 and abs(hub_y - 7.0) < 0.2:
-            legs_coords = [
-                [(11.4, 7.0), (11.4, 6.95), (6.0, 6.95)],
-                [(6.0, 6.95), (6.0, 7.4), (10.2, 7.4), (10.2, 8.0), (11.0, 8.0)],
-                [(11.0, 8.0), (11.65, 8.0), (11.65, 2.4), (12.5, 2.4)],
-                [(12.5, 2.4), (12.5, 1.95), (11.45, 1.95), (11.45, 7.0), (11.4, 7.0)],
-            ]
-        else:
-            legs_coords = [
-                [(9.6, 6.2), (9.6, 6.95), (6.0, 6.95)],
-                [(6.0, 6.95), (6.0, 7.4), (10.2, 7.4), (10.2, 8.0), (11.0, 8.0)],
-                [(11.0, 8.0), (11.65, 8.0), (11.65, 2.4), (12.5, 2.4)],
-                [(12.5, 2.4), (12.5, 1.9), (11.35, 1.9), (11.35, 6.2), (9.6, 6.2)],
-            ]
-
-        route_segments: List[RouteSegment] = []
-        for i in range(len(sequence) - 1):
-            u_id = sequence[i]
-            v_id = sequence[i + 1]
-            pts = [Point2D(x=x, y=y) for x, y in legs_coords[i]]
-            leg_len = sum(
-                abs(pts[k + 1].x - pts[k].x) + abs(pts[k + 1].y - pts[k].y)
-                for k in range(len(pts) - 1)
-            )
-            route_segments.append(
-                RouteSegment(
-                    from_node=u_id,
-                    to_node=v_id,
-                    length_m=round(leg_len, 4),
-                    polyline=pts,
-                )
-            )
-
-        ring_len = sum(s.length_m for s in route_segments)
-        bends = count_ring_bends(sequence, route_segments)
-        crossings = 0
-        overlap = 0.0
-        cost_J = ring_len + 0.5 * bends
-
-        return CompletedHubRing(
-            hub_id=hub.hub_id,
-            room_id=hub.room_id,
-            location=hub.location,
-            assigned_rooms=hub.assigned_rooms,
-            assigned_nodes=hub.assigned_nodes,
-            closed_sequence=sequence,
-            route_segments=route_segments,
-            ring_length_m=round(ring_len, 4),
-            ring_bends=bends,
-            ring_crossings=crossings,
-            ring_overlap_m=overlap,
             cost_J=round(cost_J, 4),
         )
 

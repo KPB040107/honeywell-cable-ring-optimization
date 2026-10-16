@@ -352,9 +352,11 @@ class IncrementalCoDesignEngine:
                     # Leg 1: N1 -> N3 (enters bedroom 3 via doorway waypoint)
                     # Doorway waypoint in R01 leading to N3
                     w_door = Point2D(x=6.6, y=2.2)
-                    p_n3 = Point2D(x=1.5, y=2.2)
+                    p_n3 = self.plan.nodes[v_id].location
                     poly_to_w = self._route_orthogonal_leg(new_pt, w_door, preferred_axis="x_first")
-                    poly_out = compress_polyline(poly_to_w + [p_n3])
+                    poly_out = compress_polyline(
+                        poly_to_w + [Point2D(x=p_n3.x, y=w_door.y), p_n3]
+                    )
                     len_out = sum(
                         math.hypot(poly_out[k + 1].x - poly_out[k].x, poly_out[k + 1].y - poly_out[k].y)
                         for k in range(len(poly_out) - 1)
@@ -497,17 +499,11 @@ class IncrementalCoDesignEngine:
             first_node_id = seq[1]
             first_node_pt = self.plan.nodes[first_node_id].location
 
-            # In Slide 5 H1, N1 is reached at (7.6, 1.2)
             if hub_id == "H1" and first_node_id == "N1":
-                target_pt = (
-                    first_node_pt
-                    if abs(first_node_pt.x - 7.6) < 0.1
-                    else Point2D(x=7.6, y=1.2)
-                )
                 poly_dep = compress_polyline([
                     new_pt,
-                    Point2D(x=target_pt.x, y=new_pt.y),
-                    target_pt,
+                    Point2D(x=first_node_pt.x, y=new_pt.y),
+                    first_node_pt,
                 ])
             else:
                 poly_dep = self._route_orthogonal_leg(new_pt, first_node_pt, preferred_axis="x_first")
@@ -967,4 +963,3 @@ class IncrementalCoDesignEngine:
 
         latency_ms = (time.perf_counter() - t0) * 1000
         return self.get_state(latency_ms=latency_ms, report=report), latency_ms
-

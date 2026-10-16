@@ -1,0 +1,194 @@
+{
+  "plan_id": "demo_six_rooms_capacity",
+  "units": "m",
+  "hubs": [
+    {
+      "hub_id": "H1",
+      "room_id": "R01",
+      "location": {
+        "x": 2.5,
+        "y": 3.85
+      },
+      "assigned_rooms": [
+        "R01",
+        "R04"
+      ],
+      "assigned_nodes": [
+        "N1",
+        "N4"
+      ],
+      "closed_sequence": [
+        "H1",
+        "N1",
+        "N4",
+        "H1"
+      ],
+      "route_segments": [
+        {
+          "from": "H1",
+          "to": "N1",
+          "length_m": 1.85,
+          "polyline": [
+            [
+              2.5,
+              3.85
+            ],
+            [
+              2.5,
+              2.0
+            ]
+          ]
+        },
+        {
+          "from": "N1",
+          "to": "N4",
+          "length_m": 4.08,
+          "polyline": [
+            [
+              2.5,
+              2.0
+            ],
+            [
+              2.46,
+              2.0
+            ],
+            [
+              2.46,
+              6.0
+            ],
+            [
+              2.5,
+              6.0
+            ]
+          ]
+        },
+        {
+          "from": "N4",
+          "to": "H1",
+          "length_m": 2.15,
+          "polyline": [
+            [
+              2.5,
+              6.0
+            ],
+            [
+              2.5,
+              3.85
+            ]
+          ]
+        }
+      ],
+      "ring_length_m": 8.08
+    },
+    {
+      "hub_id": "H2",
+      "room_id": "R02",
+      "location": {
+        "x": 7.5,
+        "y": 3.85
+      },
+      "assigned_rooms": [
+        "R02",
+        "R03",
+        "R05",
+        "R06"
+      ],
+      "assigned_nodes": [
+        "N2",
+        "N3",
+        "N5",
+        "N6"
+      ],
+      "closed_sequence": [
+        "H2",
+        "N2",
+        "N3",
+        "N6",
+        "N5",
+        "H2"
+      ],
+      "route_segments": [
+        {
+          "from": "H2",
+          "to": "N2",
+          "length_m": 1.85,
+          "polyline": [
+            [
+              7.5,
+              3.85
+            ],
+            [
+              7.5,
+              2.0
+            ]
+          ]
+        },
+        {
+          "from": "N2",
+          "to": "N3",
+          "length_m": 5.0,
+          "polyline": [
+            [
+              7.5,
+              2.0
+            ],
+            [
+              12.5,
+              2.0
+            ]
+          ]
+        },
+        {
+          "from": "N3",
+          "to": "N6",
+          "length_m": 4.0,
+          "polyline": [
+            [
+              12.5,
+              2.0
+            ],
+            [
+              12.5,
+              6.0
+            ]
+          ]
+        },
+        {
+          "from": "N6",
+          "to": "N5",
+          "length_m": 5.0,
+          "polyline": [
+            [
+              12.5,
+              6.0
+            ],
+            [
+              7.5,
+              6.0
+            ]
+          ]
+        },
+        {
+          "from": "N5",
+          "to": "H2",
+          "length_m": 2.15,
+          "polyline": [
+            [
+              7.5,
+              6.0
+            ],
+            [
+              7.5,
+              3.85
+            ]
+          ]
+        }
+      ],
+      "ring_length_m": 18.0
+    }
+  ],
+  "reported_metrics": {
+    "hub_count": 2,
+    "total_length_m": 26.08
+  }
+}
