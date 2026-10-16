@@ -373,3 +373,76 @@ def test_load_demo_plan_endpoints(client: TestClient) -> None:
     # 3. Load non-existent demo
     resp_err = client.post("/api/demo/non_existent_demo")
     assert resp_err.status_code in (400, 404)
+
+
+# =========================================================================
+# 6. Co-Pilot Suggestions on Uploaded Plans & Empty/Applied States
+# =========================================================================
+
+def test_copilot_suggestions_uses_uploaded_plan(client: TestClient) -> None:
+    """Verify co-pilot suggestions analyze the currently uploaded plan, not default Slide 5."""
+    fixture = _load_fixture("new_four_room_plan.json")
+    up_resp = client.post("/api/upload", json=fixture)
+    assert up_resp.status_code == 200
+
+    # Request suggestions directly
+    sug_resp = client.post("/api/copilot/suggest", json={"max_proposals": 5})
+    assert sug_resp.status_code == 200
+    report = sug_resp.json()
+    assert report["plan_id"] == "new_four_room_plan"
+    assert report["plan_id"] != "slide5_schematic"
+
+
+def test_copilot_empty_proposals_for_symmetric_optimal_plan(client: TestClient) -> None:
+    """Verify locally optimal plans like new_four_room_plan return 0 proposals (clean empty state)."""
+    fixture = _load_fixture("new_four_room_plan.json")
+    client.post("/api/upload", json=fixture)
+    gen_resp = client.post("/api/generate")
+    assert gen_resp.status_code == 200
+
+    sug_resp = client.post("/api/copilot/suggest", json={"max_proposals": 5})
+    assert sug_resp.status_code == 200
+    report = sug_resp.json()
+    assert report["plan_id"] == "new_four_room_plan"
+    # Local optimality: centered midpoints mean delta_J <= 0 for all door shifts
+    assert report["recommended_proposals"] == []
+
+
+def test_copilot_proposals_and_apply_on_uploaded_plan(client: TestClient) -> None:
+    """Verify proposal discovery, application, and 6 PPT hard-rule evaluation on uploaded plan."""
+    fixture = _load_fixture("demo_three_rooms_window.json")
+    client.post("/api/upload", json=fixture)
+    client.post("/api/generate")
+
+    sug_resp = client.post("/api/copilot/suggest", json={"max_proposals": 5})
+    assert sug_resp.status_code == 200
+    report = sug_resp.json()
+    assert report["plan_id"] == "demo_three_rooms_window"
+    assert len(report["recommended_proposals"]) >= 1
+
+    first_proposal = report["recommended_proposals"][0]
+    p_id = first_proposal["proposal_id"]
+
+    # Apply the proposal
+    apply_resp = client.post("/api/copilot/apply", json={"proposal_id": p_id})
+    assert apply_resp.status_code == 200
+    state = apply_resp.json()
+
+    assert state["plan"]["plan_id"] == "demo_three_rooms_window"
+    assert state["is_valid"] is True
+    # Verify all 6 hard rules were checked
+    rules = state["rules_passed"]
+    assert len(rules) == 6
+    assert all(rules[f"Rule {i}"] is True for i in range(1, 7))
+
+
+def test_engine_reset_preserves_uploaded_plan(client: TestClient) -> None:
+    """Verify engine reset re-routes the active uploaded plan rather than falling back to Slide 5."""
+    fixture = _load_fixture("new_four_room_plan.json")
+    client.post("/api/upload", json=fixture)
+    client.post("/api/generate")
+
+    state, _ = engine.reset()
+    assert state["plan"]["plan_id"] == "new_four_room_plan"
+    assert state["plan"]["plan_id"] != "slide5_schematic"
+

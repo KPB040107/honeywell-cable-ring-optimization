@@ -138,6 +138,16 @@
   const btnRefreshCopilot = document.getElementById('btnRefreshCopilot');
   const copilotContainer = document.getElementById('copilotContainer');
 
+  function updateSuggestButtonsState(enabled, tooltip) {
+    const btns = [btnSuggestToolbar, btnSuggestActions, btnRefreshCopilot];
+    btns.forEach(btn => {
+      if (btn) {
+        btn.disabled = !enabled;
+        if (tooltip) btn.title = tooltip;
+      }
+    });
+  }
+
   const btnScissorsTool = document.getElementById('btnScissorsTool');
   const btnHealCircuit = document.getElementById('btnHealCircuit');
 
@@ -417,10 +427,27 @@
       if (state.activeProposalId) {
         state.activeProposalId = null;
         state.copilotProposals = [];
-        renderCopilotProposals([], null);
+        if (copilotContainer) {
+          copilotContainer.innerHTML = `
+            <div class="copilot-applied-state">
+              <span class="applied-badge">✓ Tweak Applied</span>
+              <p style="margin: 6px 0 10px 0; font-size: 11px; color: var(--text-muted); line-height: 1.4;">
+                Floor plan geometry mutated and re-routed. All 6 PPT hard constraints verified.
+              </p>
+              <button id="btnSuggestAgain" class="btn-suggest-header" style="padding: 4px 10px;">Find More Improvements</button>
+            </div>
+          `;
+          const btnAgain = document.getElementById('btnSuggestAgain');
+          if (btnAgain) {
+            btnAgain.addEventListener('click', requestCopilotSuggestions);
+          }
+        }
       }
     } else if (data.type === 'error') {
       showUploadError('Server Error', data.message || 'Operation failed');
+    } else if (data.type === 'copilot_error') {
+      state.copilotLoading = false;
+      renderCopilotError(data.message || data.error || 'Failed to compute layout proposals');
     } else if (data.type === 'bim_scene_update') {
       state.bimSceneData = data.scene;
       rebuildBIMMeshes(data.scene);
@@ -536,6 +563,7 @@
 
     // Floor Plan Preview Action Bar Update
     const isPreview = Boolean(data.preview_mode);
+    const prevDisplay = previewActionBar ? previewActionBar.style.display : '';
     if (previewActionBar) {
       if (isPreview) {
         previewActionBar.style.display = 'flex';
@@ -546,6 +574,39 @@
         if (previewDetails) previewDetails.textContent = `${roomsCount} rooms | ${nodesCount} fixed devices — Unrouted Preview`;
       } else {
         previewActionBar.style.display = 'none';
+      }
+      if (prevDisplay !== previewActionBar.style.display) {
+        window.dispatchEvent(new Event('resize'));
+      }
+    }
+
+    // Co-Pilot Suggest Buttons and Card State depending on Routing
+    if (isPreview) {
+      updateSuggestButtonsState(false, 'Generate cable rings first to analyze floor-plan improvements');
+      if (copilotContainer && (!state.copilotProposals || state.copilotProposals.length === 0)) {
+        copilotContainer.innerHTML = `
+          <div class="copilot-empty-state copilot-require-routing">
+            <span class="copilot-require-icon">⚡</span>
+            <strong style="color: #F8FAFC; font-size: 13px;">Cable Rings Required</strong>
+            <p style="margin: 4px 0 8px 0; font-size: 11px; color: var(--text-muted); line-height: 1.4;">
+              Generate cable rings first to compute baseline routing cost before analyzing floor-plan improvements.
+            </p>
+            <button id="btnGenerateFromCopilot" class="btn-generate-rings-inline">Generate Cable Rings</button>
+          </div>
+        `;
+        const btnGen = document.getElementById('btnGenerateFromCopilot');
+        if (btnGen) {
+          btnGen.addEventListener('click', generateCableRings);
+        }
+      }
+    } else {
+      updateSuggestButtonsState(true, 'Suggest Floor-Plan Improvements');
+      if (copilotContainer && copilotContainer.querySelector('.copilot-require-routing')) {
+        copilotContainer.innerHTML = `
+          <div class="copilot-empty-state">
+            <span>Click "Suggest Floor-Plan Improvements" to analyze layout perturbations.</span>
+          </div>
+        `;
       }
     }
 
@@ -1443,12 +1504,34 @@
   });
 
   // --- Co-Pilot Architectural Suggestions (Phase 8) ---
+  function renderCopilotError(errorMessage) {
+    if (!copilotContainer) return;
+    updateSuggestButtonsState(true, 'Suggest Floor-Plan Improvements');
+    copilotContainer.innerHTML = `
+      <div class="copilot-empty-state copilot-error-state">
+        <span class="error-banner-icon">⚠️</span>
+        <strong style="font-size: 13px;">Co-Pilot Analysis Error</strong>
+        <p style="margin: 4px 0 0 0; font-size: 11px; line-height: 1.4;">
+          ${escapeHtml(errorMessage)}
+        </p>
+      </div>
+    `;
+  }
+
   async function requestCopilotSuggestions() {
+    if (state.serverState && state.serverState.preview_mode) {
+      showUploadError('Cable Rings Required', 'Please click "Generate Cable Rings" first before analyzing architectural improvements.');
+      return;
+    }
+
     state.copilotLoading = true;
+    updateSuggestButtonsState(false, 'Analyzing floor-plan perturbations...');
     if (copilotContainer) {
       copilotContainer.innerHTML = `
-        <div class="copilot-empty-state">
-          <span>Exploring layout perturbations and calculating rectilinear cost deltas...</span>
+        <div class="copilot-loading-state">
+          <div class="copilot-spinner"></div>
+          <span class="copilot-loading-title">Analyzing Floor Plan Perturbations...</span>
+          <span class="copilot-loading-desc">Exploring candidate doorway shifts, open passages, and calculating rectilinear cost deltas (&Delta;H, &Delta;J, &Delta;L, &Delta;B)...</span>
         </div>
       `;
     }
@@ -1462,22 +1545,20 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ max_proposals: 5 }),
         });
+        const data = await resp.json();
+        state.copilotLoading = false;
+        updateSuggestButtonsState(true, 'Suggest Floor-Plan Improvements');
         if (resp.ok) {
-          const report = await resp.json();
-          state.copilotLoading = false;
-          state.copilotProposals = report.recommended_proposals || [];
-          renderCopilotProposals(state.copilotProposals, report);
+          state.copilotProposals = data.recommended_proposals || [];
+          renderCopilotProposals(state.copilotProposals, data);
+        } else {
+          renderCopilotError(data.error || data.message || `HTTP ${resp.status}`);
         }
       } catch (err) {
         console.error('Co-Pilot suggest failed:', err);
         state.copilotLoading = false;
-        if (copilotContainer) {
-          copilotContainer.innerHTML = `
-            <div class="copilot-empty-state">
-              <span>Could not generate proposals: ${escapeHtml(err.message)}</span>
-            </div>
-          `;
-        }
+        updateSuggestButtonsState(true, 'Suggest Floor-Plan Improvements');
+        renderCopilotError(err.message || 'Network error occurred while fetching proposals.');
       }
     }
   }
@@ -1504,9 +1585,14 @@
         if (resp.ok) {
           const newState = await resp.json();
           handleServerPayload(newState);
+        } else {
+          const errData = await resp.json();
+          renderCopilotError(errData.error || errData.message || 'Failed to apply tweak');
+          state.activeProposalId = null;
         }
       } catch (err) {
         console.error('Co-Pilot apply failed:', err);
+        renderCopilotError(err.message || 'Network error applying tweak');
         state.activeProposalId = null;
       }
     }
@@ -1514,13 +1600,22 @@
 
   function renderCopilotProposals(proposals, report) {
     if (!copilotContainer) return;
+    updateSuggestButtonsState(true, 'Suggest Floor-Plan Improvements');
+
+    const planId = (state.serverState && state.serverState.plan && state.serverState.plan.plan_id) || 'Current Plan';
 
     if (!proposals || proposals.length === 0) {
       copilotContainer.innerHTML = `
-        <div class="copilot-empty-state">
-          <span>Click "Suggest Improvements" to analyze layout perturbations.</span>
+        <div class="copilot-empty-state copilot-no-proposals">
+          <div class="empty-state-icon">✓</div>
+          <h4 class="empty-state-title">No Cost-Reducing Improvements Found</h4>
+          <p class="empty-state-desc">
+            The floor plan layout for <strong>${escapeHtml(planId)}</strong> is already locally optimal for device locations.
+            All doorways align with device positions, and no door shift or open passage was found that reduces cable cost J without violating clearance.
+          </p>
         </div>
       `;
+      redrawCanvas();
       return;
     }
 
@@ -1573,6 +1668,8 @@
         }
       });
     });
+
+    redrawCanvas();
   }
 
   // --- Toolbar & Action Listeners for Co-Pilot ---
@@ -1838,7 +1935,7 @@
 
   if (btnLoadDemoPlan && demoSelectDropdown) {
     btnLoadDemoPlan.addEventListener('click', () => {
-      loadDemoPlan(demoSelectDropdown.value, false);
+      loadDemoPlan(demoSelectDropdown.value, true);
     });
   }
 

@@ -339,8 +339,16 @@ class IncrementalCoDesignEngine:
         return state, lat
 
     def reset(self) -> Tuple[Dict[str, Any], float]:
-        """Reset canvas to baseline Slide 5 schematic."""
+        """Reset canvas to baseline state.
+
+        If an uploaded or benchmark floor plan is loaded, resets it back to its
+        initial pristine state rather than forcing Slide 5.
+        """
         t0 = time.perf_counter()
+        if self._raw_data is not None and getattr(self.plan, "plan_id", "") not in ("slide5", "slide5_schematic"):
+            self.load_plan_preview(self._raw_data)
+            return self.generate_cable_rings()
+
         self._load_slide5_baseline()
         self._active_proposals = {}
         self._active_cut = None
@@ -1062,6 +1070,12 @@ class IncrementalCoDesignEngine:
         Returns:
             CoPilotReport: Validated report containing baseline metrics and ranked proposals.
         """
+        if getattr(self, "_preview_mode", False) or not self.bundle or not self.bundle.hub_rings:
+            if getattr(self, "_raw_data", None) is not None:
+                self.generate_cable_rings()
+            else:
+                raise ValueError("Cable rings must be generated first before analyzing floor-plan improvements.")
+
         copilot = ArchitecturalCoPilot()
         report = copilot.analyze_floor_plan(
             plan=self.plan,

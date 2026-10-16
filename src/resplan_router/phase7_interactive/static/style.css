@@ -206,19 +206,17 @@ body {
 }
 
 .canvas-toolbar {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  right: 14px;
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  z-index: 5;
-  pointer-events: none;
-}
-
-.canvas-toolbar > * {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #0F172A;
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 10;
   pointer-events: auto;
+  flex-shrink: 0;
 }
 
 .toolbar-group {
@@ -309,6 +307,7 @@ body {
   flex: 1;
   width: 100%;
   height: 100%;
+  min-height: 0;
   position: relative;
   overflow: hidden;
 }
@@ -910,6 +909,9 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
+  width: auto !important;
+  white-space: nowrap;
+  font-size: 11px;
 }
 
 .copilot-suggest-btn:hover {
@@ -1117,6 +1119,9 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s ease;
+  width: auto !important;
+  white-space: nowrap;
+  font-size: 11px;
 }
 
 .scissors-btn:hover {
@@ -1301,6 +1306,11 @@ body {
   font-weight: 600 !important;
   border: 1px solid #38BDF8 !important;
   box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+  width: auto !important;
+  padding: 4px 10px !important;
+  white-space: nowrap !important;
+  font-size: 11px;
+  gap: 6px !important;
 }
 
 .upload-btn:hover {
@@ -1411,8 +1421,11 @@ body {
   align-items: center;
   justify-content: space-between;
   border-radius: 6px;
-  margin: 8px 12px 0 12px;
+  margin: 8px 12px;
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 10px;
   z-index: 25;
 }
 
@@ -1452,21 +1465,25 @@ body {
 
 /* Floor Plan Preview Action Bar */
 .preview-action-bar {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
   border: 1px solid #38BDF8;
   padding: 10px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 6px;
-  margin: 8px 12px 0 12px;
+  margin: 8px 12px;
   box-shadow: 0 4px 16px rgba(56, 189, 248, 0.2);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 12px;
   z-index: 20;
 }
 
 .preview-info {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -1479,6 +1496,7 @@ body {
   padding: 3px 8px;
   border-radius: 4px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .preview-plan-id {
@@ -1507,6 +1525,7 @@ body {
   gap: 8px;
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .btn-generate-rings:hover {
@@ -1549,5 +1568,176 @@ body {
 .optimality-disclaimer-note code {
   color: #38BDF8;
   font-family: 'JetBrains Mono', monospace;
+}
+
+/* Co-Pilot Loading & Empty State UX */
+.copilot-loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px 16px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  gap: 10px;
+}
+
+.copilot-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(56, 189, 248, 0.2);
+  border-top-color: #38BDF8;
+  border-radius: 50%;
+  animation: copilotSpin 0.8s linear infinite;
+}
+
+@keyframes copilotSpin {
+  to { transform: rotate(360deg); }
+}
+
+.copilot-loading-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #F8FAFC;
+}
+
+.copilot-loading-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.copilot-no-proposals {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 20px 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px;
+}
+
+.copilot-no-proposals .empty-state-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.2);
+  color: #10B981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.copilot-no-proposals .empty-state-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #F8FAFC;
+  margin: 0;
+}
+
+.copilot-no-proposals .empty-state-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.copilot-require-routing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 18px 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px dashed rgba(56, 189, 248, 0.4);
+  border-radius: 8px;
+}
+
+.copilot-require-icon {
+  font-size: 24px;
+}
+
+.btn-generate-rings-inline {
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-generate-rings-inline:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+}
+
+.copilot-applied-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 18px 14px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 8px;
+}
+
+.applied-badge {
+  background: #10B981;
+  color: #0F172A;
+  font-weight: 800;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+
+.copilot-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 18px 14px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 8px;
+  color: #FCA5A5;
+}
+
+/* Suggest Buttons Disabled / Loading State */
+.copilot-suggest-btn:disabled,
+.btn-suggest-header:disabled,
+.btn-suggest:disabled {
+  opacity: 0.55;
+  cursor: not-allowed !important;
+  pointer-events: auto;
+}
+
+/* Responsive Narrow Screen Layout */
+@media (max-width: 1024px) {
+  .canvas-toolbar {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+  .toolbar-group {
+    padding: 3px 5px;
+  }
+  .preview-action-bar {
+    margin: 6px 8px;
+    padding: 8px 12px;
+  }
 }
 
