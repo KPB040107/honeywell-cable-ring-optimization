@@ -24,3 +24,6 @@ visualizations/
 # OS artifacts
 .DS_Store
 Thumbs.db
+# Local ResPlan source archive (too large for ordinary GitHub files)
+/archive (1).zip
+/archive (1)/
