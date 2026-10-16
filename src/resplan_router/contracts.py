@@ -449,10 +449,10 @@ class HubZonePartition(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     plan_id: str = Field(description="Floor plan identifier")
-    hub_count: int = Field(description="Total selected hubs H", ge=1)
+    hub_count: int = Field(description="Total selected hubs H", ge=0)
     lower_bound_hubs: int = Field(
         description="Theoretical lower bound H_min = max(ceil(area/100), ceil(nodes/5))",
-        ge=1,
+        ge=0,
     )
     area_gap_m2: float = Field(
         default=0.0,

@@ -224,11 +224,15 @@ def _extract_geometry_list(
     return results
 
 
-def parse_floor_plan(raw_json: Dict[str, Any]) -> MetricFloorPlan:
+def parse_floor_plan(
+    raw_json: Dict[str, Any],
+    strict_clearance: bool = True,
+) -> MetricFloorPlan:
     """Parse, heal, scale normalize, and assemble a complete MetricFloorPlan.
 
     Args:
         raw_json: Floor plan dictionary in ResPlan or competition schema.
+        strict_clearance: If True, raise ValueError on node distance < 0.499m; if False, retain coordinates.
 
     Returns:
         MetricFloorPlan: Immutable validated Pydantic model in metres.
@@ -354,6 +358,7 @@ def parse_floor_plan(raw_json: Dict[str, Any]) -> MetricFloorPlan:
         eligible_rooms=eligible_rooms_geom,
         obstacles=obstacles,
         origin_offset=origin_offset,
+        strict_clearance=strict_clearance,
     )
 
     return MetricFloorPlan(

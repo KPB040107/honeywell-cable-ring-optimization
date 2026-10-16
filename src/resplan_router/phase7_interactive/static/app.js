@@ -146,8 +146,25 @@
   const btnFitScreen = document.getElementById('btnFitScreen');
   const btnResetView = document.getElementById('btnResetView');
   const btnExportSlide8 = document.getElementById('btnExportSlide8');
+  const btnDownloadOverlayPng = document.getElementById('btnDownloadOverlayPng');
   const btnResetBaseline = document.getElementById('btnResetBaseline');
   const btnAutoOptimize = document.getElementById('btnAutoOptimize');
+
+  // Floor Plan Upload & Preview DOM Elements
+  const btnUploadFloorPlan = document.getElementById('btnUploadFloorPlan');
+  const fileUploadInput = document.getElementById('fileUploadInput');
+  const demoSelectDropdown = document.getElementById('demoSelectDropdown');
+  const btnLoadDemoPlan = document.getElementById('btnLoadDemoPlan');
+  const dropzoneOverlay = document.getElementById('dropzoneOverlay');
+  const uploadErrorBanner = document.getElementById('uploadErrorBanner');
+  const uploadErrorTitle = document.getElementById('uploadErrorTitle');
+  const uploadErrorMessage = document.getElementById('uploadErrorMessage');
+  const btnCloseUploadError = document.getElementById('btnCloseUploadError');
+  const previewActionBar = document.getElementById('previewActionBar');
+  const previewPlanId = document.getElementById('previewPlanId');
+  const previewDetails = document.getElementById('previewDetails');
+  const btnGenerateRings = document.getElementById('btnGenerateRings');
+  const btnGenerateRingsSidebar = document.getElementById('btnGenerateRingsSidebar');
 
   // --- Coordinate Transformation Utilities ---
   function worldToScreen(wx, wy) {
@@ -381,9 +398,10 @@
       }
       updateBIMSurvivability();
     } else if (data.type === 'state_update') {
-      const firstLoad = !state.serverState;
+      const isNewPlan = !state.serverState ||
+        (state.serverState.plan && data.plan && state.serverState.plan.plan_id !== data.plan.plan_id);
       state.serverState = data;
-      if (firstLoad) {
+      if (isNewPlan) {
         fitToScreen();
       }
       state.activeCutReport = data.survivability_report || null;
@@ -401,6 +419,8 @@
         state.copilotProposals = [];
         renderCopilotProposals([], null);
       }
+    } else if (data.type === 'error') {
+      showUploadError('Server Error', data.message || 'Operation failed');
     } else if (data.type === 'bim_scene_update') {
       state.bimSceneData = data.scene;
       rebuildBIMMeshes(data.scene);
@@ -514,19 +534,50 @@
     if (subMetricO) subMetricO.textContent = `+${(1 * valO).toFixed(2)} penalty (1x)`;
     if (subMetricB) subMetricB.textContent = `+${(0.5 * valB).toFixed(2)} penalty (0.5x)`;
 
+    // Floor Plan Preview Action Bar Update
+    const isPreview = Boolean(data.preview_mode);
+    if (previewActionBar) {
+      if (isPreview) {
+        previewActionBar.style.display = 'flex';
+        const plan = data.plan || {};
+        const roomsCount = (plan.rooms || []).length;
+        const nodesCount = (data.nodes || []).length;
+        if (previewPlanId) previewPlanId.textContent = plan.plan_id || 'UPLOADED_PLAN';
+        if (previewDetails) previewDetails.textContent = `${roomsCount} rooms | ${nodesCount} fixed devices — Unrouted Preview`;
+      } else {
+        previewActionBar.style.display = 'none';
+      }
+    }
+
     // Validity Banner
-    if (isValid) {
-      validityBanner.className = 'validity-banner pass';
-      validityTitle.textContent = 'VALID ARCHITECTURAL SOLUTION';
-      validitySub.textContent = '100% Slide 3 Hard Rules Passed';
-      bannerIconPass.style.display = 'block';
-      bannerIconFail.style.display = 'none';
+    if (isPreview) {
+      if (isValid) {
+        validityBanner.className = 'validity-banner pass';
+        validityTitle.textContent = 'FLOOR PLAN PREVIEW LOADED';
+        validitySub.textContent = 'Click "Generate cable rings" to route closed rings';
+        bannerIconPass.style.display = 'block';
+        bannerIconFail.style.display = 'none';
+      } else {
+        validityBanner.className = 'validity-banner fail';
+        validityTitle.textContent = 'CLEARANCE ISSUE DETECTED';
+        validitySub.textContent = `${violations.length} Critical Issue(s) in Floor Plan`;
+        bannerIconPass.style.display = 'none';
+        bannerIconFail.style.display = 'block';
+      }
     } else {
-      validityBanner.className = 'validity-banner fail';
-      validityTitle.textContent = 'RULE VIOLATIONS DETECTED';
-      validitySub.textContent = `${violations.length} Critical Issue(s) Require Correction`;
-      bannerIconPass.style.display = 'none';
-      bannerIconFail.style.display = 'block';
+      if (isValid) {
+        validityBanner.className = 'validity-banner pass';
+        validityTitle.textContent = 'VALID ARCHITECTURAL SOLUTION';
+        validitySub.textContent = '100% Slide 3 Hard Rules Passed';
+        bannerIconPass.style.display = 'block';
+        bannerIconFail.style.display = 'none';
+      } else {
+        validityBanner.className = 'validity-banner fail';
+        validityTitle.textContent = 'RULE VIOLATIONS DETECTED';
+        validitySub.textContent = `${violations.length} Critical Issue(s) Require Correction`;
+        bannerIconPass.style.display = 'none';
+        bannerIconFail.style.display = 'block';
+      }
     }
 
     // Slide 3 Checklist
@@ -1559,6 +1610,132 @@
     });
   }
 
+  // --- Upload Diagnostics & Notification Helpers ---
+  function showUploadError(title, message) {
+    if (uploadErrorBanner) {
+      if (uploadErrorTitle) uploadErrorTitle.textContent = title || 'Upload Validation Error';
+      if (uploadErrorMessage) uploadErrorMessage.textContent = message || 'An unknown error occurred while validating floor plan JSON.';
+      uploadErrorBanner.style.display = 'block';
+    }
+  }
+
+  function hideUploadError() {
+    if (uploadErrorBanner) {
+      uploadErrorBanner.style.display = 'none';
+    }
+  }
+
+  // --- Upload & File Processing ---
+  async function handleFileUpload(file) {
+    if (!file) return;
+    hideUploadError();
+
+    if (!file.name.toLowerCase().endsWith('.json') && file.type && !file.type.includes('json')) {
+      showUploadError('Invalid File Type', `File "${file.name}" is not a JSON document. Please select or drag a valid .json floor plan file.`);
+      return;
+    }
+
+    try {
+      const text = await file.text();
+      try {
+        JSON.parse(text);
+      } catch (parseErr) {
+        showUploadError('JSON Syntax Error', `Failed to parse "${file.name}": ${parseErr.message}`);
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch(`${CONFIG.httpFallbackBase}/api/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        const errMsg = data.error || data.message || `Upload failed with HTTP ${res.status}`;
+        showUploadError('Floor Plan Validation Error', errMsg);
+        return;
+      }
+
+      if (data.state) {
+        handleServerPayload(data.state);
+        fitToScreen();
+      }
+    } catch (err) {
+      showUploadError('Upload Error', err.message || 'Network error occurred while uploading floor plan.');
+    } finally {
+      if (fileUploadInput) fileUploadInput.value = '';
+    }
+  }
+
+  // --- Cable Ring Generation ---
+  async function generateCableRings() {
+    hideUploadError();
+    const btns = [btnGenerateRings, btnGenerateRingsSidebar].filter(Boolean);
+    btns.forEach(b => {
+      b.disabled = true;
+      b.dataset.origText = b.textContent;
+      b.textContent = 'Routing Cables...';
+    });
+
+    try {
+      const res = await fetch(`${CONFIG.httpFallbackBase}/api/generate`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const errMsg = data.error || data.message || `Generation failed with HTTP ${res.status}`;
+        showUploadError('Cable Routing Error', errMsg);
+        return;
+      }
+      if (data.state) {
+        handleServerPayload(data.state);
+      }
+    } catch (err) {
+      showUploadError('Cable Routing Error', err.message || 'Failed to generate cable rings.');
+    } finally {
+      btns.forEach(b => {
+        b.disabled = false;
+        if (b.dataset.origText) b.textContent = b.dataset.origText;
+      });
+    }
+  }
+
+  // --- Load Demo Plan ---
+  async function loadDemoPlan(demoId, autoGenerate = false) {
+    if (!demoId) return;
+    hideUploadError();
+    if (btnLoadDemoPlan) {
+      btnLoadDemoPlan.disabled = true;
+      btnLoadDemoPlan.textContent = 'Loading...';
+    }
+
+    try {
+      const res = await fetch(`${CONFIG.httpFallbackBase}/api/demo/${encodeURIComponent(demoId)}?generate=${autoGenerate}`, {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const errMsg = data.error || data.message || `Failed to load demo plan '${demoId}'`;
+        showUploadError('Demo Load Error', errMsg);
+        return;
+      }
+      if (data.state) {
+        handleServerPayload(data.state);
+        fitToScreen();
+      }
+    } catch (err) {
+      showUploadError('Demo Load Error', err.message || 'Network error loading demo plan.');
+    } finally {
+      if (btnLoadDemoPlan) {
+        btnLoadDemoPlan.disabled = false;
+        btnLoadDemoPlan.textContent = 'Load';
+      }
+    }
+  }
+
   // --- Action Buttons ---
   btnResetBaseline.addEventListener('click', async () => {
     sendWebSocketMessage({ action: 'reset' });
@@ -1573,7 +1750,7 @@
       btnExportSlide8.disabled = true;
       btnExportSlide8.textContent = 'Exporting...';
 
-      const res = await fetch(`${CONFIG.httpFallbackBase}/api/export`, { method: 'POST' });
+      const res = await fetch(`${CONFIG.httpFallbackBase}/api/export/json`);
       if (!res.ok) throw new Error(`Export failed with status ${res.status}`);
 
       const data = await res.json();
@@ -1598,6 +1775,108 @@
         </svg>
         Export Slide 8 JSON
       `;
+    }
+  });
+
+  if (btnDownloadOverlayPng) {
+    btnDownloadOverlayPng.addEventListener('click', async () => {
+      try {
+        btnDownloadOverlayPng.disabled = true;
+        btnDownloadOverlayPng.textContent = 'Rendering PNG...';
+        const res = await fetch(`${CONFIG.httpFallbackBase}/api/export/png`);
+        if (!res.ok) throw new Error(`PNG export failed with status ${res.status}`);
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const planId = (state.serverState && state.serverState.plan && state.serverState.plan.plan_id) || (state.serverState && state.serverState.plan_id) || 'floor_plan';
+        a.download = `${planId}_overlay.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        alert(`PNG export error: ${err.message}`);
+      } finally {
+        btnDownloadOverlayPng.disabled = false;
+        btnDownloadOverlayPng.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download Overlay PNG
+        `;
+      }
+    });
+  }
+
+  // --- Upload & Demo Toolbar Listeners ---
+  if (btnUploadFloorPlan && fileUploadInput) {
+    btnUploadFloorPlan.addEventListener('click', () => {
+      fileUploadInput.click();
+    });
+  }
+
+  if (fileUploadInput) {
+    fileUploadInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        handleFileUpload(e.target.files[0]);
+      }
+    });
+  }
+
+  if (btnCloseUploadError) {
+    btnCloseUploadError.addEventListener('click', hideUploadError);
+  }
+
+  if (btnGenerateRings) {
+    btnGenerateRings.addEventListener('click', generateCableRings);
+  }
+
+  if (btnGenerateRingsSidebar) {
+    btnGenerateRingsSidebar.addEventListener('click', generateCableRings);
+  }
+
+  if (btnLoadDemoPlan && demoSelectDropdown) {
+    btnLoadDemoPlan.addEventListener('click', () => {
+      loadDemoPlan(demoSelectDropdown.value, false);
+    });
+  }
+
+  // --- Drag and Drop Floor Plan Listeners ---
+  let dragCounter = 0;
+
+  window.addEventListener('dragenter', (e) => {
+    e.preventDefault();
+    dragCounter++;
+    if (dropzoneOverlay) {
+      dropzoneOverlay.classList.add('active');
+    }
+  });
+
+  window.addEventListener('dragover', (e) => {
+    e.preventDefault();
+  });
+
+  window.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    dragCounter--;
+    if (dragCounter <= 0) {
+      dragCounter = 0;
+      if (dropzoneOverlay) {
+        dropzoneOverlay.classList.remove('active');
+      }
+    }
+  });
+
+  window.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dragCounter = 0;
+    if (dropzoneOverlay) {
+      dropzoneOverlay.classList.remove('active');
+    }
+    const files = e.dataTransfer && e.dataTransfer.files;
+    if (files && files.length > 0) {
+      handleFileUpload(files[0]);
     }
   });
 

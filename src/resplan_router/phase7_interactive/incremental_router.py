@@ -167,6 +167,176 @@ class IncrementalCoDesignEngine:
         self.bundle = self.synthesizer.synthesize_all_rings(
             self.partition, self.plan, self.topology, self.router, self.grid
         )
+        self._preview_mode = False
+
+    def load_plan_preview(self, raw_data: Dict[str, Any]) -> Tuple[Dict[str, Any], float]:
+        """Load floor plan JSON into preview mode (unrouted)."""
+        t0 = time.perf_counter()
+        self._raw_data = raw_data
+        self._raw_doors = raw_data.get("doors")
+        self._raw_entrance = raw_data.get("front_door")
+        self._active_proposals = {}
+        self._active_cut = None
+        self._cached_bim_scene = None
+        self._preview_mode = True
+
+        self.plan = parse_floor_plan(raw_data, strict_clearance=False)
+        portals = extract_all_portals(self.plan, self._raw_doors, self._raw_entrance)
+        self.topology = MacroTopologyGraph.build_topology(self.plan, portals)
+
+        self.partition = HubZonePartition(
+            plan_id=self.plan.plan_id,
+            hub_count=0,
+            lower_bound_hubs=0,
+            area_gap_m2=0.0,
+            hubs=[],
+        )
+        self.bundle = SynthesizedRingsBundle(
+            plan_id=self.plan.plan_id,
+            hub_rings=[],
+            total_length_m=0.0,
+            total_bends=0,
+            total_crossings=0,
+            total_overlap_m=0.0,
+            total_cost_J=0.0,
+        )
+        self._last_report = EvaluationReport(
+            plan_id=self.plan.plan_id,
+            is_valid=True,
+            violations=[],
+            hub_count=0,
+            hub_metrics=[],
+            total_length_m=0.0,
+            total_crossings=0,
+            total_overlap_m=0.0,
+            total_bends=0,
+            total_cost_J=0.0,
+            area_gap_m2=0.0,
+            rules_passed={
+                "Rule 1": True,
+                "Rule 2": True,
+                "Rule 3": True,
+                "Rule 4": True,
+                "Rule 5": True,
+                "Rule 6": True,
+            },
+        )
+        latency_ms = (time.perf_counter() - t0) * 1000
+        return self.get_state(latency_ms=latency_ms), latency_ms
+
+    def generate_cable_rings(self) -> Tuple[Dict[str, Any], float]:
+        """Execute full autonomous routing pipeline on active plan."""
+        t0 = time.perf_counter()
+        if not self._raw_data:
+            raise ValueError("No floor plan loaded to route")
+
+        # 1. Macro topology portals
+        portals = extract_all_portals(self.plan, self._raw_doors, self._raw_entrance)
+        self.topology = MacroTopologyGraph.build_topology(self.plan, portals)
+
+        # 2. Rectilinear Hanan grid & pairwise cost tensor
+        grid = build_hanan_grid(plan=self.plan, topology=self.topology)
+        cost_tensor = PairwiseCostTensor.build_from_plan(
+            plan=self.plan,
+            topology=self.topology,
+            grid=grid,
+            include_portals=False,
+        )
+
+        # 3. Candidate hub locations & contiguous zone partition
+        candidates = generate_all_room_hub_candidates(
+            plan=self.plan,
+            margin_m=0.505,
+            topology=self.topology,
+        )
+        self.partition = ZonePartitioner.solve_partition(
+            plan=self.plan,
+            topology=self.topology,
+            cost_tensor=cost_tensor,
+            candidates=candidates,
+            max_area=100.0,
+            max_nodes=5,
+        )
+
+        # 4. Include selected hubs in routing grid & synthesize closed rings
+        selected_hubs = {hub.hub_id: hub.location for hub in self.partition.hubs}
+        ring_grid = build_hanan_grid(
+            plan=self.plan,
+            topology=self.topology,
+            extra_points=list(selected_hubs.values()),
+        )
+        ring_cost_tensor = PairwiseCostTensor.build_from_plan(
+            plan=self.plan,
+            topology=self.topology,
+            grid=ring_grid,
+            candidate_hubs=selected_hubs,
+            include_portals=False,
+        )
+
+        self.router = DirectionStateRouter()
+        self.synthesizer = LoopSynthesizer()
+        self.grid = ring_grid
+        self.bundle = self.synthesizer.synthesize_all_rings(
+            partition=self.partition,
+            plan=self.plan,
+            topology=self.topology,
+            router=self.router,
+            grid=ring_grid,
+            cost_tensor=ring_cost_tensor,
+        )
+
+        # 5. Independent 1 mm evaluation checker
+        report = FloorPlanChecker.evaluate(
+            plan=self.plan,
+            raw_submission=self.bundle,
+            topology=self.topology,
+        )
+        self._last_report = report
+        self._preview_mode = False
+        self._cached_bim_scene = None
+        self._active_cut = None
+
+        latency_ms = (time.perf_counter() - t0) * 1000
+        return self.get_state(latency_ms=latency_ms, report=report), latency_ms
+
+    def load_demo_plan(
+        self,
+        demo_name: str,
+        generate: bool = False,
+    ) -> Tuple[Dict[str, Any], float]:
+        """Load one of the demo fixtures and optionally generate cable rings."""
+        demo_map = {
+            "slide5": "slide5_schematic.json",
+            "slide5_schematic": "slide5_schematic.json",
+            "demo_three_rooms_window": "demo_three_rooms_window.json",
+            "demo_six_rooms_capacity": "demo_six_rooms_capacity.json",
+            "demo_disconnected_zones": "demo_disconnected_zones.json",
+            "new_four_room_plan": "new_four_room_plan.json",
+        }
+        filename = demo_map.get(demo_name.lower().strip())
+        if not filename:
+            raise ValueError(f"Unknown demo plan '{demo_name}'. Available: {list(demo_map.keys())}")
+
+        candidates = [
+            Path(__file__).parents[3] / "tests" / "fixtures" / filename,
+            Path("tests/fixtures") / filename,
+            Path("/Users/jahnaviakveti/Downloads/ps4/tests/fixtures") / filename,
+        ]
+        fixture_path = None
+        for p in candidates:
+            if p.exists():
+                fixture_path = p
+                break
+        if not fixture_path or not fixture_path.exists():
+            raise FileNotFoundError(f"Demo fixture '{filename}' not found")
+
+        with open(fixture_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        state, lat = self.load_plan_preview(data)
+        if generate:
+            return self.generate_cable_rings()
+        return state, lat
 
     def reset(self) -> Tuple[Dict[str, Any], float]:
         """Reset canvas to baseline Slide 5 schematic."""
@@ -175,6 +345,7 @@ class IncrementalCoDesignEngine:
         self._active_proposals = {}
         self._active_cut = None
         self._cached_bim_scene = None
+        self._preview_mode = False
         self._last_report = FloorPlanChecker.evaluate(
             self.plan, self.bundle, topology=self.topology
         )
@@ -701,7 +872,7 @@ class IncrementalCoDesignEngine:
         for nid, node in self.plan.nodes.items():
             halos[nid] = self.halo_tracker.check_clearance(node.location, self.plan)
 
-        for hub in self.partition.hubs:
+        for hub in (self.partition.hubs if self.partition else []):
             halos[hub.hub_id] = self.halo_tracker.check_clearance(hub.location, self.plan)
 
         # Merge halo clearance into Rule 6 status
@@ -714,6 +885,28 @@ class IncrementalCoDesignEngine:
                 else:
                     rules_passed["Rule 5"] = False
                     rules_passed["Rule 6"] = False
+
+        violations_data = [
+            {
+                "rule_number": v.rule_number,
+                "rule_name": v.rule_name,
+                "hub_id": v.hub_id,
+                "room_id": v.room_id,
+                "message": v.message,
+            }
+            for v in rep.violations
+        ]
+        for h_id, h_stat in halos.items():
+            if not h_stat["is_clear"]:
+                term_type = "Hub" if h_id.startswith("H") else "Fixed node"
+                dist_m = h_stat.get("distance_m", 0.0)
+                violations_data.append({
+                    "rule_number": 6,
+                    "rule_name": "Wall Clearance (>= 0.50 m)",
+                    "hub_id": h_id if h_id.startswith("H") else None,
+                    "room_id": None,
+                    "message": f"{term_type} '{h_id}' violates minimum wall clearance: {dist_m:.2f} m < 0.50 m",
+                })
 
         is_valid = rep.is_valid and all(rules_passed.values())
 
@@ -728,7 +921,7 @@ class IncrementalCoDesignEngine:
                 "assigned_nodes": list(h.assigned_nodes),
                 "zone_area_m2": h.zone_area_m2,
             }
-            for h in self.partition.hubs
+            for h in (self.partition.hubs if self.partition else [])
         ]
 
         # Node representations
@@ -759,7 +952,7 @@ class IncrementalCoDesignEngine:
                     for s in ring.route_segments
                 ],
             }
-            for ring in self.bundle.hub_rings
+            for ring in (self.bundle.hub_rings if self.bundle else [])
         ]
 
         # Plan rooms for canvas rendering
@@ -790,9 +983,11 @@ class IncrementalCoDesignEngine:
                         [round(pt[0], 4), round(pt[1], 4)] for pt in g.exterior.coords
                     ])
 
+        preview_mode = getattr(self, "_preview_mode", False)
         state_payload = {
             "type": "state_update",
             "latency_ms": round(float(latency_ms), 2),
+            "preview_mode": preview_mode,
             "is_valid": is_valid,
             "metrics": {
                 "H": rep.hub_count,
@@ -804,16 +999,7 @@ class IncrementalCoDesignEngine:
                 "delta_area_gap_m2": rep.area_gap_m2,
             },
             "rules_passed": rules_passed,
-            "violations": [
-                {
-                    "rule_number": v.rule_number,
-                    "rule_name": v.rule_name,
-                    "hub_id": v.hub_id,
-                    "room_id": v.room_id,
-                    "message": v.message,
-                }
-                for v in rep.violations
-            ],
+            "violations": violations_data,
             "halos": halos,
             "hubs": hubs_data,
             "nodes": nodes_data,

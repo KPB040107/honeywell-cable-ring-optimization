@@ -6,16 +6,21 @@ for real-time floor plan mutations, Slide 8 JSON export, and state reset.
 
 from __future__ import annotations
 
+import io
+import json
 import logging
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, File, Request, Response, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
+import matplotlib.pyplot as plt
 from pydantic import BaseModel
 
+from resplan_router.phase1_ingestion.validator import validate_floor_plan_json
+from resplan_router.phase6_output.visualizer import FloorPlanVisualizer
 from resplan_router.phase7_interactive.incremental_router import IncrementalCoDesignEngine
 
 logger = logging.getLogger(__name__)
@@ -116,10 +121,134 @@ def reset_to_baseline() -> Dict[str, Any]:
     return state
 
 
+@app.post("/api/upload")
+async def upload_floor_plan(
+    request: Request,
+    file: Optional[UploadFile] = File(None),
+) -> Any:
+    """Upload floor plan JSON via file or JSON body, validate structure, and load preview."""
+    payload_to_validate: Any = None
+    if file is not None and file.filename:
+        try:
+            payload_to_validate = await file.read()
+        except Exception as exc:
+            return JSONResponse(
+                status_code=400,
+                content={"status": "error", "error": f"Failed to read file: {exc}", "message": str(exc)},
+            )
+    else:
+        try:
+            payload_to_validate = await request.body()
+        except Exception as exc:
+            return JSONResponse(
+                status_code=400,
+                content={"status": "error", "error": f"Failed to read request body: {exc}", "message": str(exc)},
+            )
+
+    if not payload_to_validate:
+        return JSONResponse(
+            status_code=400,
+            content={"status": "error", "error": "No file or JSON data uploaded", "message": "No file or JSON data uploaded"},
+        )
+
+    is_valid, err_msg, parsed_dict = validate_floor_plan_json(payload_to_validate)
+    if not is_valid or parsed_dict is None:
+        return JSONResponse(
+            status_code=400,
+            content={"status": "error", "error": err_msg or "Invalid floor plan JSON", "message": err_msg},
+        )
+
+    try:
+        state, _ = engine.load_plan_preview(parsed_dict)
+        return {
+            "status": "ok",
+            "message": f"Floor plan '{engine.plan.plan_id}' loaded into preview mode",
+            "state": state,
+        }
+    except Exception as exc:
+        logger.exception("Failed to parse uploaded floor plan")
+        return JSONResponse(
+            status_code=400,
+            content={"status": "error", "error": str(exc), "message": str(exc)},
+        )
+
+
+@app.post("/api/generate")
+def generate_cable_rings_endpoint() -> Any:
+    """Run active floor plan through full routing pipeline and compute closed rings."""
+    try:
+        state, _ = engine.generate_cable_rings()
+        return {
+            "status": "ok",
+            "message": "Cable rings generated successfully",
+            "state": state,
+        }
+    except Exception as exc:
+        logger.exception("Failed to generate cable rings")
+        return JSONResponse(
+            status_code=400,
+            content={"status": "error", "error": str(exc), "message": str(exc)},
+        )
+
+
 @app.post("/api/export")
 def export_slide8_solution() -> Dict[str, Any]:
     """Export current floor plan routing solution to Slide 8 JSON format."""
     return engine.export_slide8()
+
+
+@app.get("/api/export/json")
+def download_slide8_json() -> Response:
+    """Download official Slide 8 solution JSON file."""
+    data = engine.export_slide8()
+    plan_id = engine.plan.plan_id if engine.plan else "floor_plan"
+    return Response(
+        content=json.dumps(data, indent=2),
+        media_type="application/json",
+        headers={"Content-Disposition": f'attachment; filename="{plan_id}_solution.json"'},
+    )
+
+
+@app.get("/api/export/png")
+def download_overlay_png() -> Response:
+    """Download high-resolution Slide 5 schematic overlay PNG."""
+    plan_id = engine.plan.plan_id if engine.plan else "floor_plan"
+    if getattr(engine, "_preview_mode", False) or not engine.bundle or not engine.bundle.hub_rings:
+        try:
+            engine.generate_cable_rings()
+        except Exception as exc:
+            logger.warning("Could not auto-generate rings for PNG export: %s", exc)
+
+    fig = FloorPlanVisualizer.render_overlay(
+        plan=engine.plan,
+        bundle=engine.bundle,
+        evaluation=engine._last_report,
+    )
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=150, bbox_inches="tight")
+    plt.close(fig)
+    buf.seek(0)
+    return Response(
+        content=buf.getvalue(),
+        media_type="image/png",
+        headers={"Content-Disposition": f'attachment; filename="{plan_id}_overlay.png"'},
+    )
+
+
+@app.api_route("/api/demo/{demo_id}", methods=["GET", "POST"])
+def load_demo_endpoint(demo_id: str, generate: bool = False) -> Any:
+    """Load one of the demo benchmark floor plans."""
+    try:
+        state, _ = engine.load_demo_plan(demo_id, generate=generate)
+        return {
+            "status": "ok",
+            "message": f"Loaded demo plan '{demo_id}'",
+            "state": state,
+        }
+    except ValueError as exc:
+        return JSONResponse(status_code=400, content={"status": "error", "message": str(exc)})
+    except FileNotFoundError as exc:
+        return JSONResponse(status_code=404, content={"status": "error", "message": str(exc)})
 
 
 @app.post("/api/node/drag")
@@ -174,6 +303,8 @@ class MutationRequest(BaseModel):
     door_id: Optional[str] = None
     room_id: Optional[str] = None
     proposal_id: Optional[str] = None
+    demo_id: Optional[str] = None
+    plan_data: Optional[Dict[str, Any]] = None
     x: Optional[float] = None
     y: Optional[float] = None
     offset_m: Optional[float] = 0.0
@@ -227,6 +358,30 @@ def mutate_http(req: MutationRequest) -> Any:
                 content={"error": "copilot_apply requires proposal_id"},
             )
         state, _ = engine.apply_structural_proposal(req.proposal_id)
+        return state
+
+    elif action == "upload":
+        if not req.plan_data:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "upload action requires plan_data"},
+            )
+        is_val, err, valid_dict = validate_floor_plan_json(req.plan_data)
+        if not is_val or valid_dict is None:
+            return JSONResponse(
+                status_code=400,
+                content={"error": err or "Invalid floor plan JSON"},
+            )
+        state, _ = engine.load_plan_preview(valid_dict)
+        return state
+
+    elif action == "generate_rings":
+        state, _ = engine.generate_cable_rings()
+        return state
+
+    elif action == "load_demo":
+        d_id = req.demo_id or "slide5"
+        state, _ = engine.load_demo_plan(d_id, generate=True)
         return state
 
     elif action == "reset":
@@ -350,6 +505,34 @@ async def websocket_co_design(websocket: WebSocket) -> None:
                 resp["type"] = "survivability_update"
                 resp["report"] = report_dict
                 await websocket.send_json(resp)
+
+            elif action == "upload":
+                plan_data = data.get("plan_data") or data.get("plan")
+                if not plan_data:
+                    await websocket.send_json({"type": "error", "message": "upload action requires plan_data"})
+                else:
+                    is_val, err, valid_dict = validate_floor_plan_json(plan_data)
+                    if not is_val or valid_dict is None:
+                        await websocket.send_json({"type": "error", "message": err or "Invalid floor plan JSON"})
+                    else:
+                        state, _ = engine.load_plan_preview(valid_dict)
+                        await websocket.send_json(state)
+
+            elif action == "generate_rings":
+                try:
+                    state, _ = engine.generate_cable_rings()
+                    await websocket.send_json(state)
+                except Exception as exc:
+                    await websocket.send_json({"type": "error", "message": str(exc)})
+
+            elif action == "load_demo":
+                demo_id = str(data.get("demo_id", "slide5"))
+                gen = bool(data.get("generate", False))
+                try:
+                    state, _ = engine.load_demo_plan(demo_id, generate=gen)
+                    await websocket.send_json(state)
+                except Exception as exc:
+                    await websocket.send_json({"type": "error", "message": str(exc)})
 
             elif action == "wire_heal":
                 state, _ = engine.heal_wire()

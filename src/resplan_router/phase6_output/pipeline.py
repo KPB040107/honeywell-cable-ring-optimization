@@ -39,6 +39,7 @@ def route_floor_plan(
     config: Optional[SystemConfig] = None,
     output_json_path: Optional[Union[str, Path]] = None,
     render_png_path: Optional[Union[str, Path]] = None,
+    strict_clearance: bool = True,
 ) -> Tuple[dict[str, Any], EvaluationReport, SynthesizedRingsBundle]:
     """Execute complete end-to-end cable routing pipeline across all 6 phases.
 
@@ -47,6 +48,7 @@ def route_floor_plan(
         config: Optional SystemConfig containing tolerances, capacities, and weights.
         output_json_path: Optional file path to export Slide 8 JSON solution.
         render_png_path: Optional file path to render Slide 5 schematic overlay PNG.
+        strict_clearance: If True, validate node clearance on load; if False, retain coordinates.
 
     Returns:
         Tuple of (exported_slide8_json_dict, evaluation_report, synthesized_rings_bundle).
@@ -63,7 +65,7 @@ def route_floor_plan(
     else:
         raise TypeError(f"Expected dict, str, or Path, got {type(raw_plan_dict_or_path)}")
 
-    plan: MetricFloorPlan = parse_floor_plan(raw_data)
+    plan: MetricFloorPlan = parse_floor_plan(raw_data, strict_clearance=strict_clearance)
 
     # 2. Portal Extraction & Macro Topology Dual Graph (Phase 2)
     doors_data = raw_data.get("doors")

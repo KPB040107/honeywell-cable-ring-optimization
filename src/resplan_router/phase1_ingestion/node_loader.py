@@ -81,8 +81,9 @@ def load_fixed_nodes(
     eligible_rooms: Dict[str, Union[Polygon, MultiPolygon]],
     obstacles: BaseGeometry,
     origin_offset: Tuple[float, float] = (0.0, 0.0),
+    strict_clearance: bool = True,
 ) -> Dict[str, FixedNode]:
-    """Load or deterministically generate fixed interior nodes for eligible rooms.
+    r"""Load or deterministically generate fixed interior nodes for eligible rooms.
 
     Rules:
     - Exactly 1 node per eligible room (living, bedroom, kitchen, storage).
@@ -98,12 +99,13 @@ def load_fixed_nodes(
         eligible_rooms: Dictionary mapping room_id to metric room Polygon/MultiPolygon.
         obstacles: Impassable obstacle union O in metres.
         origin_offset: (min_x, min_y) offset of the floor plan bounding box.
+        strict_clearance: If True, raise ValueError on dist < 0.499m; if False, retain coordinates.
 
     Returns:
         Dict[str, FixedNode]: Mapping of node_id to FixedNode.
 
     Raises:
-        ValueError: If a provided node violates clearance or lies outside its host room.
+        ValueError: If a provided node violates clearance (strict) or lies outside its host room.
     """
     raw_node_items = _extract_raw_node_items(raw_json)
     nodes_dict: Dict[str, FixedNode] = {}
@@ -187,7 +189,7 @@ def load_fixed_nodes(
             # 2. Assert node satisfies >= 0.50 m clearance from obstacles (1 mm tolerance)
             if not obstacles.is_empty:
                 dist_to_obs = obstacles.distance(node_pt)
-                if dist_to_obs < clearance_tol:
+                if dist_to_obs < clearance_tol and strict_clearance:
                     raise ValueError(
                         f"Node {node_id} clearance violation: distance to obstacles is "
                         f"{dist_to_obs:.4f} m < {clearance_tol:.4f} m"

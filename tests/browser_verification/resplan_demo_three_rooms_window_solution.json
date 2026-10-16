@@ -1,0 +1,122 @@
+{
+  "plan_id": "demo_three_rooms_window",
+  "units": "m",
+  "hubs": [
+    {
+      "hub_id": "H1",
+      "room_id": "R01",
+      "location": {
+        "x": 2.5,
+        "y": 3.85
+      },
+      "assigned_rooms": [
+        "R01",
+        "R02",
+        "R03"
+      ],
+      "assigned_nodes": [
+        "N1",
+        "N2",
+        "N3"
+      ],
+      "closed_sequence": [
+        "H1",
+        "N1",
+        "N2",
+        "N3",
+        "H1"
+      ],
+      "route_segments": [
+        {
+          "from": "H1",
+          "to": "N1",
+          "length_m": 1.85,
+          "polyline": [
+            [
+              2.5,
+              3.85
+            ],
+            [
+              2.5,
+              2
+            ]
+          ]
+        },
+        {
+          "from": "N1",
+          "to": "N2",
+          "length_m": 5.2,
+          "polyline": [
+            [
+              2.5,
+              2
+            ],
+            [
+              2.5,
+              1.9
+            ],
+            [
+              7.5,
+              1.9
+            ],
+            [
+              7.5,
+              2
+            ]
+          ]
+        },
+        {
+          "from": "N2",
+          "to": "N3",
+          "length_m": 9,
+          "polyline": [
+            [
+              7.5,
+              2
+            ],
+            [
+              2.6,
+              2
+            ],
+            [
+              2.6,
+              6
+            ],
+            [
+              2.5,
+              6
+            ]
+          ]
+        },
+        {
+          "from": "N3",
+          "to": "H1",
+          "length_m": 2.35,
+          "polyline": [
+            [
+              2.5,
+              6
+            ],
+            [
+              2.4,
+              6
+            ],
+            [
+              2.4,
+              3.85
+            ],
+            [
+              2.5,
+              3.85
+            ]
+          ]
+        }
+      ],
+      "ring_length_m": 18.4
+    }
+  ],
+  "reported_metrics": {
+    "hub_count": 1,
+    "total_length_m": 18.4
+  }
+}

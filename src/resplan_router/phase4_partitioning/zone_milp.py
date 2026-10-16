@@ -360,6 +360,22 @@ class ZonePartitioner:
             max_nodes=max_nodes,
         )
 
+        # Ensure all eligible rooms are covered by at least one candidate zone.
+        # If an uploaded plan has an eligible room with area > max_area (e.g. 110 m^2) or isolated room,
+        # create a single-room candidate zone so partitioning can form a complete solution,
+        # allowing FloorPlanChecker to independently detect and flag the Rule 2 capacity violation!
+        covered_rooms = {r for z in candidate_zones for r in z["rooms"]}
+        uncovered = set(elig_rooms) - covered_rooms
+        if uncovered:
+            for r in sorted(uncovered):
+                r_nodes = [n.node_id for n in plan.nodes.values() if n.room_id == r]
+                r_area = plan.rooms[r].area_m2 if r in plan.rooms else 100.0
+                candidate_zones.append({
+                    "rooms": [r],
+                    "nodes": sorted(r_nodes),
+                    "area_m2": round(r_area, 4),
+                })
+
         # 2. Price each connected zone with exact closed-ring tour cost
         priced_zones: List[Dict[str, Any]] = []
         for z in candidate_zones:
@@ -400,9 +416,11 @@ class ZonePartitioner:
 
             # Area gap tie-breaker variables: delta_A = A_max - A_min
             SCALE_AREA = 1000
-            A_max = model.NewIntVar(0, int(round(100.0 * SCALE_AREA)), "A_max")
-            A_min = model.NewIntVar(0, int(round(100.0 * SCALE_AREA)), "A_min")
-            delta_A = model.NewIntVar(0, int(round(100.0 * SCALE_AREA)), "delta_A")
+            max_area_val = max(100.0, max((z["area_m2"] for z in priced_zones), default=100.0))
+            max_area_int = int(round(max_area_val * SCALE_AREA)) + 1000
+            A_max = model.NewIntVar(0, max_area_int, "A_max")
+            A_min = model.NewIntVar(0, max_area_int, "A_min")
+            delta_A = model.NewIntVar(0, max_area_int, "delta_A")
             model.Add(delta_A == A_max - A_min)
 
             for i in range(n_zones):
