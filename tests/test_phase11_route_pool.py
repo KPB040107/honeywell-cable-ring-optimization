@@ -33,6 +33,8 @@ def test_yen_route_pool_shortest_paths():
     assert best_route.length_m > 0
     assert len(best_route.polyline) >= 2
 
-    # Verify monotonic length
+    # Verify monotonic composite routing cost (L + 0.5*B)
     for i in range(len(routes) - 1):
-        assert routes[i].length_m <= routes[i + 1].length_m + 1e-4
+        cost_i = routes[i].length_m + 0.5 * routes[i].bends
+        cost_next = routes[i + 1].length_m + 0.5 * routes[i + 1].bends
+        assert cost_i <= cost_next + 1e-4

@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Any, Dict, FrozenSet, Optional
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 import shapely
+from shapely.geometry.base import BaseGeometry
 
 
 class Point2D(BaseModel):
@@ -140,6 +141,14 @@ class MetricFloorPlan(BaseModel):
     obstacles_wkt: str = Field(
         description="WKT geometry of obstacle union O = wall + window + front_door"
     )
+    doors_wkt: Optional[str] = Field(
+        default=None,
+        description="Optional WKT geometry of metric interior doors",
+    )
+    front_doors_wkt: Optional[str] = Field(
+        default=None,
+        description="Optional WKT geometry of front/exterior doors",
+    )
     rooms: Dict[str, EligibleOrExcludedRoom] = Field(
         default_factory=dict,
         description="Dictionary mapping room_id to room models",
@@ -160,6 +169,17 @@ class MetricFloorPlan(BaseModel):
             raise ValueError(f"Invalid Shapely WKT geometry: {exc}") from exc
         return v
 
+    @field_validator("doors_wkt", "front_doors_wkt")
+    @classmethod
+    def validate_optional_wkt_strings(cls, v: Optional[str]) -> Optional[str]:
+        if v is None or v == "":
+            return None
+        try:
+            shapely.from_wkt(v)
+        except Exception as exc:
+            raise ValueError(f"Invalid Shapely WKT geometry: {exc}") from exc
+        return v
+
     @property
     def inner_geom(self) -> shapely.Polygon:
         return shapely.from_wkt(self.inner_wkt)
@@ -171,6 +191,18 @@ class MetricFloorPlan(BaseModel):
     @property
     def obstacles_geom(self) -> shapely.MultiPolygon:
         return shapely.from_wkt(self.obstacles_wkt)
+
+    @property
+    def doors_geom(self) -> Optional[BaseGeometry]:
+        if self.doors_wkt:
+            return shapely.from_wkt(self.doors_wkt)
+        return None
+
+    @property
+    def front_doors_geom(self) -> Optional[BaseGeometry]:
+        if self.front_doors_wkt:
+            return shapely.from_wkt(self.front_doors_wkt)
+        return None
 
 
 class PortalType(str, Enum):

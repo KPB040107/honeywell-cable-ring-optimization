@@ -432,8 +432,12 @@ class IncrementalCoDesignEngine:
         """
         t0 = time.perf_counter()
         if self._raw_data is not None and getattr(self.plan, "plan_id", "") not in ("slide5", "slide5_schematic"):
-            self.load_plan_preview(self._raw_data)
-            return self.generate_cable_rings()
+            if "inner" in self._raw_data:
+                self.load_plan_preview(self._raw_data)
+                return self.generate_cable_rings()
+            elif "id" in self._raw_data:
+                self.load_dataset_plan(self._raw_data["id"])
+                return self.generate_cable_rings()
 
         self._load_slide5_baseline()
         self._active_proposals = {}

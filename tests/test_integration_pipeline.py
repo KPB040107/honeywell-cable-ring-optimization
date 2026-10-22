@@ -143,7 +143,18 @@ def test_cli_invocation(slide5_fixture_path: Path, tmp_path: Path) -> None:
         str(out_png),
     ]
 
-    result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    import os
+    env = dict(os.environ)
+    env["PYTHONIOENCODING"] = "utf-8"
+    result = subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        check=False,
+        env=env,
+        encoding="utf-8",
+        errors="replace",
+    )
 
     assert result.returncode == 0, f"CLI exited with error:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
     assert "REVIEWER SCORECARD" in result.stdout

@@ -1,0 +1,33 @@
+         14837064 function calls (14836960 primitive calls) in 6.399 seconds
+
+   Ordered by: cumulative time
+   List reduced from 449 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+      104    2.033    0.020    5.315    0.051 C:\hackhive\src\resplan_router\phase3_micro_routing\astar_rectilinear.py:248(compute_single_source)
+        2    0.001    0.000    3.544    1.772 C:\hackhive\src\resplan_router\phase3_micro_routing\cost_matrix.py:243(build_from_plan)
+        2    0.017    0.009    3.543    1.772 C:\hackhive\src\resplan_router\phase3_micro_routing\cost_matrix.py:115(build_tensor)
+  4116401    1.259    0.000    1.818    0.000 C:\hackhive\.venv\Lib\site-packages\pydantic\_internal\_model_construction.py:515(hash_func)
+        1    0.006    0.006    1.284    1.284 C:\hackhive\.venv\Lib\site-packages\ortools\sat\python\cp_model.py:372(new_bool_var)
+       13    0.007    0.001    1.276    0.098 C:\hackhive\src\resplan_router\phase4_partitioning\zone_milp.py:134(evaluate_zone_exact_ring)
+        1    0.000    0.000    0.697    0.697 C:\hackhive\src\resplan_router\phase5_ring_sequencing\loop_synthesizer.py:476(synthesize_all_rings)
+        2    0.013    0.007    0.675    0.337 C:\hackhive\src\resplan_router\phase5_ring_sequencing\loop_synthesizer.py:242(synthesize_ring)
+  1514592    0.663    0.000    0.663    0.000 {built-in method builtins.round}
+       12    0.000    0.000    0.653    0.054 C:\hackhive\src\resplan_router\phase3_micro_routing\astar_rectilinear.py:368(find_shortest_path)
+  4116401    0.559    0.000    0.559    0.000 {built-in method builtins.hash}
+        1    0.000    0.000    0.461    0.461 C:\hackhive\src\resplan_router\phase4_partitioning\hub_candidates.py:249(generate_all_room_hub_candidates)
+        7    0.004    0.001    0.461    0.066 C:\hackhive\src\resplan_router\phase4_partitioning\hub_candidates.py:87(generate_hub_candidates)
+   193658    0.100    0.000    0.433    0.000 C:\hackhive\src\resplan_router\phase3_micro_routing\rectilinear_grid.py:171(get_neighbors)
+     4016    0.040    0.000    0.432    0.000 C:\hackhive\src\resplan_router\phase4_partitioning\hub_candidates.py:188(try_add_point)
+    26047    0.058    0.000    0.386    0.000 C:\hackhive\.venv\Lib\site-packages\shapely\geometry\point.py:59(__new__)
+        2    0.030    0.015    0.383    0.191 C:\hackhive\src\resplan_router\phase3_micro_routing\rectilinear_grid.py:234(build_hanan_grid)
+   643285    0.201    0.000    0.288    0.000 {method 'get' of 'dict' objects}
+   731790    0.204    0.000    0.204    0.000 {method 'setdefault' of 'dict' objects}
+31741/31693    0.023    0.000    0.197    0.000 C:\hackhive\.venv\Lib\site-packages\shapely\decorators.py:182(wrapper)
+   194706    0.072    0.000    0.175    0.000 C:\hackhive\src\resplan_router\phase3_micro_routing\rectilinear_grid.py:139(get_vertex)
+    26047    0.126    0.000    0.133    0.000 C:\hackhive\.venv\Lib\site-packages\shapely\creation.py:52(points)
+    26113    0.092    0.000    0.127    0.000 C:\hackhive\.venv\Lib\site-packages\numpy\_core\numerictypes.py:418(issubdtype)
+     2272    0.022    0.000    0.104    0.000 C:\hackhive\src\resplan_router\phase3_micro_routing\astar_rectilinear.py:117(get_metric_to)
+        2    0.013    0.006    0.102    0.051 C:\hackhive\src\resplan_router\phase3_micro_routing\rectilinear_grid.py:65(__init__)
+
+

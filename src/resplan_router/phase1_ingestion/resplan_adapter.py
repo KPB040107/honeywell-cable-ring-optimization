@@ -129,10 +129,6 @@ def adapt_resplan_record(record: Dict[str, Any]) -> MetricFloorPlan:
         "balcony",
         "balacony",
         "stair",
-        "garden",
-        "pool",
-        "parking",
-        "land",
         "corridor",
     ]
 
@@ -192,7 +188,7 @@ def adapt_resplan_record(record: Dict[str, Any]) -> MetricFloorPlan:
     doorway_points: List[Point2D] = []
     for d_poly in metric_doors:
         c = d_poly.centroid
-        doorway_points.append(Point2D(x=round(c.x, 4), y=round(c.y, 4)))
+        doorway_points.append(Point2D(x=max(0.0, round(c.x, 4)), y=max(0.0, round(c.y, 4))))
 
     # 6. Generate deterministic device locations for eligible rooms
     eligible_rooms_geom = {
@@ -207,6 +203,12 @@ def adapt_resplan_record(record: Dict[str, Any]) -> MetricFloorPlan:
         doorway_points=doorway_points,
     )
 
+    doors_union = shapely.unary_union(metric_doors) if metric_doors else None
+    doors_wkt = doors_union.wkt if (doors_union is not None and not doors_union.is_empty) else None
+
+    front_doors_union = shapely.unary_union(metric_front_doors) if metric_front_doors else None
+    front_doors_wkt = front_doors_union.wkt if (front_doors_union is not None and not front_doors_union.is_empty) else None
+
     return MetricFloorPlan(
         plan_id=plan_id,
         scale_units_per_m=round(scale, 6),
@@ -214,6 +216,8 @@ def adapt_resplan_record(record: Dict[str, Any]) -> MetricFloorPlan:
         inner_wkt=healed_inner.wkt,
         free_space_wkt=free_space.wkt,
         obstacles_wkt=obstacles.wkt,
+        doors_wkt=doors_wkt,
+        front_doors_wkt=front_doors_wkt,
         rooms=rooms_dict,
         nodes=nodes_dict,
     )

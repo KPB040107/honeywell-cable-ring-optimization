@@ -304,7 +304,8 @@ class YenRoutePool:
             m = compute_polyline_metrics(best_poly, start_id, end_id, d_start, d_end)
             routes.append(m)
 
-        # Store in cache
+        # Store in cache (sorted by composite cost and length)
+        routes.sort(key=lambda r: (r.cost_J, r.length_m))
         self.cache.put(start_id, end_id, routes, d_start, d_end)
         return routes
 

@@ -16,6 +16,18 @@ from resplan_router.config import SystemConfig
 from resplan_router.phase6_output.pipeline import route_floor_plan
 
 
+if sys.stdout is not None and hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+if sys.stderr is not None and hasattr(sys.stderr, "reconfigure"):
+    try:
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
+
 def print_scorecard(
     plan_id: str,
     evaluation: Any,
@@ -29,7 +41,7 @@ def print_scorecard(
     sub = "-" * 80
 
     print(header)
-    print(f"{'RESPLAN CABLE RING ROUTER — REVIEWER SCORECARD':^80}")
+    print(f"{'RESPLAN CABLE RING ROUTER - REVIEWER SCORECARD':^80}")
     print(header)
     print(f"Plan ID:         {plan_id}")
     print(f"Status:          {status_str}")
@@ -45,7 +57,10 @@ def print_scorecard(
     print(f"  Total Bends (B):         {evaluation.total_bends}")
     print(f"  Total Crossings (X):     {evaluation.total_crossings}")
     print(f"  Total Overlap (O):       {evaluation.total_overlap_m:.2f} m")
-    print(f"  Area Gap (ΔA_gap):       {evaluation.area_gap_m2:.2f} m²")
+    try:
+        print(f"  Area Gap (ΔA_gap):       {evaluation.area_gap_m2:.2f} m²")
+    except UnicodeEncodeError:
+        print(f"  Area Gap (Delta_A_gap):  {evaluation.area_gap_m2:.2f} m2")
     print(f"  Total Cost J (Official): {evaluation.total_cost_J:.2f}")
     print(sub)
     print("HARD VALIDITY RULES (Slide 3 Checklist):")

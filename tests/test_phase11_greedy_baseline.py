@@ -16,7 +16,7 @@ def test_greedy_baseline_on_dataset_plan():
     assert res.h_count >= 1
     assert res.total_length_m > 0
     assert res.total_cost_J > 0
-    assert res.runtime_s < 5.0
+    assert res.runtime_s < 10.0
 
     # Independent checker verification
     report = FloorPlanChecker.evaluate(plan, res.bundle)

@@ -1,4 +1,4 @@
-"""Polygon healing, room classification, free-space extraction, and floor plan parsing.
+r"""Polygon healing, room classification, free-space extraction, and floor plan parsing.
 
 Enforces:
 - Shapely make_valid() on all input geometry.
@@ -143,7 +143,7 @@ def build_obstacles_and_freespace(
     doors: Optional[List[BaseGeometry]] = None,
     front_doors: Optional[List[BaseGeometry]] = None,
 ) -> Tuple[BaseGeometry, BaseGeometry]:
-    """Construct impassable obstacle union O and routable free space F.
+    r"""Construct impassable obstacle union O and routable free space F.
 
     Formula:
         Obstacle Union O: unary_union(walls ∪ windows ∪ front_doors)
@@ -163,9 +163,23 @@ def build_obstacles_and_freespace(
     Returns:
         Tuple[BaseGeometry, BaseGeometry]: (obstacles, free_space)
     """
-    # 1. Obstacle union O = wall ∪ window ∪ front_door
+    # Carve interior doors out of walls so doorways remain in free space
+    valid_doors = [d for d in (doors or []) if d and not d.is_empty]
+    door_union = shapely.unary_union(valid_doors) if valid_doors else None
+
+    carved_walls = []
+    for w in walls:
+        if w and not w.is_empty:
+            if door_union is not None and not door_union.is_empty and w.intersects(door_union):
+                diff = w.difference(door_union)
+                if not diff.is_empty:
+                    carved_walls.append(diff)
+            else:
+                carved_walls.append(w)
+
+    # 1. Obstacle union O = (wall \ door) ∪ window ∪ front_door
     obs_components: List[BaseGeometry] = []
-    obs_components.extend([w for w in walls if w and not w.is_empty])
+    obs_components.extend(carved_walls)
     obs_components.extend([w for w in windows if w and not w.is_empty])
     if front_doors:
         obs_components.extend([fd for fd in front_doors if fd and not fd.is_empty])
@@ -176,14 +190,9 @@ def build_obstacles_and_freespace(
         obstacles = Polygon()
     obstacles = shapely.make_valid(obstacles)
 
-    # 2. Free space F = inner \ (wall ∪ window)
-    wall_win_components: List[BaseGeometry] = []
-    wall_win_components.extend([w for w in walls if w and not w.is_empty])
-    wall_win_components.extend([w for w in windows if w and not w.is_empty])
-
-    if wall_win_components:
-        wall_win_union = shapely.unary_union(wall_win_components)
-        free_space = scaled_inner.difference(wall_win_union)
+    # 2. Free space F = inner \ ((wall \ door) ∪ window ∪ front_door)
+    if obs_components:
+        free_space = scaled_inner.difference(obstacles)
     else:
         free_space = scaled_inner
     free_space = shapely.make_valid(free_space)
@@ -361,6 +370,12 @@ def parse_floor_plan(
         strict_clearance=strict_clearance,
     )
 
+    doors_union = shapely.unary_union(metric_doors) if metric_doors else None
+    doors_wkt = doors_union.wkt if (doors_union is not None and not doors_union.is_empty) else None
+
+    front_doors_union = shapely.unary_union(metric_front_doors) if metric_front_doors else None
+    front_doors_wkt = front_doors_union.wkt if (front_doors_union is not None and not front_doors_union.is_empty) else None
+
     return MetricFloorPlan(
         plan_id=plan_id,
         scale_units_per_m=scale,
@@ -368,6 +383,8 @@ def parse_floor_plan(
         inner_wkt=healed_inner.wkt,
         free_space_wkt=free_space.wkt,
         obstacles_wkt=obstacles.wkt,
+        doors_wkt=doors_wkt,
+        front_doors_wkt=front_doors_wkt,
         rooms=rooms_dict,
         nodes=nodes_dict,
     )
