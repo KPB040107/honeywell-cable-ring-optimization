@@ -1,0 +1,481 @@
+{
+  "benchmark_timestamp_utc": "2026-10-23T21:00:57Z",
+  "arbitration_microbenchmark": {
+    "n_evaluations": 10000,
+    "mean_us": 2.338,
+    "std_us": 3.785,
+    "median_us": 2.3,
+    "p95_us": 2.8,
+    "p99_us": 3.7,
+    "min_us": 1.2,
+    "max_us": 314.3,
+    "mean_ms": 0.00234
+  },
+  "tiers": {
+    "compact": {
+      "tier_name": "compact",
+      "sample_count": 3,
+      "plans": [
+        {
+          "plan_id": 0,
+          "eligible_rooms": 5,
+          "total_rooms": 9,
+          "total_area_m2": 130.99,
+          "v1_standalone": {
+            "runtime_s": 3.0356,
+            "is_valid": true,
+            "h_count": 4,
+            "cost_J": 41.2047,
+            "area_gap_m2": 38.5994
+          },
+          "v2_standalone": {
+            "runtime_s": 7.2147,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 87.0347,
+            "area_gap_m2": 80.5323
+          },
+          "fallback_on_demand": {
+            "runtime_s": 5.0538,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 87.0347,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0018
+          },
+          "fallback_arbitrated": {
+            "runtime_s": 6.8245,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 87.0347,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0082
+          },
+          "fallback_adversarial_recovery": {
+            "runtime_s": 3.2308,
+            "is_valid": true,
+            "h_count": 3,
+            "cost_J": 66.6903,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_infeasible_solution",
+            "arbitration_ms": 0.0033
+          }
+        },
+        {
+          "plan_id": 11,
+          "eligible_rooms": 3,
+          "total_rooms": 5,
+          "total_area_m2": 58.06,
+          "v1_standalone": {
+            "runtime_s": 2.8089,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 25.4074,
+            "area_gap_m2": 0.0
+          },
+          "v2_standalone": {
+            "runtime_s": 3.0258,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 25.4074,
+            "area_gap_m2": 0.0
+          },
+          "fallback_on_demand": {
+            "runtime_s": 2.5249,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 25.4074,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0019
+          },
+          "fallback_arbitrated": {
+            "runtime_s": 2.7594,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 25.4074,
+            "fallback_triggered": true,
+            "fallback_reason": "exact_tie_baseline_preserved",
+            "arbitration_ms": 0.0077
+          },
+          "fallback_adversarial_recovery": {
+            "runtime_s": 2.7072,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 25.4074,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_infeasible_solution",
+            "arbitration_ms": 0.0025
+          }
+        },
+        {
+          "plan_id": 20,
+          "eligible_rooms": 3,
+          "total_rooms": 7,
+          "total_area_m2": 209.03,
+          "v1_standalone": {
+            "runtime_s": 2.3313,
+            "is_valid": true,
+            "h_count": 3,
+            "cost_J": 2.841,
+            "area_gap_m2": 65.3545
+          },
+          "v2_standalone": {
+            "runtime_s": 1.2511,
+            "is_valid": true,
+            "h_count": 3,
+            "cost_J": 2.841,
+            "area_gap_m2": 65.3545
+          },
+          "fallback_on_demand": {
+            "runtime_s": 1.5901,
+            "is_valid": true,
+            "h_count": 3,
+            "cost_J": 2.841,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0023
+          },
+          "fallback_arbitrated": {
+            "runtime_s": 2.6188,
+            "is_valid": true,
+            "h_count": 3,
+            "cost_J": 2.841,
+            "fallback_triggered": true,
+            "fallback_reason": "exact_tie_baseline_preserved",
+            "arbitration_ms": 0.0068
+          },
+          "fallback_adversarial_recovery": {
+            "runtime_s": 1.9307,
+            "is_valid": true,
+            "h_count": 3,
+            "cost_J": 2.841,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_infeasible_solution",
+            "arbitration_ms": 0.0043
+          }
+        }
+      ],
+      "mean_v1_runtime_s": 2.7253,
+      "mean_v2_runtime_s": 3.8305,
+      "mean_ondemand_runtime_s": 3.0563,
+      "mean_arbitrated_runtime_s": 4.0676,
+      "mean_adversarial_runtime_s": 2.6229,
+      "mean_arbitration_overhead_ms": 0.0076
+    },
+    "standard": {
+      "tier_name": "standard",
+      "sample_count": 3,
+      "plans": [
+        {
+          "plan_id": 1,
+          "eligible_rooms": 5,
+          "total_rooms": 9,
+          "total_area_m2": 134.71,
+          "v1_standalone": {
+            "runtime_s": 3.5569,
+            "is_valid": true,
+            "h_count": 3,
+            "cost_J": 72.9384,
+            "area_gap_m2": 61.299
+          },
+          "v2_standalone": {
+            "runtime_s": 5.5017,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 91.257,
+            "area_gap_m2": 84.0012
+          },
+          "fallback_on_demand": {
+            "runtime_s": 5.0926,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 91.257,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0024
+          },
+          "fallback_arbitrated": {
+            "runtime_s": 7.7846,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 91.257,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0059
+          },
+          "fallback_adversarial_recovery": {
+            "runtime_s": 3.4003,
+            "is_valid": true,
+            "h_count": 3,
+            "cost_J": 72.9384,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_infeasible_solution",
+            "arbitration_ms": 0.0025
+          }
+        },
+        {
+          "plan_id": 4,
+          "eligible_rooms": 4,
+          "total_rooms": 8,
+          "total_area_m2": 106.84,
+          "v1_standalone": {
+            "runtime_s": 3.2141,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 80.8325,
+            "area_gap_m2": 0.0
+          },
+          "v2_standalone": {
+            "runtime_s": 3.0378,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 81.1755,
+            "area_gap_m2": 0.0
+          },
+          "fallback_on_demand": {
+            "runtime_s": 2.6464,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 81.1755,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0027
+          },
+          "fallback_arbitrated": {
+            "runtime_s": 2.6812,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 80.8325,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_hub_count_regression",
+            "arbitration_ms": 0.0076
+          },
+          "fallback_adversarial_recovery": {
+            "runtime_s": 2.6815,
+            "is_valid": true,
+            "h_count": 1,
+            "cost_J": 80.8325,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_infeasible_solution",
+            "arbitration_ms": 0.0049
+          }
+        },
+        {
+          "plan_id": 17,
+          "eligible_rooms": 5,
+          "total_rooms": 10,
+          "total_area_m2": 142.14,
+          "v1_standalone": {
+            "runtime_s": 3.2077,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 72.0977,
+            "area_gap_m2": 73.9046
+          },
+          "v2_standalone": {
+            "runtime_s": 4.3701,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 67.3898,
+            "area_gap_m2": 73.9046
+          },
+          "fallback_on_demand": {
+            "runtime_s": 3.9584,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 67.3898,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0018
+          },
+          "fallback_arbitrated": {
+            "runtime_s": 4.5183,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 67.3898,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0056
+          },
+          "fallback_adversarial_recovery": {
+            "runtime_s": 3.7818,
+            "is_valid": true,
+            "h_count": 2,
+            "cost_J": 72.0977,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_infeasible_solution",
+            "arbitration_ms": 0.0042
+          }
+        }
+      ],
+      "mean_v1_runtime_s": 3.3262,
+      "mean_v2_runtime_s": 4.3032,
+      "mean_ondemand_runtime_s": 3.8991,
+      "mean_arbitrated_runtime_s": 4.9947,
+      "mean_adversarial_runtime_s": 3.2879,
+      "mean_arbitration_overhead_ms": 0.0064
+    },
+    "complex": {
+      "tier_name": "complex",
+      "sample_count": 3,
+      "plans": [
+        {
+          "plan_id": 18,
+          "eligible_rooms": 6,
+          "total_rooms": 13,
+          "total_area_m2": 184.88,
+          "v1_standalone": {
+            "runtime_s": 4.8506,
+            "is_valid": true,
+            "h_count": 4,
+            "cost_J": 74.4079,
+            "area_gap_m2": 67.4726
+          },
+          "v2_standalone": {
+            "runtime_s": 5.4045,
+            "is_valid": true,
+            "h_count": 4,
+            "cost_J": 74.4079,
+            "area_gap_m2": 67.4726
+          },
+          "fallback_on_demand": {
+            "runtime_s": 5.5315,
+            "is_valid": true,
+            "h_count": 4,
+            "cost_J": 74.4079,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0017
+          },
+          "fallback_arbitrated": {
+            "runtime_s": 9.2432,
+            "is_valid": true,
+            "h_count": 4,
+            "cost_J": 74.4079,
+            "fallback_triggered": true,
+            "fallback_reason": "exact_tie_baseline_preserved",
+            "arbitration_ms": 0.006
+          },
+          "fallback_adversarial_recovery": {
+            "runtime_s": 5.0608,
+            "is_valid": true,
+            "h_count": 4,
+            "cost_J": 74.4079,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_infeasible_solution",
+            "arbitration_ms": 0.0034
+          }
+        },
+        {
+          "plan_id": 47,
+          "eligible_rooms": 7,
+          "total_rooms": 13,
+          "total_area_m2": 191.01,
+          "v1_standalone": {
+            "runtime_s": 4.4213,
+            "is_valid": true,
+            "h_count": 5,
+            "cost_J": 42.5563,
+            "area_gap_m2": 88.4125
+          },
+          "v2_standalone": {
+            "runtime_s": 7.8055,
+            "is_valid": true,
+            "h_count": 5,
+            "cost_J": 41.3924,
+            "area_gap_m2": 88.4125
+          },
+          "fallback_on_demand": {
+            "runtime_s": 7.0434,
+            "is_valid": true,
+            "h_count": 5,
+            "cost_J": 41.3924,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.002
+          },
+          "fallback_arbitrated": {
+            "runtime_s": 6.9493,
+            "is_valid": true,
+            "h_count": 5,
+            "cost_J": 41.3924,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.0061
+          },
+          "fallback_adversarial_recovery": {
+            "runtime_s": 4.4962,
+            "is_valid": true,
+            "h_count": 5,
+            "cost_J": 42.5563,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_infeasible_solution",
+            "arbitration_ms": 0.0037
+          }
+        },
+        {
+          "plan_id": 917,
+          "eligible_rooms": 8,
+          "total_rooms": 16,
+          "total_area_m2": 260.13,
+          "v1_standalone": {
+            "runtime_s": 12.5163,
+            "is_valid": true,
+            "h_count": 7,
+            "cost_J": 9.6654,
+            "area_gap_m2": 94.9865
+          },
+          "v2_standalone": {
+            "runtime_s": 8.0371,
+            "is_valid": true,
+            "h_count": 7,
+            "cost_J": 12.1639,
+            "area_gap_m2": 94.9865
+          },
+          "fallback_on_demand": {
+            "runtime_s": 8.0926,
+            "is_valid": true,
+            "h_count": 7,
+            "cost_J": 12.1639,
+            "fallback_triggered": false,
+            "fallback_reason": "none_v2_accepted",
+            "arbitration_ms": 0.002
+          },
+          "fallback_arbitrated": {
+            "runtime_s": 14.0275,
+            "is_valid": true,
+            "h_count": 7,
+            "cost_J": 9.6654,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_hub_count_regression",
+            "arbitration_ms": 0.0086
+          },
+          "fallback_adversarial_recovery": {
+            "runtime_s": 13.1994,
+            "is_valid": true,
+            "h_count": 7,
+            "cost_J": 9.6654,
+            "fallback_triggered": true,
+            "fallback_reason": "v2_infeasible_solution",
+            "arbitration_ms": 0.0051
+          }
+        }
+      ],
+      "mean_v1_runtime_s": 7.2627,
+      "mean_v2_runtime_s": 7.0824,
+      "mean_ondemand_runtime_s": 6.8892,
+      "mean_arbitrated_runtime_s": 10.0733,
+      "mean_adversarial_runtime_s": 7.5855,
+      "mean_arbitration_overhead_ms": 0.0069
+    }
+  },
+  "overall_summary": {
+    "mean_arbitration_overhead_ms": 0.00234,
+    "arbitration_overhead_budget_pct": 4.7e-05,
+    "zero_regression_guarantee": true,
+    "lexicographical_hierarchy_certified": "Feasibility (100%) > Minimum Hub Count (H*) > Routing Cost (J) > Area Gap (Delta A)"
+  }
+}

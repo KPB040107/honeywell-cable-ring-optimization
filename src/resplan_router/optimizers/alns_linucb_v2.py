@@ -745,15 +745,19 @@ class LinUCB_ALNS_V2Optimizer(BaseFloorPlanOptimizer):
             )
 
             # Monotonicity guard: never return a worse solution than starting baseline
+            # Strictly preserves: Feasibility > Minimum Hub Count (H*) > Routing Cost (J) > Area Gap (Delta A)
             is_lex_superior = False
             if candidate_res.is_valid:
                 if candidate_res.h_count < init_res.h_count:
                     is_lex_superior = True
-                elif (
-                    candidate_res.h_count == init_res.h_count
-                    and candidate_res.total_cost_J <= init_res.total_cost_J + 1e-4
-                ):
-                    is_lex_superior = True
+                elif candidate_res.h_count == init_res.h_count:
+                    if candidate_res.total_cost_J < init_res.total_cost_J - 1e-4:
+                        is_lex_superior = True
+                    elif (
+                        abs(candidate_res.total_cost_J - init_res.total_cost_J) <= 1e-4
+                        and candidate_res.area_gap_m2 < init_res.area_gap_m2 - 1e-4
+                    ):
+                        is_lex_superior = True
 
             if is_lex_superior:
                 diag_info["fallback_to_baseline"] = False

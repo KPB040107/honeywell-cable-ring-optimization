@@ -12,6 +12,18 @@ from resplan_router.optimizers.cpsat_multipath import CPSATMultiPathOptimizer
 from resplan_router.optimizers.alns_optimizer import ALNSOptimizer
 from resplan_router.optimizers.genetic_optimizer import GeneticOptimizer
 from resplan_router.optimizers.portfolio_hybrid import PortfolioHybridOptimizer
+from resplan_router.optimizers.alns_linucb import ALNSLinUCBOptimizer
+from resplan_router.optimizers.alns_linucb_v2 import (
+    LinUCB_ALNS_V2Optimizer,
+    ALNSLinUCBV2Optimizer,
+    ALNSLinUCB_V2Optimizer,
+)
+from resplan_router.optimizers.production_fallback import (
+    FallbackReason,
+    ProductionFallbackMode,
+    ProductionFallbackOptimizer,
+    evaluate_lexicographical_preference,
+)
 
 __all__ = [
     "BaseFloorPlanOptimizer",
@@ -24,4 +36,12 @@ __all__ = [
     "ALNSOptimizer",
     "GeneticOptimizer",
     "PortfolioHybridOptimizer",
+    "ALNSLinUCBOptimizer",
+    "LinUCB_ALNS_V2Optimizer",
+    "ALNSLinUCBV2Optimizer",
+    "ALNSLinUCB_V2Optimizer",
+    "FallbackReason",
+    "ProductionFallbackMode",
+    "ProductionFallbackOptimizer",
+    "evaluate_lexicographical_preference",
 ]
