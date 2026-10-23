@@ -1,0 +1,234 @@
+{
+  "total_plans": 17000,
+  "metadata": {
+    "mode": "full",
+    "timestamp": "2026-10-23 20:20:20 UTC",
+    "total_plans_requested": 17000,
+    "total_plans_completed": 17000,
+    "time_limit_seconds": 5.0,
+    "max_iterations": 25,
+    "max_workers": 4,
+    "total_elapsed_seconds": 33070.45
+  },
+  "algorithms": {
+    "LinUCB_ALNS": {
+      "algo_name": "LinUCB_ALNS",
+      "total_runs": 17000,
+      "valid_count": 15506,
+      "validity_rate_pct": 91.21,
+      "mean_H": 1.95,
+      "median_H": 2.0,
+      "mean_J": 60.1508,
+      "median_J": 61.8226,
+      "std_J": 19.4736,
+      "min_J": 0.0,
+      "max_J": 135.0076,
+      "mean_L": 30.86,
+      "mean_B": 13.15,
+      "mean_X": 3.45,
+      "mean_O": 5.4459,
+      "mean_area_gap": 34.9773,
+      "mean_runtime_s": 7.474,
+      "median_runtime_s": 5.435,
+      "total_runtime_s": 127054.04
+    }
+  },
+  "pairwise": {
+    "LinUCB_ALNS_vs_PortfolioHybrid": {
+      "candidate": "LinUCB_ALNS",
+      "competitor": "PortfolioHybrid",
+      "total_pairs": 17000,
+      "valid_pairs": 0,
+      "candidate_wins": 0,
+      "competitor_wins": 0,
+      "ties": 0,
+      "candidate_win_rate_pct": 0.0,
+      "candidate_non_loss_rate_pct": 0.0,
+      "mean_delta_J": 0.0,
+      "median_delta_J": 0.0,
+      "mean_pct_improvement": 0.0,
+      "ttest_statistic": 0.0,
+      "ttest_p_value": 1.0,
+      "wilcoxon_statistic": 0.0,
+      "wilcoxon_p_value": 1.0,
+      "bootstrap_ci_95_delta_J": [
+        0.0,
+        0.0
+      ],
+      "bootstrap_ci_95_pct_improvement": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "tiers": {
+    "compact": {
+      "tier": "compact",
+      "plan_count": 1777,
+      "pct_of_dataset": 10.45,
+      "algorithms": {
+        "LinUCB_ALNS": {
+          "algo_name": "LinUCB_ALNS",
+          "total_runs": 1777,
+          "valid_count": 1629,
+          "validity_rate_pct": 91.67,
+          "mean_H": 1.25,
+          "median_H": 1.0,
+          "mean_J": 36.902,
+          "median_J": 38.0891,
+          "std_J": 11.5838,
+          "min_J": 0.0,
+          "max_J": 73.0012,
+          "mean_L": 19.2,
+          "mean_B": 8.43,
+          "mean_X": 1.94,
+          "mean_O": 3.7697,
+          "mean_area_gap": 5.9266,
+          "mean_runtime_s": 4.656,
+          "median_runtime_s": 4.962,
+          "total_runtime_s": 8273.8
+        }
+      },
+      "pairwise_vs_baseline": {
+        "LinUCB_ALNS_vs_PortfolioHybrid": {
+          "candidate": "LinUCB_ALNS",
+          "competitor": "PortfolioHybrid",
+          "total_pairs": 1777,
+          "valid_pairs": 0,
+          "candidate_wins": 0,
+          "competitor_wins": 0,
+          "ties": 0,
+          "candidate_win_rate_pct": 0.0,
+          "candidate_non_loss_rate_pct": 0.0,
+          "mean_delta_J": 0.0,
+          "median_delta_J": 0.0,
+          "mean_pct_improvement": 0.0,
+          "ttest_statistic": 0.0,
+          "ttest_p_value": 1.0,
+          "wilcoxon_statistic": 0.0,
+          "wilcoxon_p_value": 1.0,
+          "bootstrap_ci_95_delta_J": [
+            0.0,
+            0.0
+          ],
+          "bootstrap_ci_95_pct_improvement": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "standard": {
+      "tier": "standard",
+      "plan_count": 13178,
+      "pct_of_dataset": 77.52,
+      "algorithms": {
+        "LinUCB_ALNS": {
+          "algo_name": "LinUCB_ALNS",
+          "total_runs": 13178,
+          "valid_count": 12419,
+          "validity_rate_pct": 94.24,
+          "mean_H": 1.78,
+          "median_H": 2.0,
+          "mean_J": 63.7365,
+          "median_J": 64.5376,
+          "std_J": 17.1641,
+          "min_J": 0.0054,
+          "max_J": 135.0076,
+          "mean_L": 32.67,
+          "mean_B": 13.72,
+          "mean_X": 3.71,
+          "mean_O": 5.6601,
+          "mean_area_gap": 33.8961,
+          "mean_runtime_s": 7.127,
+          "median_runtime_s": 5.461,
+          "total_runtime_s": 93926.15
+        }
+      },
+      "pairwise_vs_baseline": {
+        "LinUCB_ALNS_vs_PortfolioHybrid": {
+          "candidate": "LinUCB_ALNS",
+          "competitor": "PortfolioHybrid",
+          "total_pairs": 13178,
+          "valid_pairs": 0,
+          "candidate_wins": 0,
+          "competitor_wins": 0,
+          "ties": 0,
+          "candidate_win_rate_pct": 0.0,
+          "candidate_non_loss_rate_pct": 0.0,
+          "mean_delta_J": 0.0,
+          "median_delta_J": 0.0,
+          "mean_pct_improvement": 0.0,
+          "ttest_statistic": 0.0,
+          "ttest_p_value": 1.0,
+          "wilcoxon_statistic": 0.0,
+          "wilcoxon_p_value": 1.0,
+          "bootstrap_ci_95_delta_J": [
+            0.0,
+            0.0
+          ],
+          "bootstrap_ci_95_pct_improvement": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "complex": {
+      "tier": "complex",
+      "plan_count": 1826,
+      "pct_of_dataset": 10.74,
+      "algorithms": {
+        "LinUCB_ALNS": {
+          "algo_name": "LinUCB_ALNS",
+          "total_runs": 1826,
+          "valid_count": 1458,
+          "validity_rate_pct": 79.85,
+          "mean_H": 4.18,
+          "median_H": 4.0,
+          "mean_J": 55.5832,
+          "median_J": 57.769,
+          "std_J": 25.2872,
+          "min_J": 0.0068,
+          "max_J": 131.1702,
+          "mean_L": 28.51,
+          "mean_B": 13.53,
+          "mean_X": 2.96,
+          "mean_O": 5.4945,
+          "mean_area_gap": 76.6446,
+          "mean_runtime_s": 13.611,
+          "median_runtime_s": 11.034,
+          "total_runtime_s": 24854.09
+        }
+      },
+      "pairwise_vs_baseline": {
+        "LinUCB_ALNS_vs_PortfolioHybrid": {
+          "candidate": "LinUCB_ALNS",
+          "competitor": "PortfolioHybrid",
+          "total_pairs": 1826,
+          "valid_pairs": 0,
+          "candidate_wins": 0,
+          "competitor_wins": 0,
+          "ties": 0,
+          "candidate_win_rate_pct": 0.0,
+          "candidate_non_loss_rate_pct": 0.0,
+          "mean_delta_J": 0.0,
+          "median_delta_J": 0.0,
+          "mean_pct_improvement": 0.0,
+          "ttest_statistic": 0.0,
+          "ttest_p_value": 1.0,
+          "wilcoxon_statistic": 0.0,
+          "wilcoxon_p_value": 1.0,
+          "bootstrap_ci_95_delta_J": [
+            0.0,
+            0.0
+          ],
+          "bootstrap_ci_95_pct_improvement": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  }
+}
