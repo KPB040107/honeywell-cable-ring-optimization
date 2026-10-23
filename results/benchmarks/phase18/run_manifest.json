@@ -1,0 +1,70 @@
+{
+  "manifest_title": "Honeywell Cable Ring Optimization - Phase 18 Production Run Manifest",
+  "timestamp_utc": "2026-10-23T22:42:45.579340+00:00",
+  "phase": 18,
+  "certified_release_tag": "v2.0-certified-production",
+  "git_commit": "84c4cd1d0dae69ce492d5e14a5a0a9b21b81a894",
+  "git_branch": "phase18-production-execution",
+  "dataset": {
+    "path": "C:\\hackhive\\ResPlan.pkl",
+    "size_bytes": 300290069,
+    "sha256": "2a73179cf11e6066384400494683072eb1648ed56ae000750d0e9f3fa499c570",
+    "total_plans_enumerated": 17000,
+    "min_plan_id": 0,
+    "max_plan_id": 16999
+  },
+  "solver_architecture": {
+    "production_wrapper": "ProductionFallbackOptimizer",
+    "candidate_optimizer": "LinUCB_ALNS_V2Optimizer (14 ALNS Operators, 24 Features)",
+    "fallback_optimizer": "ALNSLinUCBOptimizer (Frozen v1 Champion Baseline)",
+    "fallback_mode": "ARBITRATED",
+    "lexicographical_hierarchy": [
+      "is_valid",
+      "hub_count",
+      "total_cost_J",
+      "area_gap_m2"
+    ],
+    "max_iterations": 25,
+    "per_plan_timeout_s": 5.0,
+    "spatial_tolerance_m": 0.001,
+    "hub_obstacle_clearance_m": 0.5
+  },
+  "hardware_environment": {
+    "cpu": "Intel Core i5-13450HX (10 Cores, 16 Threads)",
+    "recommended_workers": 6,
+    "affinity_cores": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "max_memory_per_worker_gb": 1.2
+  },
+  "preflight_status": "ALL_10_GATES_PASSED_CERTIFIED",
+  "git_commit_short": "84c4cd1",
+  "git_commit_full": "84c4cd1d0dae69ce492d5e14a5a0a9b21b81a894",
+  "git_tags": [
+    "v2.0-certified-production"
+  ],
+  "seed_policy": {
+    "base_seed": 42,
+    "seed_formula": "seed = base_seed + int(plan_id)",
+    "isolation": "independent_per_worker_process_rng",
+    "reproducibility": "BITWISE_IDENTICAL_DETERMINISTIC",
+    "supported_trials": [
+      42,
+      1042,
+      2042
+    ]
+  },
+  "audit_status": "CERTIFIED_VERIFIED",
+  "audit_timestamp_utc": "2026-10-23T22:45:41.019229+00:00"
+}

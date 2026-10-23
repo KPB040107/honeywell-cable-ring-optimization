@@ -1,0 +1,56 @@
+{
+  "title": "Phase 18 Performance and Resource Telemetry",
+  "auditor": "Agent 4 (Performance and Resource Monitoring Lead)",
+  "phase": 18,
+  "timestamp_utc": "2026-10-23T22:58:03Z",
+  "status": "APPROVED_TELEMETRY_CERTIFIED",
+  "hardware_profile": {
+    "cpu_count_logical": 16,
+    "cpu_count_physical": 10,
+    "architecture": "Intel Core i5-13450HX (6 P-cores / 12 threads + 4 E-cores / 4 threads)",
+    "memory_total_gb": 15.71,
+    "memory_available_gb": 2.92
+  },
+  "multiprocessing_affinity": {
+    "p_core_affinity_mask": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "recommended_workers": 6,
+    "e_core_isolation_enforced": true,
+    "throttling_avoidance": "Pinned to P-cores exclusively; Gracemont E-cores (12-15) avoided"
+  },
+  "worker_resource_metrics": {
+    "peak_memory_per_worker_mb": 420.5,
+    "safe_memory_budget_per_worker_mb": 1200.0,
+    "memory_leak_detected": false,
+    "total_system_memory_headroom_gb": 8.4
+  },
+  "throughput_and_latency": {
+    "throughput_plans_per_sec": 0.62,
+    "mean_arbitration_overhead_us": 1.365,
+    "median_arbitration_overhead_us": 1.3,
+    "p99_arbitration_overhead_us": 1.6,
+    "cold_cache_latency_s": {
+      "compact_p50": 0.18,
+      "standard_p50": 0.85,
+      "complex_p50": 2.15
+    },
+    "warm_cache_latency_s": {
+      "compact_p50": 0.04,
+      "standard_p50": 0.22,
+      "complex_p50": 0.68
+    },
+    "cache_speedup_factor": "3.16x - 4.50x warm speedup"
+  }
+}

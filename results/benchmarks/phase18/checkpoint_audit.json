@@ -1,0 +1,285 @@
+{
+  "audit_title": "Honeywell Cable Ring Optimization - Phase 18 Checkpoint, Recovery & Reproducibility Certification",
+  "timestamp_utc": "2026-10-23T22:46:26.877706+00:00",
+  "status": "APPROVED_CERTIFIED_REPRODUCIBLE",
+  "total_audit_duration_s": 46.237,
+  "manifest_audit": {
+    "manifest_path": "C:\\hackhive\\results\\benchmarks\\phase18\\run_manifest.json",
+    "git_commit": "84c4cd1d0dae69ce492d5e14a5a0a9b21b81a894",
+    "git_commit_short": "84c4cd1",
+    "git_tags": [
+      "v2.0-certified-production"
+    ],
+    "dataset_path": "C:\\hackhive\\ResPlan.pkl",
+    "dataset_sha256": "2a73179cf11e6066384400494683072eb1648ed56ae000750d0e9f3fa499c570",
+    "seed_policy": {
+      "base_seed": 42,
+      "seed_formula": "seed = base_seed + int(plan_id)",
+      "isolation": "independent_per_worker_process_rng",
+      "reproducibility": "BITWISE_IDENTICAL_DETERMINISTIC",
+      "supported_trials": [
+        42,
+        1042,
+        2042
+      ]
+    },
+    "manifest_valid": true
+  },
+  "atomic_checkpointing": {
+    "atomic_write_verified": true,
+    "fsync_flush_verified": true,
+    "crash_interruption_tested": true,
+    "target_file_corruption_observed": false,
+    "orphaned_tmp_isolation": true
+  },
+  "resumable_batch_execution": {
+    "batch_plans_tested": [
+      11,
+      4,
+      0
+    ],
+    "stage1_completed": [
+      11,
+      4
+    ],
+    "stage2_skipped": [
+      11,
+      4
+    ],
+    "stage2_executed": [
+      0
+    ],
+    "zero_duplicate_work_verified": true,
+    "zero_state_leakage_verified": true,
+    "validated_output_preservation_verified": true,
+    "merged_count": 3
+  },
+  "repository_duplicate_audit": {
+    "total_files_audited": 18,
+    "clean_files_count": 18,
+    "all_files_duplicate_free": true,
+    "file_details": {
+      "benchmark_checkpoint_custom.json": {
+        "path": "results\\benchmarks\\benchmark_checkpoint_custom.json",
+        "format": "JSON",
+        "total_records": 5,
+        "unique_plan_ids": 5,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_checkpoint_full.json": {
+        "path": "results\\benchmarks\\full_dataset\\benchmark_checkpoint_full.json",
+        "format": "JSON",
+        "total_records": 1490,
+        "unique_plan_ids": 1490,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_checkpoint_smoke.json": {
+        "path": "results\\benchmarks\\benchmark_checkpoint_smoke.json",
+        "format": "JSON",
+        "total_records": 25,
+        "unique_plan_ids": 25,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_checkpoint_test.json": {
+        "path": "results\\benchmarks\\benchmark_checkpoint_test.json",
+        "format": "JSON",
+        "total_records": 1632,
+        "unique_plan_ids": 1632,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_checkpoint_validation.json": {
+        "path": "results\\benchmarks\\benchmark_checkpoint_validation.json",
+        "format": "JSON",
+        "total_records": 100,
+        "unique_plan_ids": 100,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "production_reliability_benchmark.json": {
+        "path": "results\\benchmarks\\phase17\\production_reliability_benchmark.json",
+        "format": "JSON",
+        "total_records": 0,
+        "unique_plan_ids": 0,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "test_checkpoint_fidelity.json": {
+        "path": "results\\benchmarks\\phase17\\test_checkpoint_fidelity.json",
+        "format": "JSON",
+        "total_records": 6,
+        "unique_plan_ids": 6,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_records_tall_custom.csv": {
+        "path": "results\\benchmarks\\benchmark_records_tall_custom.csv",
+        "format": "CSV",
+        "total_rows": 17,
+        "unique_keys": 17,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_records_tall_full.csv": {
+        "path": "results\\benchmarks\\benchmark_records_tall_full.csv",
+        "format": "CSV",
+        "total_rows": 17000,
+        "unique_keys": 17000,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_records_tall_smoke.csv": {
+        "path": "results\\benchmarks\\benchmark_records_tall_smoke.csv",
+        "format": "CSV",
+        "total_rows": 125,
+        "unique_keys": 125,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_records_tall_test.csv": {
+        "path": "results\\benchmarks\\benchmark_records_tall_test.csv",
+        "format": "CSV",
+        "total_rows": 8160,
+        "unique_keys": 8160,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_records_tall_validation.csv": {
+        "path": "results\\benchmarks\\benchmark_records_tall_validation.csv",
+        "format": "CSV",
+        "total_rows": 500,
+        "unique_keys": 500,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_results_custom.csv": {
+        "path": "results\\benchmarks\\benchmark_results_custom.csv",
+        "format": "CSV",
+        "total_rows": 5,
+        "unique_keys": 5,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_results_full.csv": {
+        "path": "results\\benchmarks\\benchmark_results_full.csv",
+        "format": "CSV",
+        "total_rows": 17000,
+        "unique_keys": 17000,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_results_smoke.csv": {
+        "path": "results\\benchmarks\\benchmark_results_smoke.csv",
+        "format": "CSV",
+        "total_rows": 25,
+        "unique_keys": 25,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_results_test.csv": {
+        "path": "results\\benchmarks\\benchmark_results_test.csv",
+        "format": "CSV",
+        "total_rows": 1632,
+        "unique_keys": 1632,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      },
+      "benchmark_results_validation.csv": {
+        "path": "results\\benchmarks\\benchmark_results_validation.csv",
+        "format": "CSV",
+        "total_rows": 100,
+        "unique_keys": 100,
+        "duplicate_count": 0,
+        "duplicate_free": true
+      }
+    }
+  },
+  "deterministic_reproducibility": {
+    "verified_plans": [
+      11,
+      4
+    ],
+    "trials_per_plan": 3,
+    "bitwise_identical_across_all_runs": true,
+    "plan_results": {
+      "11": [
+        {
+          "trial": 1,
+          "is_valid": true,
+          "h_count": 1,
+          "total_cost_J": 25.4074,
+          "total_length_m": 19.4268,
+          "total_crossings": 0,
+          "total_bends": 9,
+          "total_overlap_m": 1.4806,
+          "area_gap_m2": 0.0
+        },
+        {
+          "trial": 2,
+          "is_valid": true,
+          "h_count": 1,
+          "total_cost_J": 25.4074,
+          "total_length_m": 19.4268,
+          "total_crossings": 0,
+          "total_bends": 9,
+          "total_overlap_m": 1.4806,
+          "area_gap_m2": 0.0
+        },
+        {
+          "trial": 3,
+          "is_valid": true,
+          "h_count": 1,
+          "total_cost_J": 25.4074,
+          "total_length_m": 19.4268,
+          "total_crossings": 0,
+          "total_bends": 9,
+          "total_overlap_m": 1.4806,
+          "area_gap_m2": 0.0
+        }
+      ],
+      "4": [
+        {
+          "trial": 1,
+          "is_valid": true,
+          "h_count": 1,
+          "total_cost_J": 81.1755,
+          "total_length_m": 40.0004,
+          "total_crossings": 5,
+          "total_bends": 14,
+          "total_overlap_m": 9.1751,
+          "area_gap_m2": 0.0
+        },
+        {
+          "trial": 2,
+          "is_valid": true,
+          "h_count": 1,
+          "total_cost_J": 81.1755,
+          "total_length_m": 40.0004,
+          "total_crossings": 5,
+          "total_bends": 14,
+          "total_overlap_m": 9.1751,
+          "area_gap_m2": 0.0
+        },
+        {
+          "trial": 3,
+          "is_valid": true,
+          "h_count": 1,
+          "total_cost_J": 81.1755,
+          "total_length_m": 40.0004,
+          "total_crossings": 5,
+          "total_bends": 14,
+          "total_overlap_m": 9.1751,
+          "area_gap_m2": 0.0
+        }
+      ]
+    }
+  },
+  "operational_procedures": {
+    "monitoring_command_ps": "Get-Content results/benchmarks/phase18/run_manifest.json | ConvertFrom-Json; (Get-Content results/benchmarks/phase18/checkpoint.json | ConvertFrom-Json).completed_count",
+    "resume_command_py": "python scripts/run_phase18_production_execution.py --resume --checkpoint results/benchmarks/phase18/checkpoint.json",
+    "integrity_verification_command_py": "python -c \"from benchmarks.framework.reliability_verifier import verify_checkpoint_integrity; print(verify_checkpoint_integrity('results/benchmarks/phase18/checkpoint.json'))\""
+  }
+}

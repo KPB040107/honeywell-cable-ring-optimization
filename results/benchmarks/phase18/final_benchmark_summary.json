@@ -1,0 +1,722 @@
+{
+  "title": "Honeywell Cable Ring Optimization \u2014 Phase 18 Final Benchmark Summary",
+  "phase": 18,
+  "timestamp_utc": "2026-10-23T22:52:36.689018+00:00",
+  "status": "OFFICIALLY_CERTIFIED_FINAL",
+  "certified_release_tag": "v2.0-certified-production",
+  "git_commit": "84c4cd1",
+  "baseline_frozen_commit": "d26cc91 (v1.0-frozen-champion)",
+  "production_architecture": "LinUCB-ALNS v2 + ProductionFallbackOptimizer + GeometryHealingEngine",
+  "validity_metrics": {
+    "total_dataset_plans": 17000,
+    "overall_valid_plans": 16153,
+    "overall_validity_rate_pct": 95.02,
+    "eligible_denominators": {
+      "strict_eligible": {
+        "description": "Total dataset excluding 447 provably infeasible (425 capacity + 22 geometric) and 329 invalid inputs (225 zero room/coord + 104 cadastral)",
+        "denominator": 16224,
+        "valid_count": 16153,
+        "validity_rate_pct": 99.56
+      },
+      "operational_eligible": {
+        "description": "Total dataset excluding 447 provably infeasible plans",
+        "denominator": 16553,
+        "valid_count": 16153,
+        "validity_rate_pct": 97.58
+      },
+      "ingestion_clean_eligible": {
+        "description": "Coarse ingestion clean feasible set (16,246 plans)",
+        "denominator": 16246,
+        "valid_count": 16153,
+        "validity_rate_pct": 99.43
+      }
+    }
+  },
+  "routing_cost_j_stats": {
+    "count": 16153,
+    "mean": 60.0624,
+    "median": 61.7473,
+    "std": 19.7247,
+    "min": 0.0,
+    "max": 135.0076,
+    "p25": 47.5347,
+    "p75": 73.5127,
+    "p95": 90.0928
+  },
+  "hub_count_h_stats": {
+    "count": 16153,
+    "mean": 2.0006,
+    "median": 2.0,
+    "std": 1.1894,
+    "min": 0.0,
+    "max": 9.0,
+    "p25": 1.0,
+    "p75": 3.0,
+    "p95": 4.0
+  },
+  "hub_count_distribution": {
+    "0": {
+      "count": 6,
+      "pct_of_valid": 0.04
+    },
+    "1": {
+      "count": 7044,
+      "pct_of_valid": 43.61
+    },
+    "2": {
+      "count": 4877,
+      "pct_of_valid": 30.19
+    },
+    "3": {
+      "count": 2460,
+      "pct_of_valid": 15.23
+    },
+    "4": {
+      "count": 1043,
+      "pct_of_valid": 6.46
+    },
+    "5": {
+      "count": 455,
+      "pct_of_valid": 2.82
+    },
+    "6": {
+      "count": 195,
+      "pct_of_valid": 1.21
+    },
+    "7": {
+      "count": 64,
+      "pct_of_valid": 0.4
+    },
+    "8": {
+      "count": 8,
+      "pct_of_valid": 0.05
+    },
+    "9": {
+      "count": 1,
+      "pct_of_valid": 0.01
+    }
+  },
+  "cable_length_l_stats": {
+    "count": 16153,
+    "mean": 30.7776,
+    "median": 32.25,
+    "std": 9.3918,
+    "min": 0.0,
+    "max": 60.61,
+    "p25": 25.17,
+    "p75": 37.26,
+    "p95": 43.878
+  },
+  "crossings_x_stats": {
+    "count": 16153,
+    "mean": 3.4506,
+    "median": 3.0,
+    "std": 1.6364,
+    "min": 0.0,
+    "max": 11.0,
+    "p25": 2.0,
+    "p75": 5.0,
+    "p95": 6.0
+  },
+  "overlaps_o_stats": {
+    "count": 16153,
+    "mean": 5.4821,
+    "median": 5.1251,
+    "std": 3.0752,
+    "min": 0.0,
+    "max": 25.5415,
+    "p25": 3.2369,
+    "p75": 7.3283,
+    "p95": 11.0679
+  },
+  "bends_b_stats": {
+    "count": 16153,
+    "mean": 13.0991,
+    "median": 13.0,
+    "std": 3.8671,
+    "min": 0.0,
+    "max": 27.0,
+    "p25": 10.0,
+    "p75": 16.0,
+    "p95": 19.0
+  },
+  "runtime_s_stats": {
+    "count": 16153,
+    "mean": 7.5365,
+    "median": 5.461,
+    "std": 64.6808,
+    "min": 0.017,
+    "max": 4754.018,
+    "p25": 5.015,
+    "p75": 6.524,
+    "p95": 13.3424
+  },
+  "complexity_tier_breakdown": {
+    "compact": {
+      "tier_name": "compact",
+      "total_plans": 1777,
+      "pct_of_total_dataset": 10.45,
+      "valid_plans": 1667,
+      "validity_rate_pct": 93.81,
+      "h_stats": {
+        "count": 1667,
+        "mean": 1.2597,
+        "median": 1.0,
+        "std": 0.4926,
+        "min": 0.0,
+        "max": 3.0,
+        "p25": 1.0,
+        "p75": 1.0,
+        "p95": 2.0
+      },
+      "j_stats": {
+        "count": 1667,
+        "mean": 36.7956,
+        "median": 38.004,
+        "std": 11.7497,
+        "min": 0.0,
+        "max": 73.0012,
+        "p25": 29.9301,
+        "p75": 43.6226,
+        "p95": 54.6629
+      },
+      "l_stats": {
+        "count": 1667,
+        "mean": 19.1,
+        "median": 20.27,
+        "std": 5.7427,
+        "min": 0.0,
+        "max": 36.0,
+        "p25": 16.61,
+        "p75": 22.645,
+        "p95": 26.651
+      },
+      "x_stats": {
+        "count": 1667,
+        "mean": 1.9448,
+        "median": 2.0,
+        "std": 0.9757,
+        "min": 0.0,
+        "max": 6.0,
+        "p25": 1.0,
+        "p75": 2.0,
+        "p95": 4.0
+      },
+      "o_stats": {
+        "count": 1667,
+        "mean": 3.7675,
+        "median": 3.4371,
+        "std": 2.3416,
+        "min": 0.0,
+        "max": 17.9996,
+        "p25": 2.087,
+        "p75": 5.2758,
+        "p95": 7.5736
+      },
+      "b_stats": {
+        "count": 1667,
+        "mean": 8.4079,
+        "median": 8.0,
+        "std": 2.4086,
+        "min": 0.0,
+        "max": 15.0,
+        "p25": 7.0,
+        "p75": 10.0,
+        "p95": 12.0
+      },
+      "runtime_stats": {
+        "count": 1667,
+        "mean": 4.909,
+        "median": 4.982,
+        "std": 0.887,
+        "min": 0.017,
+        "max": 10.3261,
+        "p25": 4.8075,
+        "p75": 5.222,
+        "p95": 5.7671
+      }
+    },
+    "standard": {
+      "tier_name": "standard",
+      "total_plans": 13178,
+      "pct_of_total_dataset": 77.52,
+      "valid_plans": 12845,
+      "validity_rate_pct": 97.47,
+      "h_stats": {
+        "count": 12845,
+        "mean": 1.8062,
+        "median": 2.0,
+        "std": 0.8823,
+        "min": 1.0,
+        "max": 5.0,
+        "p25": 1.0,
+        "p75": 2.0,
+        "p95": 3.0
+      },
+      "j_stats": {
+        "count": 12845,
+        "mean": 63.7157,
+        "median": 64.5327,
+        "std": 17.3105,
+        "min": 0.0036,
+        "max": 135.0076,
+        "p25": 53.6144,
+        "p75": 74.9123,
+        "p95": 90.7055
+      },
+      "l_stats": {
+        "count": 12845,
+        "mean": 32.6181,
+        "median": 33.52,
+        "std": 7.9553,
+        "min": 0.0036,
+        "max": 58.84,
+        "p25": 28.49,
+        "p75": 37.8,
+        "p95": 44.04
+      },
+      "x_stats": {
+        "count": 12845,
+        "mean": 3.7141,
+        "median": 4.0,
+        "std": 1.5372,
+        "min": 0.0,
+        "max": 11.0,
+        "p25": 3.0,
+        "p75": 5.0,
+        "p95": 6.0
+      },
+      "o_stats": {
+        "count": 12845,
+        "mean": 5.6901,
+        "median": 5.3326,
+        "std": 2.9819,
+        "min": 0.0,
+        "max": 20.3514,
+        "p25": 3.5064,
+        "p75": 7.4902,
+        "p95": 11.1089
+      },
+      "b_stats": {
+        "count": 12845,
+        "mean": 13.6746,
+        "median": 14.0,
+        "std": 3.4461,
+        "min": 0.0,
+        "max": 26.0,
+        "p25": 12.0,
+        "p75": 16.0,
+        "p95": 19.0
+      },
+      "runtime_stats": {
+        "count": 12845,
+        "mean": 7.1286,
+        "median": 5.454,
+        "std": 72.4252,
+        "min": 0.5397,
+        "max": 4754.018,
+        "p25": 5.034,
+        "p75": 6.256,
+        "p95": 9.869
+      }
+    },
+    "complex": {
+      "tier_name": "complex",
+      "total_plans": 1826,
+      "pct_of_total_dataset": 10.74,
+      "valid_plans": 1641,
+      "validity_rate_pct": 89.87,
+      "h_stats": {
+        "count": 1641,
+        "mean": 4.2748,
+        "median": 4.0,
+        "std": 1.2493,
+        "min": 2.0,
+        "max": 9.0,
+        "p25": 3.0,
+        "p75": 5.0,
+        "p95": 6.0
+      },
+      "j_stats": {
+        "count": 1641,
+        "mean": 55.101,
+        "median": 57.2948,
+        "std": 25.7859,
+        "min": 0.0054,
+        "max": 131.1702,
+        "p25": 37.592,
+        "p75": 73.8215,
+        "p95": 94.4961
+      },
+      "l_stats": {
+        "count": 1641,
+        "mean": 28.2333,
+        "median": 30.43,
+        "std": 12.956,
+        "min": 0.0054,
+        "max": 60.61,
+        "p25": 19.41,
+        "p75": 37.75,
+        "p95": 46.1726
+      },
+      "x_stats": {
+        "count": 1641,
+        "mean": 2.9183,
+        "median": 3.0,
+        "std": 1.9411,
+        "min": 0.0,
+        "max": 11.0,
+        "p25": 1.0,
+        "p75": 4.0,
+        "p95": 6.0
+      },
+      "o_stats": {
+        "count": 1641,
+        "mean": 5.5959,
+        "median": 5.2129,
+        "std": 3.8182,
+        "min": 0.0,
+        "max": 25.5415,
+        "p25": 2.8116,
+        "p75": 7.92,
+        "p95": 12.0064
+      },
+      "b_stats": {
+        "count": 1641,
+        "mean": 13.3601,
+        "median": 14.0,
+        "std": 4.8307,
+        "min": 0.0,
+        "max": 27.0,
+        "p25": 10.0,
+        "p75": 17.0,
+        "p95": 21.0
+      },
+      "runtime_stats": {
+        "count": 1641,
+        "mean": 13.399,
+        "median": 11.247,
+        "std": 8.8759,
+        "min": 2.262,
+        "max": 105.467,
+        "p25": 7.258,
+        "p75": 16.419,
+        "p95": 29.351
+      }
+    },
+    "boundary": {
+      "tier_name": "boundary",
+      "total_plans": 219,
+      "pct_of_total_dataset": 1.29,
+      "valid_plans": 0,
+      "validity_rate_pct": 0.0,
+      "h_stats": {
+        "count": 0,
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p95": 0.0
+      },
+      "j_stats": {
+        "count": 0,
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p95": 0.0
+      },
+      "l_stats": {
+        "count": 0,
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p95": 0.0
+      },
+      "x_stats": {
+        "count": 0,
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p95": 0.0
+      },
+      "o_stats": {
+        "count": 0,
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p95": 0.0
+      },
+      "b_stats": {
+        "count": 0,
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p95": 0.0
+      },
+      "runtime_stats": {
+        "count": 0,
+        "mean": 0.0,
+        "median": 0.0,
+        "std": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "p25": 0.0,
+        "p75": 0.0,
+        "p95": 0.0
+      }
+    }
+  },
+  "failure_category_distribution": {
+    "VALID_OPTIMIZED": {
+      "count": 12626,
+      "pct_of_dataset": 74.27,
+      "description": "LinUCB-ALNS v2 solution directly validated and accepted by ProductionFallbackOptimizer arbitration (v2 win or non-loss)"
+    },
+    "VALID_FALLBACK": {
+      "count": 3527,
+      "pct_of_dataset": 20.75,
+      "description": "Production fallback arbitration invoked to return certified v1 solution (2,880 plans) or Phase 16 geometry recovery solution (647 plans)"
+    },
+    "PROVEN_INFEASIBLE": {
+      "count": 447,
+      "pct_of_dataset": 2.63,
+      "description": "Mathematically proven physical impossibility: 22 geometric (14 hub clearance < 0.50m + 8 isolated leaf rooms) and 425 capacity infeasible (single room > 100m2)",
+      "breakdown": {
+        "hub_clearance_under_50cm": 14,
+        "isolated_degree_0_leaf": 8,
+        "single_room_over_100m2": 425
+      }
+    },
+    "INVALID_INPUT": {
+      "count": 329,
+      "pct_of_dataset": 1.94,
+      "description": "Malformed input records violating metric domain contracts (225 zero rooms / negative coordinates + 104 anomalous cadastral topology)",
+      "breakdown": {
+        "zero_rooms_or_negative_coords": 225,
+        "cadastral_topology_anomalies": 104
+      }
+    },
+    "SOLVER_TIMEOUT": {
+      "count": 12,
+      "pct_of_dataset": 0.07,
+      "description": "Solver execution exceeded wall-clock budget without producing an incumbent route"
+    },
+    "SOLVER_ERROR": {
+      "count": 14,
+      "pct_of_dataset": 0.08,
+      "description": "Unhandled internal graph partition or topological extraction exception"
+    },
+    "VALIDATION_FAILED": {
+      "count": 28,
+      "pct_of_dataset": 0.16,
+      "description": "Solver emitted candidate route that violated FloorPlanChecker criteria at 1 mm tolerance"
+    },
+    "UNRESOLVED": {
+      "count": 17,
+      "pct_of_dataset": 0.1,
+      "description": "Remaining extreme cadastral boundary edge cases requiring manual architectural review"
+    }
+  },
+  "paired_statistical_analysis": {
+    "evaluation_protocol": {
+      "sample_size_total_runs": 70,
+      "sample_size_mutually_valid": 63,
+      "wall_clock_timeout_s": 5.0,
+      "alns_iterations": 20,
+      "random_seeds": [
+        42,
+        123
+      ],
+      "oracle_checker_tolerance_m": 0.001,
+      "zero_test_split_contamination_verified": true
+    },
+    "raw_v2_vs_v1": {
+      "overall": {
+        "n_samples": 63,
+        "mean_delta_J": 1.2996,
+        "std_delta_J": 7.0096,
+        "cohen_dz": 0.1854,
+        "paired_t_stat": 1.4715,
+        "paired_t_pval": 0.14620096668163057,
+        "wilcoxon_stat": 247.5,
+        "wilcoxon_pval": 0.17917627578327178,
+        "rank_biserial_r": 0.2568,
+        "bootstrap_ci_95": {
+          "mean": 1.2996,
+          "ci_lower": -0.2894,
+          "ci_upper": 3.1007,
+          "median": 0.0,
+          "median_ci_lower": 0.0,
+          "median_ci_upper": 0.0
+        }
+      },
+      "compact": {
+        "n_samples": 14,
+        "mean_delta_J": 1.9961,
+        "std_delta_J": 5.3772,
+        "cohen_dz": 0.3712,
+        "paired_t_stat": 1.389,
+        "paired_t_pval": 0.18817305912256227,
+        "wilcoxon_stat": 3.0,
+        "wilcoxon_pval": 0.078125,
+        "rank_biserial_r": 0.7857,
+        "bootstrap_ci_95": {
+          "mean": 1.9961,
+          "ci_lower": 0.0003,
+          "ci_upper": 4.9886,
+          "median": 0.0,
+          "median_ci_lower": 0.0,
+          "median_ci_upper": 1.537
+        }
+      },
+      "standard": {
+        "n_samples": 39,
+        "mean_delta_J": 1.954,
+        "std_delta_J": 7.5757,
+        "cohen_dz": 0.2579,
+        "paired_t_stat": 1.6108,
+        "paired_t_pval": 0.1155042431300898,
+        "wilcoxon_stat": 83.0,
+        "wilcoxon_pval": 0.16585874557495117,
+        "rank_biserial_r": 0.3439,
+        "bootstrap_ci_95": {
+          "mean": 1.954,
+          "ci_lower": -0.1251,
+          "ci_upper": 4.4071,
+          "median": 0.0,
+          "median_ci_lower": 0.0,
+          "median_ci_upper": 0.0
+        }
+      },
+      "complex": {
+        "n_samples": 10,
+        "mean_delta_J": -2.228,
+        "std_delta_J": 6.1615,
+        "cohen_dz": -0.3616,
+        "paired_t_stat": -1.1435,
+        "paired_t_pval": 0.28234696773829965,
+        "wilcoxon_stat": 8.0,
+        "wilcoxon_pval": 0.375,
+        "rank_biserial_r": 0.4286,
+        "bootstrap_ci_95": {
+          "mean": -2.228,
+          "ci_lower": -6.4386,
+          "ci_upper": 0.867,
+          "median": 0.0,
+          "median_ci_lower": -3.7496,
+          "median_ci_upper": 0.7555
+        }
+      }
+    },
+    "production_fallback_v2_vs_v1": {
+      "overall": {
+        "n_samples": 63,
+        "mean_delta_J": 2.0695,
+        "std_delta_J": 6.2753,
+        "cohen_dz": 0.3298,
+        "paired_t_stat": 2.6175,
+        "paired_t_pval": 0.011114511045920827,
+        "wilcoxon_stat": 19.0,
+        "wilcoxon_pval": 0.00029507163815891866,
+        "rank_biserial_r": 0.8623,
+        "bootstrap_ci_95": {
+          "mean": 2.0695,
+          "ci_lower": 0.699,
+          "ci_upper": 3.7023,
+          "median": 0.0,
+          "median_ci_lower": 0.0,
+          "median_ci_upper": 0.0
+        }
+      },
+      "compact": {
+        "n_samples": 14,
+        "mean_delta_J": 2.082,
+        "std_delta_J": 5.3316,
+        "cohen_dz": 0.3905,
+        "paired_t_stat": 1.4611,
+        "paired_t_pval": 0.1677262714628503,
+        "wilcoxon_stat": 0.0,
+        "wilcoxon_pval": 0.03125,
+        "rank_biserial_r": 1.0,
+        "bootstrap_ci_95": {
+          "mean": 2.082,
+          "ci_lower": 0.11,
+          "ci_upper": 4.9887,
+          "median": 0.0,
+          "median_ci_lower": 0.0,
+          "median_ci_upper": 1.537
+        }
+      },
+      "standard": {
+        "n_samples": 39,
+        "mean_delta_J": 2.4286,
+        "std_delta_J": 7.2993,
+        "cohen_dz": 0.3327,
+        "paired_t_stat": 2.0779,
+        "paired_t_pval": 0.04452976492319433,
+        "wilcoxon_stat": 11.0,
+        "wilcoxon_pval": 0.0067138671875,
+        "rank_biserial_r": 0.7905,
+        "bootstrap_ci_95": {
+          "mean": 2.4286,
+          "ci_lower": 0.4249,
+          "ci_upper": 4.8136,
+          "median": 0.0,
+          "median_ci_lower": 0.0,
+          "median_ci_upper": 0.0
+        }
+      },
+      "complex": {
+        "n_samples": 10,
+        "mean_delta_J": 0.6511,
+        "std_delta_J": 1.5719,
+        "cohen_dz": 0.4142,
+        "paired_t_stat": 1.3099,
+        "paired_t_pval": 0.22266847833026077,
+        "wilcoxon_stat": 0.0,
+        "wilcoxon_pval": 0.25,
+        "rank_biserial_r": 1.0,
+        "bootstrap_ci_95": {
+          "mean": 0.6511,
+          "ci_lower": 0.0,
+          "ci_upper": 1.7328,
+          "median": 0.0,
+          "median_ci_lower": 0.0,
+          "median_ci_upper": 0.7555
+        }
+      }
+    },
+    "arbitration_outcomes": {
+      "v2_wins": 23,
+      "v2_ties": 27,
+      "v2_losses": 13,
+      "fallback_invocations_count": 13,
+      "fallback_invocation_rate_pct": 20.63,
+      "non_loss_rate_raw_pct": 79.37,
+      "non_loss_rate_prod_pct": 100.0
+    }
+  }
+}

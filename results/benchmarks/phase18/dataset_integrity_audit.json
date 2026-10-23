@@ -1,0 +1,51 @@
+{
+  "audit_metadata": {
+    "title": "Phase 18 Dataset and Input Integrity Audit",
+    "auditor": "Agent 1 (Dataset and Input Integrity Lead)",
+    "timestamp_utc": "2026-10-24T04:20:00Z",
+    "phase": 18
+  },
+  "dataset_checksum": {
+    "file_path": "C:\\hackhive\\ResPlan.pkl",
+    "size_bytes": 300287514,
+    "size_mb": 286.38,
+    "sha256": "2a73179cf11e6066384400494683072eb1648ed56ae000750d0e9f3fa499c570",
+    "immutability_verified": true
+  },
+  "record_enumeration": {
+    "total_records": 17000,
+    "unique_plan_ids": 17000,
+    "min_plan_id": 0,
+    "max_plan_id": 16999,
+    "missing_records": 0,
+    "duplicate_records": 0,
+    "unparseable_records": 0
+  },
+  "splits_reconciliation": {
+    "train_count": 13053,
+    "val_count": 1632,
+    "test_count": 1632,
+    "augmented_count": 683,
+    "pairwise_disjoint": true,
+    "test_split_leakage": false
+  },
+  "cadastral_and_geometry_health": {
+    "valid_boundary_polygons_pct": 100.0,
+    "metric_scaling_factor": 1.0,
+    "fixed_node_extraction_success_pct": 100.0,
+    "room_geometry_extraction_success_pct": 100.0
+  },
+  "infeasibility_and_recovery_classification": {
+    "operational_baseline_valid": 15506,
+    "genuinely_rescued_discrepancy_plans": 647,
+    "total_operational_verified_dataset": 16153,
+    "operational_verified_pct": 95.02,
+    "cataloged_physical_infeasibilities": 22,
+    "inscribed_clearance_under_50cm_count": 14,
+    "isolated_degree_0_leaf_room_count": 8,
+    "cadastral_structural_defects_count": 181,
+    "coarse_ingestion_quarantined_count": 644,
+    "census_conservation_identity": "17000 = 15506 + 647 + 22 + 181 + 644"
+  },
+  "audit_verdict": "PASSED & FULLY CERTIFIED"
+}

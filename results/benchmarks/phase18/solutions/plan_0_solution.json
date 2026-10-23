@@ -1,0 +1,236 @@
+{
+  "plan_id": "0",
+  "hub_rings": [
+    {
+      "hub_id": "H1",
+      "room_id": "bedroom_02",
+      "location": {
+        "x": 2.2233,
+        "y": 9.0526
+      },
+      "assigned_rooms": [
+        "bedroom_01",
+        "bedroom_02",
+        "bedroom_03",
+        "living_01"
+      ],
+      "assigned_nodes": [
+        "N1",
+        "N2",
+        "N3",
+        "N4"
+      ],
+      "closed_sequence": [
+        "H1",
+        "N2",
+        "N3",
+        "N4",
+        "N1",
+        "H1"
+      ],
+      "route_segments": [
+        {
+          "from_node": "H1",
+          "to_node": "N2",
+          "length_m": 0.0007,
+          "polyline": [
+            {
+              "x": 2.2233,
+              "y": 9.0526
+            },
+            {
+              "x": 2.223,
+              "y": 9.0526
+            },
+            {
+              "x": 2.223,
+              "y": 9.053
+            }
+          ]
+        },
+        {
+          "from_node": "N2",
+          "to_node": "N3",
+          "length_m": 12.2578,
+          "polyline": [
+            {
+              "x": 2.223,
+              "y": 9.053
+            },
+            {
+              "x": 4.3716,
+              "y": 9.053
+            },
+            {
+              "x": 4.3716,
+              "y": 5.2971
+            },
+            {
+              "x": 5.6848,
+              "y": 5.2971
+            },
+            {
+              "x": 5.6848,
+              "y": 9.559
+            },
+            {
+              "x": 6.463,
+              "y": 9.559
+            }
+          ]
+        },
+        {
+          "from_node": "N3",
+          "to_node": "N4",
+          "length_m": 8.6794,
+          "polyline": [
+            {
+              "x": 6.463,
+              "y": 9.559
+            },
+            {
+              "x": 5.6848,
+              "y": 9.559
+            },
+            {
+              "x": 5.6848,
+              "y": 6.203
+            },
+            {
+              "x": 10.23,
+              "y": 6.203
+            }
+          ]
+        },
+        {
+          "from_node": "N4",
+          "to_node": "N1",
+          "length_m": 7.7344,
+          "polyline": [
+            {
+              "x": 10.23,
+              "y": 6.203
+            },
+            {
+              "x": 8.1803,
+              "y": 6.203
+            },
+            {
+              "x": 8.1803,
+              "y": 1.933
+            },
+            {
+              "x": 9.595,
+              "y": 1.933
+            }
+          ]
+        },
+        {
+          "from_node": "N1",
+          "to_node": "H1",
+          "length_m": 14.4913,
+          "polyline": [
+            {
+              "x": 9.595,
+              "y": 1.933
+            },
+            {
+              "x": 7.561,
+              "y": 1.933
+            },
+            {
+              "x": 7.561,
+              "y": 5.2971
+            },
+            {
+              "x": 3.2647,
+              "y": 5.2971
+            },
+            {
+              "x": 3.2647,
+              "y": 9.0526
+            },
+            {
+              "x": 2.2233,
+              "y": 9.0526
+            }
+          ]
+        }
+      ],
+      "ring_length_m": 43.1636,
+      "ring_bends": 13,
+      "ring_crossings": 5,
+      "ring_overlap_m": 8.9118,
+      "cost_J": 83.5754
+    },
+    {
+      "hub_id": "H2",
+      "room_id": "kitchen_01",
+      "location": {
+        "x": 1.8309,
+        "y": 2.8398
+      },
+      "assigned_rooms": [
+        "kitchen_01"
+      ],
+      "assigned_nodes": [
+        "N5"
+      ],
+      "closed_sequence": [
+        "H2",
+        "N5",
+        "H2"
+      ],
+      "route_segments": [
+        {
+          "from_node": "H2",
+          "to_node": "N5",
+          "length_m": 0.0073,
+          "polyline": [
+            {
+              "x": 1.8309,
+              "y": 2.8398
+            },
+            {
+              "x": 1.833,
+              "y": 2.8398
+            },
+            {
+              "x": 1.833,
+              "y": 2.845
+            }
+          ]
+        },
+        {
+          "from_node": "N5",
+          "to_node": "H2",
+          "length_m": 0.0073,
+          "polyline": [
+            {
+              "x": 1.833,
+              "y": 2.845
+            },
+            {
+              "x": 1.8309,
+              "y": 2.845
+            },
+            {
+              "x": 1.8309,
+              "y": 2.8398
+            }
+          ]
+        }
+      ],
+      "ring_length_m": 0.0146,
+      "ring_bends": 2,
+      "ring_crossings": 0,
+      "ring_overlap_m": 0.0,
+      "cost_J": 1.0146
+    }
+  ],
+  "total_length_m": 43.1782,
+  "total_bends": 15,
+  "total_crossings": 5,
+  "total_overlap_m": 8.9118,
+  "total_cost_J": 84.59
+}
