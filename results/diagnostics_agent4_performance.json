@@ -1,0 +1,79 @@
+{
+  "overall_pilot_metrics": {
+    "total_timesteps": 9984,
+    "total_runtime_seconds": 43115.5,
+    "total_runtime_hours": 11.98,
+    "effective_throughput_sps": 0.2316,
+    "mean_seconds_per_step": 4.318
+  },
+  "curriculum_stage_progression": {
+    "compact (steps 0-2500)": {
+      "updates": 39,
+      "mean_reward": -0.0606,
+      "mean_entropy": 2.0351,
+      "mean_loss": 0.041,
+      "mean_worst_route_rebuild_freq": 0.119
+    },
+    "standard (steps 2500-5000)": {
+      "updates": 39,
+      "mean_reward": -0.0268,
+      "mean_entropy": 0.7623,
+      "mean_loss": -0.0259,
+      "mean_worst_route_rebuild_freq": 0.2885
+    },
+    "complex (steps 5000-7500)": {
+      "updates": 39,
+      "mean_reward": -0.02,
+      "mean_entropy": 0.0627,
+      "mean_loss": 0.0119,
+      "mean_worst_route_rebuild_freq": 0.5488
+    },
+    "all (steps 7500-10000)": {
+      "updates": 39,
+      "mean_reward": -0.0198,
+      "mean_entropy": 0.0538,
+      "mean_loss": -0.0158,
+      "mean_worst_route_rebuild_freq": 0.6776
+    }
+  },
+  "component_latencies": {
+    "floor_plan_checker": {
+      "compact": {
+        "mean_ms": 4.26,
+        "p95_ms": 6.59
+      },
+      "standard": {
+        "mean_ms": 8.16,
+        "p95_ms": 11.11
+      },
+      "complex": {
+        "mean_ms": 11.99,
+        "p95_ms": 16.01
+      }
+    },
+    "environment_step_per_worker": {
+      "compact": {
+        "mean_ms": 156.17,
+        "p95_ms": 450.85
+      },
+      "standard": {
+        "mean_ms": 438.55,
+        "p95_ms": 1207.91
+      },
+      "complex": {
+        "mean_ms": 755.71,
+        "p95_ms": 2030.34
+      }
+    },
+    "gpu_ppo_update_per_batch_ms": {
+      "mean_ms": 58.02,
+      "p95_ms": 99.96
+    }
+  },
+  "bottleneck_forensic_analysis": {
+    "bottleneck_1_sequential_worker_stepping": "train_ppo.py steps workers in a single-threaded Python for-loop (`for i, env in enumerate(self.envs): env.step(a)`). Setting --envs 2 does NOT parallelize execution; it executes 2 environment steps sequentially per rollout step, doubling the environment work per rollout.",
+    "bottleneck_2_uncounted_validation_overhead": "Validation was executed every 5 updates (31 times total) evaluating 5 plans for 25 steps each (= 125 env steps per validation). This injected 3,875 hidden environment steps (an uncounted 38.8% overhead over the 9,984 training steps), which took ~1,200 - 1,800 seconds and was excluded from the nominal SPS numerator.",
+    "bottleneck_3_alns_synthesis_in_env_step": "Unlike standard discrete RL environments with O(1) state transitions, each ALNS environment step re-computes A* rectilinear shortest paths, Hanan routing grids, Held-Karp TSP, and full FloorPlanChecker validation. On standard (4-5 rooms) and complex (>=6 rooms) layouts, a single step takes 80-250 ms.",
+    "bottleneck_4_synchronous_checkpointing": "Full PyTorch model, optimizer, RNG states, and training history (555 KB) were serialized to disk on every single update (156 times), adding synchronous disk I/O overhead."
+  }
+}

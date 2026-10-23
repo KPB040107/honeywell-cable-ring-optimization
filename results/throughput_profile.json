@@ -1,0 +1,23 @@
+{
+  "dataset_manager_init_s": 5.0964,
+  "baseline_generation_uncached_mean_s": 3.0768,
+  "baseline_retrieval_cached_mean_ms": 1.2126,
+  "caching_speedup_factor": 2537.4,
+  "env_reset_cached_mean_ms": 10.1054,
+  "alns_operators_ms": {
+    "Op_0_BOUNDARY_EXCHANGE_ms": 0.01,
+    "Op_1_MERGE_SPLIT_ms": 0.0,
+    "Op_2_CROSSING_ELIM_ms": 4168.81,
+    "Op_3_OVERLAP_REDUCE_ms": 4109.05,
+    "Op_4_BEND_SMOOTH_ms": 4215.19,
+    "Op_5_WORST_ROUTE_REBUILD_ms": 8205.27,
+    "Op_6_RANDOM_EXPLORATION_ms": 0.04,
+    "Op_7_HUB_CENTROID_RELOC_ms": 4956.66
+  },
+  "alns_operator_mean_ms": 3206.88,
+  "floorplan_checker_evaluate_ms": 14.072,
+  "ppo_inference_cpu_batch4_us": 801.16,
+  "ppo_inference_cuda_batch4_us": 2705.33,
+  "ppo_backward_update_128samples_ms": 11.616,
+  "ipc_serialization_obs_us": 19.75
+}

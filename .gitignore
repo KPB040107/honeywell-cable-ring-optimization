@@ -24,11 +24,20 @@ visualizations/
 # OS artifacts
 .DS_Store
 Thumbs.db
-# Local ResPlan source archive and dataset (too large for ordinary GitHub files: 246MB)
+
+# Scratch and runtime logs
+scratch/
+logs/
+
+# SQLite databases & runtime cache
+*.sqlite
+results/cache/
+
+# Large local files exceeding standard limits
 /archive (1).zip
 /archive (1)/
 /ResPlan.pkl
+results/benchmarks/benchmark_checkpoint_full.json
 
 # Presentation build artifacts
 tests/.deck_build/
-

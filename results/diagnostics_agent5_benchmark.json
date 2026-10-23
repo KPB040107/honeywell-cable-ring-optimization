@@ -1,0 +1,99 @@
+{
+  "num_plans_evaluated": 58,
+  "sample_size": 60,
+  "max_steps_per_variant": 10,
+  "num_workers": 6,
+  "portfolio_hybrid": {
+    "mean_J": 25.425,
+    "median_J": 27.236,
+    "mean_H": 3.41,
+    "mean_runtime_s": 4.064,
+    "validity_rate": 1.0
+  },
+  "standalone_alns_bandit": {
+    "mean_J": 24.231,
+    "median_J": 26.445,
+    "mean_H": 3.41,
+    "mean_runtime_s": 6.369,
+    "validity_rate": 1.0,
+    "mean_delta_J": 1.1942,
+    "pct_improvement": 3.681,
+    "wtl_vs_base": {
+      "wins": 18,
+      "ties": 40,
+      "losses": 0
+    },
+    "t_test_p_value": 0.00021708467555895902,
+    "wilcoxon_p_value": 0.00019643672621231134
+  },
+  "random_alns": {
+    "mean_J": 24.009,
+    "median_J": 25.964,
+    "mean_H": 3.41,
+    "mean_runtime_s": 6.684,
+    "validity_rate": 1.0,
+    "mean_delta_J": 1.4156,
+    "pct_improvement": 4.813,
+    "wtl_vs_base": {
+      "wins": 22,
+      "ties": 36,
+      "losses": 0
+    }
+  },
+  "trained_ppo_alns": {
+    "mean_J": 24.812,
+    "median_J": 27.012,
+    "mean_H": 3.41,
+    "mean_runtime_s": 15.813,
+    "validity_rate": 1.0,
+    "mean_delta_J": 0.6124,
+    "pct_improvement": 1.919,
+    "wtl_vs_base": {
+      "wins": 10,
+      "ties": 48,
+      "losses": 0
+    },
+    "wtl_vs_bandit": {
+      "wins": 1,
+      "ties": 44,
+      "losses": 13
+    },
+    "t_test_vs_base_p_value": 0.0029969296094999732,
+    "wilcoxon_vs_base_p_value": 0.005062032126267864,
+    "t_test_vs_bandit_p_value": 0.006274302001051462,
+    "wilcoxon_vs_bandit_p_value": 0.001887179308509098
+  },
+  "tiered_breakdown": {
+    "compact": {
+      "count": 12,
+      "mean_J_base": 29.123,
+      "mean_J_bandit": 26.323,
+      "mean_J_random": 25.789,
+      "mean_J_ppo": 27.531,
+      "delta_J_bandit": 2.8001,
+      "delta_J_ppo": 1.5917
+    },
+    "standard": {
+      "count": 40,
+      "mean_J_base": 23.459,
+      "mean_J_bandit": 22.705,
+      "mean_J_random": 22.544,
+      "mean_J_ppo": 23.049,
+      "delta_J_bandit": 0.7541,
+      "delta_J_ppo": 0.4105
+    },
+    "complex": {
+      "count": 6,
+      "mean_J_base": 31.133,
+      "mean_J_bandit": 30.216,
+      "mean_J_random": 30.216,
+      "mean_J_ppo": 31.133,
+      "delta_J_bandit": 0.9169,
+      "delta_J_ppo": 0.0
+    }
+  },
+  "verdict_and_findings": {
+    "did_ppo_learn_meaningful_advantage": false,
+    "summary": "Across 58 held-out clean validation floor plans, Trained PPO-ALNS achieved Mean J = 24.81 versus PortfolioHybrid baseline Mean J = 25.42 and Standalone ALNS Mean J = 24.23. Trained PPO-ALNS tied PortfolioHybrid in 48/58 plans (82.8%), yielding an empirical improvement of 0.6124m (p = 0.0030). Because the trained policy collapsed into picking WORST_ROUTE_REBUILD (Op 5) deterministically, it behaves as a near no-op filter over PortfolioHybrid, failing to achieve the cost reductions of adaptive Standalone ALNS."
+  }
+}

@@ -1,0 +1,1341 @@
+{
+  "timestamp_utc": "2026-10-22T08:46:04.958136+00:00",
+  "host_hardware": {
+    "cpu": {
+      "cpu_count_physical": 10,
+      "cpu_count_logical": 16,
+      "system_cpu_percent": 45.3,
+      "per_core_cpu_percent": [
+        66.7,
+        0.0,
+        33.3,
+        0.0,
+        50.0,
+        16.7,
+        16.7,
+        66.7,
+        33.3,
+        50.0,
+        66.7,
+        16.7,
+        50.0,
+        66.7,
+        66.7,
+        66.7
+      ],
+      "system_ram_total_gb": 15.71,
+      "system_ram_available_gb": 0.25,
+      "system_ram_used_pct": 98.4,
+      "process_rss_mb": 1296.93,
+      "process_vms_mb": 2299.29
+    },
+    "gpu": {
+      "available": true,
+      "device_name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+      "total_memory_mb": 6140.5,
+      "allocated_memory_mb": 0.0,
+      "reserved_memory_mb": 0.0,
+      "utilization_compute_pct": 0.0,
+      "temperature_c": 44.0,
+      "power_draw_w": 1.65
+    }
+  },
+  "sqlite_cache_metrics": {
+    "wal_enabled": true,
+    "journal_mode": "WAL",
+    "synchronous_level": 1,
+    "busy_timeout_ms": 30000,
+    "read_latency_ms": {
+      "mean": 1.1492,
+      "median": 1.1875,
+      "p95": 1.6919,
+      "min": 0.4738,
+      "max": 6.3233
+    },
+    "write_latency_ms": {
+      "mean": 10.5448,
+      "median": 9.475,
+      "p95": 14.8204,
+      "min": 5.6902,
+      "max": 31.0765
+    },
+    "throughput_reads_per_sec": 870.2,
+    "throughput_writes_per_sec": 94.8
+  },
+  "component_breakdowns": {
+    "plan_51": {
+      "hanan_grid": {
+        "component": "Hanan grid generation",
+        "plan_id": "51",
+        "grid_vertices": 1031,
+        "grid_edges": 1927,
+        "iterations": 10,
+        "latency_ms": {
+          "mean": 257.776,
+          "median": 250.444,
+          "std": 27.998,
+          "p95": 301.559,
+          "min": 208.799,
+          "max": 308.686
+        },
+        "profile_dump": "results\\profiling_dumps\\hanan_grid_51.prof",
+        "top_call_breakdown": [
+          {
+            "function": "build_hanan_grid",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 234,
+            "ncalls": 10,
+            "tottime_ms": 222.2,
+            "cumtime_ms": 2540.078,
+            "percall_ms": 254.0078
+          },
+          {
+            "function": "__init__",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 65,
+            "ncalls": 10,
+            "tottime_ms": 91.407,
+            "cumtime_ms": 655.47,
+            "percall_ms": 65.547
+          },
+          {
+            "function": "covers",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\base.py",
+            "line": 815,
+            "ncalls": 85130,
+            "tottime_ms": 38.717,
+            "cumtime_ms": 355.818,
+            "percall_ms": 0.0042
+          },
+          {
+            "function": "wrapper",
+            "file": ".venv\\Lib\\site-packages\\shapely\\decorators.py",
+            "line": 182,
+            "ncalls": 43270,
+            "tottime_ms": 37.728,
+            "cumtime_ms": 317.964,
+            "percall_ms": 0.0073
+          },
+          {
+            "function": "<covers_scalar>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 85130,
+            "tottime_ms": 305.915,
+            "cumtime_ms": 305.915,
+            "percall_ms": 0.0036
+          },
+          {
+            "function": "__new__",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\linestring.py",
+            "line": 45,
+            "ncalls": 23780,
+            "tottime_ms": 56.228,
+            "cumtime_ms": 304.852,
+            "percall_ms": 0.0128
+          },
+          {
+            "function": "__new__",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\point.py",
+            "line": 59,
+            "ncalls": 19270,
+            "tottime_ms": 53.491,
+            "cumtime_ms": 296.172,
+            "percall_ms": 0.0154
+          },
+          {
+            "function": "add_edge",
+            "file": ".venv\\Lib\\site-packages\\networkx\\classes\\graph.py",
+            "line": 916,
+            "ncalls": 19270,
+            "tottime_ms": 83.027,
+            "cumtime_ms": 289.543,
+            "percall_ms": 0.015
+          }
+        ]
+      },
+      "astar_search": {
+        "component": "A* rectilinear path search",
+        "plan_id": "51",
+        "iterations": 15,
+        "latency_ms": {
+          "mean": 170.638,
+          "median": 148.676,
+          "std": 92.296,
+          "p95": 271.869,
+          "min": 120.659,
+          "max": 512.111
+        },
+        "profile_dump": "results\\profiling_dumps\\astar_search_51.prof",
+        "top_call_breakdown": [
+          {
+            "function": "compute_single_source",
+            "file": "src\\resplan_router\\phase3_micro_routing\\astar_rectilinear.py",
+            "line": 248,
+            "ncalls": 15,
+            "tottime_ms": 1174.712,
+            "cumtime_ms": 2559.468,
+            "percall_ms": 170.6312
+          },
+          {
+            "function": "hash_func",
+            "file": ".venv\\Lib\\site-packages\\pydantic\\_internal\\_model_construction.py",
+            "line": 515,
+            "ncalls": 1214115,
+            "tottime_ms": 533.921,
+            "cumtime_ms": 738.433,
+            "percall_ms": 0.0006
+          },
+          {
+            "function": "<built-in method builtins.round>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 439410,
+            "tottime_ms": 262.317,
+            "cumtime_ms": 262.317,
+            "percall_ms": 0.0006
+          },
+          {
+            "function": "<built-in method builtins.hash>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1214115,
+            "tottime_ms": 204.512,
+            "cumtime_ms": 204.512,
+            "percall_ms": 0.0002
+          },
+          {
+            "function": "get_neighbors",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 171,
+            "ncalls": 57825,
+            "tottime_ms": 37.48,
+            "cumtime_ms": 179.246,
+            "percall_ms": 0.0031
+          },
+          {
+            "function": "<method 'get' of 'dict' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 174795,
+            "tottime_ms": 91.615,
+            "cumtime_ms": 123.302,
+            "percall_ms": 0.0007
+          },
+          {
+            "function": "<method 'setdefault' of 'dict' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 219690,
+            "tottime_ms": 106.336,
+            "cumtime_ms": 106.336,
+            "percall_ms": 0.0005
+          },
+          {
+            "function": "get_vertex",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 139,
+            "ncalls": 57840,
+            "tottime_ms": 27.485,
+            "cumtime_ms": 75.013,
+            "percall_ms": 0.0013
+          }
+        ]
+      },
+      "held_karp_tsp": {
+        "component": "Held-Karp TSP tour solver",
+        "plan_id": "51",
+        "terminal_count": 3,
+        "iterations": 30,
+        "latency_ms": {
+          "mean": 0.0082,
+          "median": 0.0077,
+          "std": 0.0025,
+          "p95": 0.0096,
+          "min": 0.0068,
+          "max": 0.0215
+        },
+        "profile_dump": "results\\profiling_dumps\\held_karp_tsp_51.prof",
+        "top_call_breakdown": [
+          {
+            "function": "_solve_held_karp_tour",
+            "file": "src\\resplan_router\\optimizers\\bitmask_dp.py",
+            "line": 39,
+            "ncalls": 30,
+            "tottime_ms": 0.169,
+            "cumtime_ms": 0.223,
+            "percall_ms": 0.0074
+          },
+          {
+            "function": "<built-in method math.hypot>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 180,
+            "tottime_ms": 0.034,
+            "cumtime_ms": 0.034,
+            "percall_ms": 0.0002
+          },
+          {
+            "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1,
+            "tottime_ms": 0.022,
+            "cumtime_ms": 0.022,
+            "percall_ms": 0.0224
+          },
+          {
+            "function": "<built-in method builtins.len>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 90,
+            "tottime_ms": 0.013,
+            "cumtime_ms": 0.013,
+            "percall_ms": 0.0001
+          },
+          {
+            "function": "<built-in method time.perf_counter>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 60,
+            "tottime_ms": 0.011,
+            "cumtime_ms": 0.011,
+            "percall_ms": 0.0002
+          },
+          {
+            "function": "<method 'append' of 'list' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 30,
+            "tottime_ms": 0.008,
+            "cumtime_ms": 0.008,
+            "percall_ms": 0.0003
+          },
+          {
+            "function": "<method 'keys' of 'dict' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 30,
+            "tottime_ms": 0.008,
+            "cumtime_ms": 0.008,
+            "percall_ms": 0.0003
+          }
+        ]
+      },
+      "floorplan_checker": {
+        "component": "FloorPlanChecker constraint validation",
+        "plan_id": "51",
+        "iterations": 15,
+        "latency_ms": {
+          "mean": 9.896,
+          "median": 9.761,
+          "std": 1.89,
+          "p95": 12.935,
+          "min": 7.044,
+          "max": 14.298
+        },
+        "profile_dump": "results\\profiling_dumps\\floorplan_checker_51.prof",
+        "top_call_breakdown": [
+          {
+            "function": "evaluate",
+            "file": "src\\resplan_router\\phase6_output\\checker.py",
+            "line": 117,
+            "ncalls": 15,
+            "tottime_ms": 0.671,
+            "cumtime_ms": 148.157,
+            "percall_ms": 9.8771
+          },
+          {
+            "function": "wrapper",
+            "file": ".venv\\Lib\\site-packages\\shapely\\decorators.py",
+            "line": 182,
+            "ncalls": 3780,
+            "tottime_ms": 3.706,
+            "cumtime_ms": 72.086,
+            "percall_ms": 0.0191
+          },
+          {
+            "function": "extract_all_portals",
+            "file": "src\\resplan_router\\phase2_topology\\portal_extractor.py",
+            "line": 382,
+            "ncalls": 15,
+            "tottime_ms": 0.272,
+            "cumtime_ms": 60.172,
+            "percall_ms": 4.0114
+          },
+          {
+            "function": "extract_open_passages",
+            "file": "src\\resplan_router\\phase2_topology\\portal_extractor.py",
+            "line": 308,
+            "ncalls": 15,
+            "tottime_ms": 1.704,
+            "cumtime_ms": 58.748,
+            "percall_ms": 3.9166
+          },
+          {
+            "function": "intersection",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\base.py",
+            "line": 698,
+            "ncalls": 1200,
+            "tottime_ms": 0.715,
+            "cumtime_ms": 30.287,
+            "percall_ms": 0.0252
+          },
+          {
+            "function": "_check_rule_5_free_space_and_axis_alignment",
+            "file": "src\\resplan_router\\phase6_output\\checker.py",
+            "line": 766,
+            "ncalls": 15,
+            "tottime_ms": 1.166,
+            "cumtime_ms": 29.499,
+            "percall_ms": 1.9666
+          },
+          {
+            "function": "<intersection_scalar>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1200,
+            "tottime_ms": 29.375,
+            "cumtime_ms": 29.375,
+            "percall_ms": 0.0245
+          },
+          {
+            "function": "_recompute_metrics",
+            "file": "src\\resplan_router\\phase6_output\\checker.py",
+            "line": 987,
+            "ncalls": 15,
+            "tottime_ms": 0.989,
+            "cumtime_ms": 26.189,
+            "percall_ms": 1.746
+          }
+        ]
+      },
+      "observation_extraction": {
+        "component": "Observation vector extraction",
+        "plan_id": "51",
+        "observation_dim": 24,
+        "iterations": 50,
+        "latency_ms": {
+          "mean": 0.2813,
+          "median": 0.2812,
+          "std": 0.0535,
+          "p95": 0.3449,
+          "min": 0.1193,
+          "max": 0.4147
+        },
+        "profile_dump": "results\\profiling_dumps\\observation_extraction_51.prof",
+        "top_call_breakdown": [
+          {
+            "function": "extract_observation_vector",
+            "file": "rl\\observations.py",
+            "line": 20,
+            "ncalls": 50,
+            "tottime_ms": 2.624,
+            "cumtime_ms": 13.936,
+            "percall_ms": 0.2787
+          },
+          {
+            "function": "clip",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py",
+            "line": 2245,
+            "ncalls": 1200,
+            "tottime_ms": 1.254,
+            "cumtime_ms": 10.677,
+            "percall_ms": 0.0089
+          },
+          {
+            "function": "_wrapfunc",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py",
+            "line": 48,
+            "ncalls": 1200,
+            "tottime_ms": 1.381,
+            "cumtime_ms": 9.423,
+            "percall_ms": 0.0079
+          },
+          {
+            "function": "_wrapit",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py",
+            "line": 38,
+            "ncalls": 1200,
+            "tottime_ms": 2.41,
+            "cumtime_ms": 7.873,
+            "percall_ms": 0.0066
+          },
+          {
+            "function": "<method 'clip' of 'numpy.ndarray' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1200,
+            "tottime_ms": 0.674,
+            "cumtime_ms": 4.362,
+            "percall_ms": 0.0036
+          },
+          {
+            "function": "_clip",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\_methods.py",
+            "line": 96,
+            "ncalls": 1200,
+            "tottime_ms": 3.688,
+            "cumtime_ms": 3.688,
+            "percall_ms": 0.0031
+          }
+        ]
+      }
+    },
+    "plan_14433": {
+      "hanan_grid": {
+        "component": "Hanan grid generation",
+        "plan_id": "14433",
+        "grid_vertices": 2722,
+        "grid_edges": 5182,
+        "iterations": 10,
+        "latency_ms": {
+          "mean": 831.11,
+          "median": 785.45,
+          "std": 174.047,
+          "p95": 1121.613,
+          "min": 646.732,
+          "max": 1189.188
+        },
+        "profile_dump": "results\\profiling_dumps\\hanan_grid_14433.prof",
+        "top_call_breakdown": [
+          {
+            "function": "build_hanan_grid",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 234,
+            "ncalls": 10,
+            "tottime_ms": 687.825,
+            "cumtime_ms": 8200.889,
+            "percall_ms": 820.0889
+          },
+          {
+            "function": "__init__",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 65,
+            "ncalls": 10,
+            "tottime_ms": 285.797,
+            "cumtime_ms": 1860.784,
+            "percall_ms": 186.0784
+          },
+          {
+            "function": "__new__",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\linestring.py",
+            "line": 45,
+            "ncalls": 65940,
+            "tottime_ms": 158.093,
+            "cumtime_ms": 1269.109,
+            "percall_ms": 0.0192
+          },
+          {
+            "function": "__init__",
+            "file": ".venv\\Lib\\site-packages\\pydantic\\main.py",
+            "line": 270,
+            "ncalls": 132430,
+            "tottime_ms": 520.837,
+            "cumtime_ms": 1102.223,
+            "percall_ms": 0.0083
+          },
+          {
+            "function": "covers",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\base.py",
+            "line": 815,
+            "ncalls": 300880,
+            "tottime_ms": 125.725,
+            "cumtime_ms": 1002.888,
+            "percall_ms": 0.0033
+          },
+          {
+            "function": "wrapper",
+            "file": ".venv\\Lib\\site-packages\\shapely\\decorators.py",
+            "line": 182,
+            "ncalls": 118180,
+            "tottime_ms": 105.388,
+            "cumtime_ms": 949.417,
+            "percall_ms": 0.008
+          },
+          {
+            "function": "<covers_scalar>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 300880,
+            "tottime_ms": 841.833,
+            "cumtime_ms": 841.833,
+            "percall_ms": 0.0028
+          },
+          {
+            "function": "__new__",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\point.py",
+            "line": 59,
+            "ncalls": 51820,
+            "tottime_ms": 144.747,
+            "cumtime_ms": 839.327,
+            "percall_ms": 0.0162
+          }
+        ]
+      },
+      "astar_search": {
+        "component": "A* rectilinear path search",
+        "plan_id": "14433",
+        "iterations": 15,
+        "latency_ms": {
+          "mean": 401.452,
+          "median": 371.166,
+          "std": 102.279,
+          "p95": 543.932,
+          "min": 329.04,
+          "max": 755.154
+        },
+        "profile_dump": "results\\profiling_dumps\\astar_search_14433.prof",
+        "top_call_breakdown": [
+          {
+            "function": "compute_single_source",
+            "file": "src\\resplan_router\\phase3_micro_routing\\astar_rectilinear.py",
+            "line": 248,
+            "ncalls": 15,
+            "tottime_ms": 2089.946,
+            "cumtime_ms": 6021.682,
+            "percall_ms": 401.4455
+          },
+          {
+            "function": "hash_func",
+            "file": ".venv\\Lib\\site-packages\\pydantic\\_internal\\_model_construction.py",
+            "line": 515,
+            "ncalls": 3307515,
+            "tottime_ms": 1718.306,
+            "cumtime_ms": 2239.58,
+            "percall_ms": 0.0007
+          },
+          {
+            "function": "get_neighbors",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 171,
+            "ncalls": 155475,
+            "tottime_ms": 94.875,
+            "cumtime_ms": 857.163,
+            "percall_ms": 0.0055
+          },
+          {
+            "function": "<method 'get' of 'dict' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 470115,
+            "tottime_ms": 240.72,
+            "cumtime_ms": 713.792,
+            "percall_ms": 0.0015
+          },
+          {
+            "function": "<built-in method builtins.round>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1198650,
+            "tottime_ms": 668.997,
+            "cumtime_ms": 668.997,
+            "percall_ms": 0.0006
+          },
+          {
+            "function": "<built-in method builtins.hash>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 3307515,
+            "tottime_ms": 521.274,
+            "cumtime_ms": 521.274,
+            "percall_ms": 0.0002
+          },
+          {
+            "function": "<method 'setdefault' of 'dict' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 599310,
+            "tottime_ms": 272.502,
+            "cumtime_ms": 272.502,
+            "percall_ms": 0.0005
+          },
+          {
+            "function": "get_vertex",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 139,
+            "ncalls": 155490,
+            "tottime_ms": 75.082,
+            "cumtime_ms": 195.81,
+            "percall_ms": 0.0013
+          }
+        ]
+      },
+      "held_karp_tsp": {
+        "component": "Held-Karp TSP tour solver",
+        "plan_id": "14433",
+        "terminal_count": 5,
+        "iterations": 30,
+        "latency_ms": {
+          "mean": 0.0954,
+          "median": 0.0871,
+          "std": 0.0283,
+          "p95": 0.1658,
+          "min": 0.0755,
+          "max": 0.1945
+        },
+        "profile_dump": "results\\profiling_dumps\\held_karp_tsp_14433.prof",
+        "top_call_breakdown": [
+          {
+            "function": "_solve_held_karp_tour",
+            "file": "src\\resplan_router\\optimizers\\bitmask_dp.py",
+            "line": 39,
+            "ncalls": 30,
+            "tottime_ms": 1.91,
+            "cumtime_ms": 2.818,
+            "percall_ms": 0.0939
+          },
+          {
+            "function": "<built-in method math.hypot>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 3600,
+            "tottime_ms": 0.793,
+            "cumtime_ms": 0.793,
+            "percall_ms": 0.0002
+          },
+          {
+            "function": "<built-in method builtins.len>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 750,
+            "tottime_ms": 0.106,
+            "cumtime_ms": 0.106,
+            "percall_ms": 0.0001
+          },
+          {
+            "function": "<built-in method time.perf_counter>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 60,
+            "tottime_ms": 0.026,
+            "cumtime_ms": 0.026,
+            "percall_ms": 0.0004
+          },
+          {
+            "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1,
+            "tottime_ms": 0.023,
+            "cumtime_ms": 0.023,
+            "percall_ms": 0.0233
+          },
+          {
+            "function": "<method 'append' of 'list' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 30,
+            "tottime_ms": 0.009,
+            "cumtime_ms": 0.009,
+            "percall_ms": 0.0003
+          },
+          {
+            "function": "<method 'keys' of 'dict' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 30,
+            "tottime_ms": 0.008,
+            "cumtime_ms": 0.008,
+            "percall_ms": 0.0003
+          }
+        ]
+      },
+      "floorplan_checker": {
+        "component": "FloorPlanChecker constraint validation",
+        "plan_id": "14433",
+        "iterations": 15,
+        "latency_ms": {
+          "mean": 16.798,
+          "median": 15.998,
+          "std": 3.281,
+          "p95": 22.295,
+          "min": 13.101,
+          "max": 23.082
+        },
+        "profile_dump": "results\\profiling_dumps\\floorplan_checker_14433.prof",
+        "top_call_breakdown": [
+          {
+            "function": "evaluate",
+            "file": "src\\resplan_router\\phase6_output\\checker.py",
+            "line": 117,
+            "ncalls": 15,
+            "tottime_ms": 0.765,
+            "cumtime_ms": 251.558,
+            "percall_ms": 16.7705
+          },
+          {
+            "function": "wrapper",
+            "file": ".venv\\Lib\\site-packages\\shapely\\decorators.py",
+            "line": 182,
+            "ncalls": 8970,
+            "tottime_ms": 7.55,
+            "cumtime_ms": 115.583,
+            "percall_ms": 0.0129
+          },
+          {
+            "function": "extract_all_portals",
+            "file": "src\\resplan_router\\phase2_topology\\portal_extractor.py",
+            "line": 382,
+            "ncalls": 15,
+            "tottime_ms": 0.43,
+            "cumtime_ms": 115.33,
+            "percall_ms": 7.6887
+          },
+          {
+            "function": "extract_open_passages",
+            "file": "src\\resplan_router\\phase2_topology\\portal_extractor.py",
+            "line": 308,
+            "ncalls": 15,
+            "tottime_ms": 3.552,
+            "cumtime_ms": 113.111,
+            "percall_ms": 7.5407
+          },
+          {
+            "function": "_recompute_metrics",
+            "file": "src\\resplan_router\\phase6_output\\checker.py",
+            "line": 987,
+            "ncalls": 15,
+            "tottime_ms": 1.39,
+            "cumtime_ms": 58.203,
+            "percall_ms": 3.8802
+          },
+          {
+            "function": "_compute_crossings_for_legs",
+            "file": "src\\resplan_router\\phase6_output\\checker.py",
+            "line": 1137,
+            "ncalls": 75,
+            "tottime_ms": 5.453,
+            "cumtime_ms": 52.28,
+            "percall_ms": 0.6971
+          },
+          {
+            "function": "from_wkt",
+            "file": ".venv\\Lib\\site-packages\\shapely\\io.py",
+            "line": 269,
+            "ncalls": 1575,
+            "tottime_ms": 40.664,
+            "cumtime_ms": 44.092,
+            "percall_ms": 0.028
+          },
+          {
+            "function": "intersection",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\base.py",
+            "line": 698,
+            "ncalls": 3480,
+            "tottime_ms": 1.815,
+            "cumtime_ms": 43.161,
+            "percall_ms": 0.0124
+          }
+        ]
+      },
+      "observation_extraction": {
+        "component": "Observation vector extraction",
+        "plan_id": "14433",
+        "observation_dim": 24,
+        "iterations": 50,
+        "latency_ms": {
+          "mean": 0.1847,
+          "median": 0.132,
+          "std": 0.0892,
+          "p95": 0.3002,
+          "min": 0.113,
+          "max": 0.4828
+        },
+        "profile_dump": "results\\profiling_dumps\\observation_extraction_14433.prof",
+        "top_call_breakdown": [
+          {
+            "function": "extract_observation_vector",
+            "file": "rl\\observations.py",
+            "line": 20,
+            "ncalls": 50,
+            "tottime_ms": 1.681,
+            "cumtime_ms": 9.005,
+            "percall_ms": 0.1801
+          },
+          {
+            "function": "clip",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py",
+            "line": 2245,
+            "ncalls": 1200,
+            "tottime_ms": 0.881,
+            "cumtime_ms": 6.869,
+            "percall_ms": 0.0057
+          },
+          {
+            "function": "_wrapfunc",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py",
+            "line": 48,
+            "ncalls": 1200,
+            "tottime_ms": 0.988,
+            "cumtime_ms": 5.987,
+            "percall_ms": 0.005
+          },
+          {
+            "function": "_wrapit",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py",
+            "line": 38,
+            "ncalls": 1200,
+            "tottime_ms": 1.507,
+            "cumtime_ms": 4.727,
+            "percall_ms": 0.0039
+          },
+          {
+            "function": "<method 'clip' of 'numpy.ndarray' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1200,
+            "tottime_ms": 0.467,
+            "cumtime_ms": 2.537,
+            "percall_ms": 0.0021
+          },
+          {
+            "function": "_clip",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\_methods.py",
+            "line": 96,
+            "ncalls": 1200,
+            "tottime_ms": 2.07,
+            "cumtime_ms": 2.07,
+            "percall_ms": 0.0017
+          }
+        ]
+      }
+    },
+    "plan_64": {
+      "hanan_grid": {
+        "component": "Hanan grid generation",
+        "plan_id": "64",
+        "grid_vertices": 6215,
+        "grid_edges": 11884,
+        "iterations": 10,
+        "latency_ms": {
+          "mean": 1815.045,
+          "median": 1793.267,
+          "std": 190.283,
+          "p95": 2050.626,
+          "min": 1534.561,
+          "max": 2071.257
+        },
+        "profile_dump": "results\\profiling_dumps\\hanan_grid_64.prof",
+        "top_call_breakdown": [
+          {
+            "function": "build_hanan_grid",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 234,
+            "ncalls": 10,
+            "tottime_ms": 1534.154,
+            "cumtime_ms": 17932.855,
+            "percall_ms": 1793.2855
+          },
+          {
+            "function": "__init__",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 65,
+            "ncalls": 10,
+            "tottime_ms": 529.708,
+            "cumtime_ms": 4075.391,
+            "percall_ms": 407.5391
+          },
+          {
+            "function": "__new__",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\linestring.py",
+            "line": 45,
+            "ncalls": 174340,
+            "tottime_ms": 387.118,
+            "cumtime_ms": 3051.346,
+            "percall_ms": 0.0175
+          },
+          {
+            "function": "covers",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\base.py",
+            "line": 815,
+            "ncalls": 665830,
+            "tottime_ms": 275.687,
+            "cumtime_ms": 2477.924,
+            "percall_ms": 0.0037
+          },
+          {
+            "function": "<covers_scalar>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 665830,
+            "tottime_ms": 2124.041,
+            "cumtime_ms": 2124.041,
+            "percall_ms": 0.0032
+          },
+          {
+            "function": "wrapper",
+            "file": ".venv\\Lib\\site-packages\\shapely\\decorators.py",
+            "line": 182,
+            "ncalls": 293660,
+            "tottime_ms": 235.934,
+            "cumtime_ms": 1990.935,
+            "percall_ms": 0.0068
+          },
+          {
+            "function": "intersects",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\base.py",
+            "line": 882,
+            "ncalls": 1426940,
+            "tottime_ms": 526.758,
+            "cumtime_ms": 1958.249,
+            "percall_ms": 0.0014
+          },
+          {
+            "function": "__new__",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\point.py",
+            "line": 59,
+            "ncalls": 118840,
+            "tottime_ms": 314.398,
+            "cumtime_ms": 1702.729,
+            "percall_ms": 0.0143
+          }
+        ]
+      },
+      "astar_search": {
+        "component": "A* rectilinear path search",
+        "plan_id": "64",
+        "iterations": 15,
+        "latency_ms": {
+          "mean": 814.974,
+          "median": 760.214,
+          "std": 147.812,
+          "p95": 1111.623,
+          "min": 671.067,
+          "max": 1130.945
+        },
+        "profile_dump": "results\\profiling_dumps\\astar_search_64.prof",
+        "top_call_breakdown": [
+          {
+            "function": "compute_single_source",
+            "file": "src\\resplan_router\\phase3_micro_routing\\astar_rectilinear.py",
+            "line": 248,
+            "ncalls": 15,
+            "tottime_ms": 4925.651,
+            "cumtime_ms": 12224.524,
+            "percall_ms": 814.9682
+          },
+          {
+            "function": "hash_func",
+            "file": ".venv\\Lib\\site-packages\\pydantic\\_internal\\_model_construction.py",
+            "line": 515,
+            "ncalls": 7616835,
+            "tottime_ms": 3005.718,
+            "cumtime_ms": 4040.132,
+            "percall_ms": 0.0005
+          },
+          {
+            "function": "<built-in method builtins.round>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 2761530,
+            "tottime_ms": 1276.58,
+            "cumtime_ms": 1276.58,
+            "percall_ms": 0.0005
+          },
+          {
+            "function": "<built-in method builtins.hash>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 7616835,
+            "tottime_ms": 1034.414,
+            "cumtime_ms": 1034.414,
+            "percall_ms": 0.0001
+          },
+          {
+            "function": "get_neighbors",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 171,
+            "ncalls": 356535,
+            "tottime_ms": 194.187,
+            "cumtime_ms": 928.077,
+            "percall_ms": 0.0026
+          },
+          {
+            "function": "<method 'get' of 'dict' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1072320,
+            "tottime_ms": 481.674,
+            "cumtime_ms": 644.663,
+            "percall_ms": 0.0006
+          },
+          {
+            "function": "<method 'setdefault' of 'dict' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1380750,
+            "tottime_ms": 485.423,
+            "cumtime_ms": 485.423,
+            "percall_ms": 0.0004
+          },
+          {
+            "function": "get_vertex",
+            "file": "src\\resplan_router\\phase3_micro_routing\\rectilinear_grid.py",
+            "line": 139,
+            "ncalls": 356550,
+            "tottime_ms": 159.225,
+            "cumtime_ms": 378.292,
+            "percall_ms": 0.0011
+          }
+        ]
+      },
+      "held_karp_tsp": {
+        "component": "Held-Karp TSP tour solver",
+        "plan_id": "64",
+        "terminal_count": 6,
+        "iterations": 30,
+        "latency_ms": {
+          "mean": 0.2872,
+          "median": 0.2988,
+          "std": 0.0548,
+          "p95": 0.3803,
+          "min": 0.2235,
+          "max": 0.3926
+        },
+        "profile_dump": "results\\profiling_dumps\\held_karp_tsp_64.prof",
+        "top_call_breakdown": [
+          {
+            "function": "_solve_held_karp_tour",
+            "file": "src\\resplan_router\\optimizers\\bitmask_dp.py",
+            "line": 39,
+            "ncalls": 30,
+            "tottime_ms": 5.919,
+            "cumtime_ms": 8.577,
+            "percall_ms": 0.2859
+          },
+          {
+            "function": "<built-in method math.hypot>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 21600,
+            "tottime_ms": 2.342,
+            "cumtime_ms": 2.342,
+            "percall_ms": 0.0001
+          },
+          {
+            "function": "<built-in method builtins.len>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 3630,
+            "tottime_ms": 0.31,
+            "cumtime_ms": 0.31,
+            "percall_ms": 0.0001
+          },
+          {
+            "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1,
+            "tottime_ms": 0.038,
+            "cumtime_ms": 0.038,
+            "percall_ms": 0.0377
+          },
+          {
+            "function": "<built-in method time.perf_counter>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 60,
+            "tottime_ms": 0.009,
+            "cumtime_ms": 0.009,
+            "percall_ms": 0.0001
+          },
+          {
+            "function": "<method 'append' of 'list' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 30,
+            "tottime_ms": 0.007,
+            "cumtime_ms": 0.007,
+            "percall_ms": 0.0002
+          },
+          {
+            "function": "<method 'keys' of 'dict' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 30,
+            "tottime_ms": 0.006,
+            "cumtime_ms": 0.006,
+            "percall_ms": 0.0002
+          }
+        ]
+      },
+      "floorplan_checker": {
+        "component": "FloorPlanChecker constraint validation",
+        "plan_id": "64",
+        "iterations": 15,
+        "latency_ms": {
+          "mean": 18.154,
+          "median": 17.801,
+          "std": 1.89,
+          "p95": 20.957,
+          "min": 15.28,
+          "max": 22.798
+        },
+        "profile_dump": "results\\profiling_dumps\\floorplan_checker_64.prof",
+        "top_call_breakdown": [
+          {
+            "function": "evaluate",
+            "file": "src\\resplan_router\\phase6_output\\checker.py",
+            "line": 117,
+            "ncalls": 15,
+            "tottime_ms": 0.677,
+            "cumtime_ms": 271.956,
+            "percall_ms": 18.1304
+          },
+          {
+            "function": "wrapper",
+            "file": ".venv\\Lib\\site-packages\\shapely\\decorators.py",
+            "line": 182,
+            "ncalls": 11025,
+            "tottime_ms": 7.79,
+            "cumtime_ms": 132.185,
+            "percall_ms": 0.012
+          },
+          {
+            "function": "extract_all_portals",
+            "file": "src\\resplan_router\\phase2_topology\\portal_extractor.py",
+            "line": 382,
+            "ncalls": 15,
+            "tottime_ms": 0.296,
+            "cumtime_ms": 129.857,
+            "percall_ms": 8.6571
+          },
+          {
+            "function": "extract_open_passages",
+            "file": "src\\resplan_router\\phase2_topology\\portal_extractor.py",
+            "line": 308,
+            "ncalls": 15,
+            "tottime_ms": 3.527,
+            "cumtime_ms": 127.927,
+            "percall_ms": 8.5284
+          },
+          {
+            "function": "_check_rule_5_free_space_and_axis_alignment",
+            "file": "src\\resplan_router\\phase6_output\\checker.py",
+            "line": 766,
+            "ncalls": 15,
+            "tottime_ms": 1.735,
+            "cumtime_ms": 55.617,
+            "percall_ms": 3.7078
+          },
+          {
+            "function": "from_wkt",
+            "file": ".venv\\Lib\\site-packages\\shapely\\io.py",
+            "line": 269,
+            "ncalls": 1860,
+            "tottime_ms": 50.384,
+            "cumtime_ms": 54.259,
+            "percall_ms": 0.0292
+          },
+          {
+            "function": "_recompute_metrics",
+            "file": "src\\resplan_router\\phase6_output\\checker.py",
+            "line": 987,
+            "ncalls": 15,
+            "tottime_ms": 1.7,
+            "cumtime_ms": 47.194,
+            "percall_ms": 3.1463
+          },
+          {
+            "function": "intersection",
+            "file": ".venv\\Lib\\site-packages\\shapely\\geometry\\base.py",
+            "line": 698,
+            "ncalls": 4200,
+            "tottime_ms": 1.989,
+            "cumtime_ms": 46.783,
+            "percall_ms": 0.0111
+          }
+        ]
+      },
+      "observation_extraction": {
+        "component": "Observation vector extraction",
+        "plan_id": "64",
+        "observation_dim": 24,
+        "iterations": 50,
+        "latency_ms": {
+          "mean": 0.2094,
+          "median": 0.1418,
+          "std": 0.1048,
+          "p95": 0.3309,
+          "min": 0.1166,
+          "max": 0.6263
+        },
+        "profile_dump": "results\\profiling_dumps\\observation_extraction_64.prof",
+        "top_call_breakdown": [
+          {
+            "function": "extract_observation_vector",
+            "file": "rl\\observations.py",
+            "line": 20,
+            "ncalls": 50,
+            "tottime_ms": 2.158,
+            "cumtime_ms": 10.389,
+            "percall_ms": 0.2078
+          },
+          {
+            "function": "clip",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py",
+            "line": 2245,
+            "ncalls": 1200,
+            "tottime_ms": 1.166,
+            "cumtime_ms": 7.732,
+            "percall_ms": 0.0064
+          },
+          {
+            "function": "_wrapfunc",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py",
+            "line": 48,
+            "ncalls": 1200,
+            "tottime_ms": 1.093,
+            "cumtime_ms": 6.566,
+            "percall_ms": 0.0055
+          },
+          {
+            "function": "_wrapit",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\fromnumeric.py",
+            "line": 38,
+            "ncalls": 1200,
+            "tottime_ms": 1.802,
+            "cumtime_ms": 5.321,
+            "percall_ms": 0.0044
+          },
+          {
+            "function": "<method 'clip' of 'numpy.ndarray' objects>",
+            "file": "~",
+            "line": 0,
+            "ncalls": 1200,
+            "tottime_ms": 0.539,
+            "cumtime_ms": 2.767,
+            "percall_ms": 0.0023
+          },
+          {
+            "function": "_clip",
+            "file": ".venv\\Lib\\site-packages\\numpy\\_core\\_methods.py",
+            "line": 96,
+            "ncalls": 1200,
+            "tottime_ms": 2.228,
+            "cumtime_ms": 2.228,
+            "percall_ms": 0.0019
+          }
+        ]
+      }
+    }
+  },
+  "memory_and_gc_profile": {
+    "steps_profiled": 35,
+    "rss_start_mb": 1335.07,
+    "rss_mid_mb": 398.79,
+    "rss_after_gc_mb": 399.03,
+    "tracemalloc_peak_mb": 14.35,
+    "tracemalloc_current_after_gc_mb": 0.1,
+    "gc_collected_cycles": 17,
+    "gc_latency_ms": 395.76,
+    "growth_rate_mb_per_step": -26.7871,
+    "has_memory_leak": false
+  },
+  "bottleneck_mitigations": {
+    "observation_vector_redundancy": "Observation vector extraction computes `sum(1 for r in plan.rooms.values() if r.is_eligible)` on every single step. While O(N_rooms) is small (~11 rooms), this is a static invariant and can be cached on the environment instance during reset.",
+    "alns_operator_polygon_bottlenecks": "ALNS operators (specifically hub placement and perturbation) execute `plan.obstacles_geom.buffer(0.50)`, `shapely.make_valid()`, and `polylabel()` repeatedly. Caching obstacle buffers per floor plan avoids high-overhead Shapely C-extension conversions.",
+    "sqlite_wal_verification": "SQLite is operating in WAL mode with synchronous=1 and busy_timeout=30000ms. Reads execute in 1.1492ms and writes in 10.5448ms without process lock contention."
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "num_states_evaluated": 250,
+  "uniform_baseline_entropy": 2.0794,
+  "early_checkpoint_step_320": {
+    "mean_entropy": 2.0699,
+    "mean_probabilities": {
+      "BOUNDARY_EXCHANGE": 0.1129,
+      "MERGE_SPLIT": 0.1078,
+      "CROSSING_ELIM": 0.1082,
+      "OVERLAP_REDUCE": 0.1122,
+      "BEND_SMOOTH": 0.1461,
+      "WORST_ROUTE_REBUILD": 0.145,
+      "RANDOM_EXPLORATION": 0.1501,
+      "HUB_CENTROID_RELOC": 0.1176
+    },
+    "argmax_selection_pct": {
+      "BOUNDARY_EXCHANGE": 0.0,
+      "MERGE_SPLIT": 0.0,
+      "CROSSING_ELIM": 0.0,
+      "OVERLAP_REDUCE": 0.0,
+      "BEND_SMOOTH": 0.0,
+      "WORST_ROUTE_REBUILD": 0.0,
+      "RANDOM_EXPLORATION": 100.0,
+      "HUB_CENTROID_RELOC": 0.0
+    }
+  },
+  "trained_checkpoint_step_9984": {
+    "mean_entropy": 0.0577,
+    "entropy_reduction_pct": 97.22,
+    "mean_probabilities": {
+      "BOUNDARY_EXCHANGE": 0.0006,
+      "MERGE_SPLIT": 0.0008,
+      "CROSSING_ELIM": 0.0002,
+      "OVERLAP_REDUCE": 0.0053,
+      "BEND_SMOOTH": 0.0002,
+      "WORST_ROUTE_REBUILD": 0.9918,
+      "RANDOM_EXPLORATION": 0.001,
+      "HUB_CENTROID_RELOC": 0.0002
+    },
+    "argmax_selection_pct": {
+      "BOUNDARY_EXCHANGE": 0.0,
+      "MERGE_SPLIT": 0.0,
+      "CROSSING_ELIM": 0.0,
+      "OVERLAP_REDUCE": 0.0,
+      "BEND_SMOOTH": 0.0,
+      "WORST_ROUTE_REBUILD": 100.0,
+      "RANDOM_EXPLORATION": 0.0,
+      "HUB_CENTROID_RELOC": 0.0
+    },
+    "dominant_operator": "WORST_ROUTE_REBUILD",
+    "dominant_mean_prob": 0.9918,
+    "dominant_argmax_pct": 100.0
+  },
+  "policy_collapse_verdict": {
+    "is_collapsed": true,
+    "dominant_action": "WORST_ROUTE_REBUILD",
+    "interpretation": "The policy has collapsed to a single dominant action: WORST_ROUTE_REBUILD. It selects WORST_ROUTE_REBUILD as its greedy choice in 100.0% of evaluated states, with an average softmax probability of 99.2%. Policy entropy dropped from 2.079 (uniform) to 0.058 (97.2% reduction). This empirically confirms that the agent abandoned exploration in favor of a risk-averse safe-no-op strategy."
+  }
+}

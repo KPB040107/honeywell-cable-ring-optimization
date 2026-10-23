@@ -1,0 +1,35 @@
+{
+  "plans": [
+    0,
+    4,
+    5,
+    12,
+    24
+  ],
+  "algorithms": {
+    "PortfolioHybrid": {
+      "validity_rate_pct": 100.0,
+      "mean_H": 4.0,
+      "mean_J": 18.36,
+      "median_J": 26.03,
+      "mean_L": 8.41,
+      "mean_runtime_s": 5.44
+    },
+    "ALNS_Standalone": {
+      "validity_rate_pct": 100.0,
+      "mean_H": 4.0,
+      "mean_J": 18.36,
+      "median_J": 26.03,
+      "mean_L": 8.41,
+      "mean_runtime_s": 5.58
+    },
+    "PPO_ALNS": {
+      "validity_rate_pct": 100.0,
+      "mean_H": 4.0,
+      "mean_J": 18.36,
+      "median_J": 26.03,
+      "mean_L": 8.41,
+      "mean_runtime_s": 0.83
+    }
+  }
+}

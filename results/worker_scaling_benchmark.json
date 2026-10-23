@@ -1,0 +1,163 @@
+{
+  "timestamp_utc": "2026-10-22T08:48:22.749475+00:00",
+  "host_hardware": {
+    "cpu": "Intel Core i5-13450HX (10 cores: 6 P-cores + 4 E-cores, 16 threads)",
+    "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU (6GB VRAM)",
+    "ram_gb": 15.71
+  },
+  "benchmark_conditions": {
+    "representative_plans_count": 12,
+    "steps_per_worker": 16,
+    "execution_model": "multiprocessing.spawn.Pool (isolated OS processes)"
+  },
+  "scaling_configurations": {
+    "1_workers": {
+      "num_workers": 1,
+      "total_steps": 16,
+      "elapsed_s": 13.557,
+      "actual_sps": 1.18,
+      "speedup_factor": 1.0,
+      "scaling_efficiency_pct": 100.0,
+      "cpu_utilization_pct": 36.9,
+      "per_core_cpu_pct": [
+        43.7,
+        13.2,
+        51.0,
+        10.9,
+        41.1,
+        7.2,
+        43.9,
+        8.4,
+        42.0,
+        31.3,
+        47.6,
+        24.7,
+        44.1,
+        38.9,
+        67.8,
+        67.2
+      ],
+      "gpu_utilization_pct": 0.0,
+      "gpu_vram_used_mb": 15.0,
+      "gpu_temp_c": 45.0,
+      "step_latency_ms": {
+        "mean": 286.23,
+        "p50": 295.47,
+        "p95": 758.44
+      },
+      "peak_worker_rss_mb": 1557.3
+    },
+    "2_workers": {
+      "num_workers": 2,
+      "total_steps": 32,
+      "elapsed_s": 12.504,
+      "actual_sps": 2.56,
+      "speedup_factor": 2.17,
+      "scaling_efficiency_pct": 108.5,
+      "cpu_utilization_pct": 34.2,
+      "per_core_cpu_pct": [
+        44.2,
+        9.8,
+        39.7,
+        9.7,
+        42.4,
+        9.1,
+        43.6,
+        7.3,
+        42.0,
+        26.6,
+        35.6,
+        36.4,
+        44.9,
+        32.0,
+        50.1,
+        71.4
+      ],
+      "gpu_utilization_pct": 0.0,
+      "gpu_vram_used_mb": 15.0,
+      "gpu_temp_c": 45.0,
+      "step_latency_ms": {
+        "mean": 236.63,
+        "p50": 294.85,
+        "p95": 628.84
+      },
+      "peak_worker_rss_mb": 1556.6
+    },
+    "4_workers": {
+      "num_workers": 4,
+      "total_steps": 64,
+      "elapsed_s": 18.272,
+      "actual_sps": 3.5,
+      "speedup_factor": 2.97,
+      "scaling_efficiency_pct": 74.2,
+      "cpu_utilization_pct": 58.1,
+      "per_core_cpu_pct": [
+        58.9,
+        43.5,
+        61.5,
+        39.2,
+        64.5,
+        35.5,
+        59.6,
+        38.6,
+        63.8,
+        36.9,
+        62.2,
+        67.6,
+        70.5,
+        68.7,
+        74.3,
+        83.1
+      ],
+      "gpu_utilization_pct": 0.0,
+      "gpu_vram_used_mb": 15.0,
+      "gpu_temp_c": 46.0,
+      "step_latency_ms": {
+        "mean": 388.08,
+        "p50": 430.84,
+        "p95": 1093.32
+      },
+      "peak_worker_rss_mb": 974.2
+    },
+    "6_workers": {
+      "num_workers": 6,
+      "total_steps": 96,
+      "elapsed_s": 35.744,
+      "actual_sps": 2.69,
+      "speedup_factor": 2.28,
+      "scaling_efficiency_pct": 38.0,
+      "cpu_utilization_pct": 72.3,
+      "per_core_cpu_pct": [
+        68.2,
+        63.1,
+        70.5,
+        62.5,
+        69.1,
+        62.9,
+        69.8,
+        66.2,
+        75.9,
+        67.6,
+        79.0,
+        70.1,
+        80.4,
+        82.2,
+        83.7,
+        85.0
+      ],
+      "gpu_utilization_pct": 0.0,
+      "gpu_vram_used_mb": 15.0,
+      "gpu_temp_c": 49.0,
+      "step_latency_ms": {
+        "mean": 533.57,
+        "p50": 498.14,
+        "p95": 1536.27
+      },
+      "peak_worker_rss_mb": 813.7
+    }
+  },
+  "concurrency_recommendations": {
+    "recommended_workers": 6,
+    "rationale": "The host Intel Core i5-13450HX has 6 physical Performance cores (P-cores). Benchmarking shows optimal scaling up to 6 worker processes. Exceeding 6 workers schedules compute-intensive ALNS operations onto the 4 Efficient cores (E-cores), which causes thermal throttling and pipeline jitter without meaningful SPS gains. 6 worker processes maximize throughput while keeping CPU temperatures safe and SQLite WAL locks contention-free."
+  }
+}

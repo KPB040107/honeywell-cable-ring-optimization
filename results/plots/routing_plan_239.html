@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Floor Plan 239 — Honeywell Cable Ring Optimization</title>
+<style>
+  :root {
+    --bg-main: #0F172A;
+    --card-bg: #1E293B;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --accent-blue: #38BDF8;
+    --accent-green: #4ADE80;
+    --border-color: #334155;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    padding: 24px;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+  h1 { font-size: 24px; font-weight: 700; color: var(--accent-blue); }
+  .badge {
+    background: #065F46;
+    color: #A7F3D0;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .controls-bar {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    background: var(--card-bg);
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+  }
+  .btn {
+    background: #334155;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { background: #475569; }
+  .btn.active { background: #0284C7; border-color: #38BDF8; }
+  .layers { display: flex; gap: 12px; font-size: 13px; color: var(--text-secondary); }
+  .layers label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .viewport-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-header {
+    padding: 14px 18px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-color);
+    background: #182234;
+  }
+  .card-body {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 480px;
+    background: #FFFFFF;
+  }
+  svg {
+    width: 100%;
+    height: 100%;
+    max-height: 520px;
+    transform: scaleY(-1); /* Correct Cartesian coordinate system */
+  }
+  text { transform: scaleY(-1); } /* Counter-transform text */
+  .diff-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    background: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+  }
+  .diff-table th, .diff-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
+  }
+  .diff-table th { background: #182234; color: var(--text-secondary); font-weight: 600; }
+  .positive { color: var(--accent-green); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Honeywell Cable Ring Optimization — Floor Plan 239</h1>
+    <p style="color: var(--text-secondary); font-size: 14px; margin-top: 4px;">
+      Interactive Side-by-Side Schematic: PortfolioHybrid Baseline vs LinUCB-ALNS Optimized
+    </p>
+  </div>
+  <div class="badge">Cost Savings: ΔJ = +0.0000 (+0.00%)</div>
+</header>
+
+<div class="controls-bar">
+  <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">LAYER CONTROLS:</span>
+  <div class="layers">
+    <label><input type="checkbox" checked onchange="toggleLayer('layer-rooms', this.checked)"> Rooms</label>
+    <label><input type="checkbox" checked onchange="toggleLayer('layer-walls', this.checked)"> Walls</label>
+    <label><input type="checkbox" checked onchange="toggleLayer('layer-portals', this.checked)"> Doorways</label>
+    <label><input type="checkbox" checked onchange="toggleLayer('layer-routes', this.checked)"> Cable Routes</label>
+    <label><input type="checkbox" checked onchange="toggleLayer('layer-hubs', this.checked)"> Hubs</label>
+    <label><input type="checkbox" checked onchange="toggleLayer('layer-nodes', this.checked)"> Terminals</label>
+  </div>
+</div>
+
+<div class="comparison-grid">
+  <!-- Left: Baseline -->
+  <div class="viewport-card">
+    <div class="card-header">
+      <span style="color: #94A3B8;">Baseline: PortfolioHybrid</span>
+      <span>Cost J: 48.9368</span>
+    </div>
+    <div class="card-body">
+      <svg viewBox="-1.0873935050002872 -1.0873935050002872 14.275151293047166 15.767205822504165">
+        <path class="layer-rooms" d="M 12.100,4.841 L 8.373,4.841 L 8.373,0.000 L 12.100,0.000 L 12.100,4.841 Z" fill="#D8F3DC" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: bedroom_01 (bedroom)
+Area: 18.0 m²</title></path>
+<path class="layer-rooms" d="M 8.203,12.189 L 4.343,12.189 L 4.343,7.950 L 8.203,7.950 L 8.203,12.189 Z" fill="#FFF3B0" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: bedroom_02 (bedroom)
+Area: 16.4 m²</title></path>
+<path class="layer-rooms" d="M 0.000,7.950 L 4.172,7.950 L 4.172,13.592 L 0.000,13.592 L 0.000,7.950 Z" fill="#FDE5D2" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: bedroom_03 (bedroom)
+Area: 23.5 m²</title></path>
+<path class="layer-rooms" d="M 2.873,7.780 L 2.873,6.102 L 4.253,6.102 L 4.253,4.195 L 0.000,4.195 L 0.000,0.000 L 8.203,0.000 L 8.203,5.011 L 12.100,5.011 L 12.100,6.785 L 12.063,6.785 L 9.591,6.785 L 9.591,6.540 L 8.411,6.540 L 8.411,10.370 L 10.281,10.370 L 10.281,10.408 L 8.373,10.408 L 8.373,7.780 L 2.873,7.780 Z" fill="#DCE8F8" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: living_01 (living)
+Area: 57.9 m²</title></path>
+<path class="layer-rooms" d="M 12.100,6.785 L 12.100,8.789 L 12.100,8.789 L 12.100,10.126 L 12.100,10.126 L 12.100,10.408 L 11.239,10.408 L 11.239,10.408 L 10.281,10.408 L 10.281,10.370 L 8.411,10.370 L 8.411,6.540 L 9.591,6.540 L 9.591,6.785 L 12.063,6.785 L 12.100,6.785 Z" fill="#DCE8F8" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: kitchen_01 (kitchen)
+Area: 13.6 m²</title></path>
+<path class="layer-rooms" d="M 9.554,6.377 L 9.554,5.189 L 9.799,5.189 L 9.799,5.011 L 12.100,5.011 L 12.100,6.578 L 9.799,6.578 L 9.799,6.377 L 9.554,6.377 Z" fill="#F3E8FF" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: storage_01 (storage)
+Area: 3.9 m²</title></path>
+<path class="layer-rooms" d="M 1.247,4.365 L 4.083,4.365 L 4.083,5.932 L 1.247,5.932 L 1.247,4.365 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: bathroom_01 (Excluded)</title></path>
+<path class="layer-rooms" d="M 2.703,7.780 L 0.000,7.780 L 0.000,6.102 L 2.703,6.102 L 2.703,7.780 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: bathroom_02 (Excluded)</title></path>
+<path class="layer-rooms" d="M 9.873,13.592 L 8.373,13.592 L 8.373,10.578 L 9.873,10.578 L 9.873,13.592 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: bathroom_03 (Excluded)</title></path>
+<path class="layer-rooms" d="M 4.380,13.555 L 4.380,12.397 L 6.072,12.397 L 8.166,12.397 L 8.166,13.555 L 4.417,13.555 L 4.380,13.555 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: balcony_01 (Excluded)</title></path>
+<path class="layer-rooms" d="M 2.554,-0.226 L 3.979,-0.226 L 3.979,-0.198 L 3.985,-0.192 L 5.587,-0.192 L 5.593,-0.198 L 5.593,-0.226 L 7.012,-0.226 L 7.012,-0.198 L 7.018,-0.192 L 9.162,-0.192 L 9.167,-0.198 L 9.167,-0.226 L 10.593,-0.226 L 10.593,-0.198 L 10.598,-0.192 L 12.280,-0.192 L 12.280,2.453 L 12.286,2.459 L 12.320,2.459 L 12.320,3.879 L 12.286,3.879 L 12.280,3.884 L 12.280,5.395 L 12.286,5.401 L 12.320,5.401 L 12.320,6.108 L 12.314,6.113 L 12.286,6.113 L 12.280,6.119 L 12.280,8.730 L 12.286,8.736 L 12.314,8.736 L 12.320,8.742 L 12.320,10.155 L 12.314,10.161 L 12.286,10.161 L 12.280,10.167 L 12.280,13.810 L 9.777,13.810 L 9.772,13.815 L 9.772,13.850 L 9.065,13.850 L 9.059,13.844 L 9.059,13.815 L 9.053,13.810 L 4.071,13.810 L 4.065,13.815 L 4.065,13.844 L 4.059,13.850 L 2.645,13.850 L 2.640,13.844 L 2.640,13.815 L 2.634,13.810 L -0.182,13.810 L -0.182,10.686 L -0.188,10.680 L -0.216,10.680 L -0.216,9.255 L -0.188,9.255 L -0.182,9.249 L -0.182,7.328 L -0.188,7.322 L -0.216,7.322 L -0.216,6.609 L -0.188,6.609 L -0.182,6.604 L -0.182,3.639 L -0.188,3.633 L -0.216,3.633 L -0.216,2.208 L -0.188,2.208 L -0.182,2.203 L -0.182,-0.192 L 2.549,-0.192 L 2.554,-0.198 L 2.554,-0.226 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: land_01 (Excluded)</title></path>
+<path class="layer-walls" d="M 5.627,-0.208 L 3.957,-0.208 L 2.576,-0.208 L -0.208,-0.208 L -0.208,0.216 L -0.208,1.351 L -0.208,2.220 L -0.208,3.623 L -0.208,4.440 L 0.037,4.440 L 0.037,4.402 L 1.040,4.402 L 1.040,4.781 L 1.040,5.449 L 1.040,5.894 L 0.037,5.894 L 0.037,5.857 L -0.208,5.857 L -0.208,6.585 L -0.208,7.320 L -0.208,9.302 L -0.208,10.593 L -0.208,13.800 L 2.665,13.800 L 4.046,13.800 L 4.417,13.800 L 4.417,13.555 L 4.380,13.555 L 4.380,12.397 L 8.166,12.397 L 8.166,12.402 L 8.147,12.402 L 8.147,13.550 L 8.166,13.550 L 8.166,13.800 L 9.079,13.800 L 9.836,13.800 L 10.081,13.800 L 10.081,10.615 L 10.281,10.615 L 11.239,10.615 L 12.308,10.615 L 12.308,10.125 L 12.308,8.789 L 12.308,6.095 L 12.308,5.404 L 12.308,3.846 L 12.308,2.487 L 12.308,-0.208 L 10.571,-0.208 L 9.190,-0.208 L 6.985,-0.208 L 5.627,-0.208 Z" fill="#1A202C" stroke="#000000" stroke-width="0.05"><title>Wall Obstacle</title></path>
+<path class="layer-portals" d="M 4.046,5.932 L 3.111,5.932" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P01</title></path>
+<path class="layer-portals" d="M 2.665,7.780 L 1.730,7.780" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P02</title></path>
+<path class="layer-portals" d="M 8.373,11.818 L 8.373,10.838" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P03</title></path>
+<path class="layer-portals" d="M 9.591,4.841 L 8.411,4.841" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P04</title></path>
+<path class="layer-portals" d="M 7.642,12.189 L 6.596,12.189" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P05</title></path>
+<path class="layer-portals" d="M 6.852,7.950 L 7.965,7.950" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P06</title></path>
+<path class="layer-portals" d="M 8.203,10.838 L 8.203,11.818" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P07</title></path>
+<path class="layer-portals" d="M 1.730,7.950 L 2.665,7.950" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P08</title></path>
+<path class="layer-portals" d="M 2.910,7.950 L 4.135,7.950" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P09</title></path>
+<path class="layer-portals" d="M 8.411,6.540 L 9.591,6.540" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P10</title></path>
+<path class="layer-portals" d="M 8.411,6.540 L 9.591,6.540" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P11</title></path>
+<path class="layer-routes" d="M 5.816,2.380 L 5.816,2.381 L 5.824,2.381" stroke="#1F77B4" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H1 Leg 1: H1 -> N4
+Length: 0.01 m</title></path>
+<path class="layer-routes" d="M 5.824,2.381 L 5.824,6.540 L 9.101,6.540 L 9.101,8.578 L 10.237,8.578" stroke="#1F77B4" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H1 Leg 2: N4 -> N5
+Length: 10.61 m</title></path>
+<path class="layer-routes" d="M 10.237,8.578 L 8.413,8.578 L 8.413,5.161 L 5.816,5.161 L 5.816,2.380" stroke="#1F77B4" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H1 Leg 3: N5 -> H1
+Length: 10.62 m</title></path>
+<path class="layer-routes" d="M 2.086,10.415 L 2.086,10.415" stroke="#E6550D" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H2 Leg 1: H2 -> N3
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 2.086,10.415 L 2.086,10.415" stroke="#E6550D" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H2 Leg 2: N3 -> H2
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 10.237,2.420 L 10.237,2.420 L 10.237,2.420" stroke="#2CA02C" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H3 Leg 1: H3 -> N1
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 10.237,2.420 L 10.237,2.420 L 10.237,2.420" stroke="#2CA02C" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H3 Leg 2: N1 -> H3
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 6.273,10.062 L 6.273,10.062 L 6.273,10.034" stroke="#9467BD" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H4 Leg 1: H4 -> N2
+Length: 0.03 m</title></path>
+<path class="layer-routes" d="M 6.273,10.034 L 6.273,10.034 L 6.273,10.062" stroke="#9467BD" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H4 Leg 2: N2 -> H4
+Length: 0.03 m</title></path>
+<path class="layer-routes" d="M 10.558,5.794 L 10.558,5.794 L 10.559,5.794" stroke="#D62728" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H5 Leg 1: H5 -> N6
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 10.559,5.794 L 10.559,5.794 L 10.558,5.794" stroke="#D62728" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H5 Leg 2: N6 -> H5
+Length: 0.00 m</title></path>
+<rect class="layer-hubs" x="5.566" y="2.130" width="0.5" height="0.5" fill="#1F77B4" stroke="#1A202C" stroke-width="0.08"><title>Hub H1 at (5.82, 2.38)
+Rooms: kitchen_01, living_01</title></rect>
+<text class="layer-hubs" x="5.816" y="2.460" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H1</text>
+<rect class="layer-hubs" x="1.836" y="10.165" width="0.5" height="0.5" fill="#E6550D" stroke="#1A202C" stroke-width="0.08"><title>Hub H2 at (2.09, 10.41)
+Rooms: bedroom_03</title></rect>
+<text class="layer-hubs" x="2.086" y="10.495" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H2</text>
+<rect class="layer-hubs" x="9.987" y="2.170" width="0.5" height="0.5" fill="#2CA02C" stroke="#1A202C" stroke-width="0.08"><title>Hub H3 at (10.24, 2.42)
+Rooms: bedroom_01</title></rect>
+<text class="layer-hubs" x="10.237" y="2.500" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H3</text>
+<rect class="layer-hubs" x="6.023" y="9.812" width="0.5" height="0.5" fill="#9467BD" stroke="#1A202C" stroke-width="0.08"><title>Hub H4 at (6.27, 10.06)
+Rooms: bedroom_02</title></rect>
+<text class="layer-hubs" x="6.273" y="10.142" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H4</text>
+<rect class="layer-hubs" x="10.308" y="5.544" width="0.5" height="0.5" fill="#D62728" stroke="#1A202C" stroke-width="0.08"><title>Hub H5 at (10.56, 5.79)
+Rooms: storage_01</title></rect>
+<text class="layer-hubs" x="10.558" y="5.874" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H5</text>
+<circle class="layer-nodes" cx="10.237" cy="2.420" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N1 (10.24, 2.42)</title></circle>
+<text class="layer-nodes" x="10.237" y="2.490" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N1</text>
+<circle class="layer-nodes" cx="6.273" cy="10.034" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N2 (6.27, 10.03)</title></circle>
+<text class="layer-nodes" x="6.273" y="10.104" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N2</text>
+<circle class="layer-nodes" cx="2.086" cy="10.415" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N3 (2.09, 10.41)</title></circle>
+<text class="layer-nodes" x="2.086" y="10.485" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N3</text>
+<circle class="layer-nodes" cx="5.824" cy="2.381" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N4 (5.82, 2.38)</title></circle>
+<text class="layer-nodes" x="5.824" y="2.451" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N4</text>
+<circle class="layer-nodes" cx="10.237" cy="8.578" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N5 (10.24, 8.58)</title></circle>
+<text class="layer-nodes" x="10.237" y="8.648" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N5</text>
+<circle class="layer-nodes" cx="10.559" cy="5.794" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N6 (10.56, 5.79)</title></circle>
+<text class="layer-nodes" x="10.559" y="5.864" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N6</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Right: LinUCB-ALNS -->
+  <div class="viewport-card">
+    <div class="card-header">
+      <span style="color: #38BDF8;">Optimized: LinUCB-ALNS (Ours)</span>
+      <span class="positive">Cost J: 48.9368 (ΔJ = +0.0000)</span>
+    </div>
+    <div class="card-body">
+      <svg viewBox="-1.0873935050002872 -1.0873935050002872 14.275151293047166 15.767205822504165">
+        <path class="layer-rooms" d="M 12.100,4.841 L 8.373,4.841 L 8.373,0.000 L 12.100,0.000 L 12.100,4.841 Z" fill="#D8F3DC" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: bedroom_01 (bedroom)
+Area: 18.0 m²</title></path>
+<path class="layer-rooms" d="M 8.203,12.189 L 4.343,12.189 L 4.343,7.950 L 8.203,7.950 L 8.203,12.189 Z" fill="#FFF3B0" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: bedroom_02 (bedroom)
+Area: 16.4 m²</title></path>
+<path class="layer-rooms" d="M 0.000,7.950 L 4.172,7.950 L 4.172,13.592 L 0.000,13.592 L 0.000,7.950 Z" fill="#FDE5D2" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: bedroom_03 (bedroom)
+Area: 23.5 m²</title></path>
+<path class="layer-rooms" d="M 2.873,7.780 L 2.873,6.102 L 4.253,6.102 L 4.253,4.195 L 0.000,4.195 L 0.000,0.000 L 8.203,0.000 L 8.203,5.011 L 12.100,5.011 L 12.100,6.785 L 12.063,6.785 L 9.591,6.785 L 9.591,6.540 L 8.411,6.540 L 8.411,10.370 L 10.281,10.370 L 10.281,10.408 L 8.373,10.408 L 8.373,7.780 L 2.873,7.780 Z" fill="#DCE8F8" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: living_01 (living)
+Area: 57.9 m²</title></path>
+<path class="layer-rooms" d="M 12.100,6.785 L 12.100,8.789 L 12.100,8.789 L 12.100,10.126 L 12.100,10.126 L 12.100,10.408 L 11.239,10.408 L 11.239,10.408 L 10.281,10.408 L 10.281,10.370 L 8.411,10.370 L 8.411,6.540 L 9.591,6.540 L 9.591,6.785 L 12.063,6.785 L 12.100,6.785 Z" fill="#DCE8F8" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: kitchen_01 (kitchen)
+Area: 13.6 m²</title></path>
+<path class="layer-rooms" d="M 9.554,6.377 L 9.554,5.189 L 9.799,5.189 L 9.799,5.011 L 12.100,5.011 L 12.100,6.578 L 9.799,6.578 L 9.799,6.377 L 9.554,6.377 Z" fill="#F3E8FF" stroke="#CBD5E0" stroke-width="0.08" opacity="0.85"><title>Room: storage_01 (storage)
+Area: 3.9 m²</title></path>
+<path class="layer-rooms" d="M 1.247,4.365 L 4.083,4.365 L 4.083,5.932 L 1.247,5.932 L 1.247,4.365 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: bathroom_01 (Excluded)</title></path>
+<path class="layer-rooms" d="M 2.703,7.780 L 0.000,7.780 L 0.000,6.102 L 2.703,6.102 L 2.703,7.780 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: bathroom_02 (Excluded)</title></path>
+<path class="layer-rooms" d="M 9.873,13.592 L 8.373,13.592 L 8.373,10.578 L 9.873,10.578 L 9.873,13.592 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: bathroom_03 (Excluded)</title></path>
+<path class="layer-rooms" d="M 4.380,13.555 L 4.380,12.397 L 6.072,12.397 L 8.166,12.397 L 8.166,13.555 L 4.417,13.555 L 4.380,13.555 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: balcony_01 (Excluded)</title></path>
+<path class="layer-rooms" d="M 2.554,-0.226 L 3.979,-0.226 L 3.979,-0.198 L 3.985,-0.192 L 5.587,-0.192 L 5.593,-0.198 L 5.593,-0.226 L 7.012,-0.226 L 7.012,-0.198 L 7.018,-0.192 L 9.162,-0.192 L 9.167,-0.198 L 9.167,-0.226 L 10.593,-0.226 L 10.593,-0.198 L 10.598,-0.192 L 12.280,-0.192 L 12.280,2.453 L 12.286,2.459 L 12.320,2.459 L 12.320,3.879 L 12.286,3.879 L 12.280,3.884 L 12.280,5.395 L 12.286,5.401 L 12.320,5.401 L 12.320,6.108 L 12.314,6.113 L 12.286,6.113 L 12.280,6.119 L 12.280,8.730 L 12.286,8.736 L 12.314,8.736 L 12.320,8.742 L 12.320,10.155 L 12.314,10.161 L 12.286,10.161 L 12.280,10.167 L 12.280,13.810 L 9.777,13.810 L 9.772,13.815 L 9.772,13.850 L 9.065,13.850 L 9.059,13.844 L 9.059,13.815 L 9.053,13.810 L 4.071,13.810 L 4.065,13.815 L 4.065,13.844 L 4.059,13.850 L 2.645,13.850 L 2.640,13.844 L 2.640,13.815 L 2.634,13.810 L -0.182,13.810 L -0.182,10.686 L -0.188,10.680 L -0.216,10.680 L -0.216,9.255 L -0.188,9.255 L -0.182,9.249 L -0.182,7.328 L -0.188,7.322 L -0.216,7.322 L -0.216,6.609 L -0.188,6.609 L -0.182,6.604 L -0.182,3.639 L -0.188,3.633 L -0.216,3.633 L -0.216,2.208 L -0.188,2.208 L -0.182,2.203 L -0.182,-0.192 L 2.549,-0.192 L 2.554,-0.198 L 2.554,-0.226 Z" fill="#F4F5F7" stroke="#CBD5E0" stroke-width="0.08" stroke-dasharray="0.2,0.2"><title>Room: land_01 (Excluded)</title></path>
+<path class="layer-walls" d="M 5.627,-0.208 L 3.957,-0.208 L 2.576,-0.208 L -0.208,-0.208 L -0.208,0.216 L -0.208,1.351 L -0.208,2.220 L -0.208,3.623 L -0.208,4.440 L 0.037,4.440 L 0.037,4.402 L 1.040,4.402 L 1.040,4.781 L 1.040,5.449 L 1.040,5.894 L 0.037,5.894 L 0.037,5.857 L -0.208,5.857 L -0.208,6.585 L -0.208,7.320 L -0.208,9.302 L -0.208,10.593 L -0.208,13.800 L 2.665,13.800 L 4.046,13.800 L 4.417,13.800 L 4.417,13.555 L 4.380,13.555 L 4.380,12.397 L 8.166,12.397 L 8.166,12.402 L 8.147,12.402 L 8.147,13.550 L 8.166,13.550 L 8.166,13.800 L 9.079,13.800 L 9.836,13.800 L 10.081,13.800 L 10.081,10.615 L 10.281,10.615 L 11.239,10.615 L 12.308,10.615 L 12.308,10.125 L 12.308,8.789 L 12.308,6.095 L 12.308,5.404 L 12.308,3.846 L 12.308,2.487 L 12.308,-0.208 L 10.571,-0.208 L 9.190,-0.208 L 6.985,-0.208 L 5.627,-0.208 Z" fill="#1A202C" stroke="#000000" stroke-width="0.05"><title>Wall Obstacle</title></path>
+<path class="layer-portals" d="M 4.046,5.932 L 3.111,5.932" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P01</title></path>
+<path class="layer-portals" d="M 2.665,7.780 L 1.730,7.780" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P02</title></path>
+<path class="layer-portals" d="M 8.373,11.818 L 8.373,10.838" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P03</title></path>
+<path class="layer-portals" d="M 9.591,4.841 L 8.411,4.841" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P04</title></path>
+<path class="layer-portals" d="M 7.642,12.189 L 6.596,12.189" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P05</title></path>
+<path class="layer-portals" d="M 6.852,7.950 L 7.965,7.950" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P06</title></path>
+<path class="layer-portals" d="M 8.203,10.838 L 8.203,11.818" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P07</title></path>
+<path class="layer-portals" d="M 1.730,7.950 L 2.665,7.950" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P08</title></path>
+<path class="layer-portals" d="M 2.910,7.950 L 4.135,7.950" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P09</title></path>
+<path class="layer-portals" d="M 8.411,6.540 L 9.591,6.540" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P10</title></path>
+<path class="layer-portals" d="M 8.411,6.540 L 9.591,6.540" stroke="#D69E2E" stroke-width="0.12" stroke-dasharray="0.15,0.15"><title>Doorway: P11</title></path>
+<path class="layer-routes" d="M 5.816,2.380 L 5.816,2.381 L 5.824,2.381" stroke="#1F77B4" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H1 Leg 1: H1 -> N4
+Length: 0.01 m</title></path>
+<path class="layer-routes" d="M 5.824,2.381 L 5.824,6.540 L 9.101,6.540 L 9.101,8.578 L 10.237,8.578" stroke="#1F77B4" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H1 Leg 2: N4 -> N5
+Length: 10.61 m</title></path>
+<path class="layer-routes" d="M 10.237,8.578 L 8.413,8.578 L 8.413,5.161 L 5.816,5.161 L 5.816,2.380" stroke="#1F77B4" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H1 Leg 3: N5 -> H1
+Length: 10.62 m</title></path>
+<path class="layer-routes" d="M 2.086,10.415 L 2.086,10.415" stroke="#E6550D" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H2 Leg 1: H2 -> N3
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 2.086,10.415 L 2.086,10.415" stroke="#E6550D" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H2 Leg 2: N3 -> H2
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 10.237,2.420 L 10.237,2.420 L 10.237,2.420" stroke="#2CA02C" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H3 Leg 1: H3 -> N1
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 10.237,2.420 L 10.237,2.420 L 10.237,2.420" stroke="#2CA02C" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H3 Leg 2: N1 -> H3
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 6.273,10.062 L 6.273,10.062 L 6.273,10.034" stroke="#9467BD" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H4 Leg 1: H4 -> N2
+Length: 0.03 m</title></path>
+<path class="layer-routes" d="M 6.273,10.034 L 6.273,10.034 L 6.273,10.062" stroke="#9467BD" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H4 Leg 2: N2 -> H4
+Length: 0.03 m</title></path>
+<path class="layer-routes" d="M 10.558,5.794 L 10.558,5.794 L 10.559,5.794" stroke="#D62728" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H5 Leg 1: H5 -> N6
+Length: 0.00 m</title></path>
+<path class="layer-routes" d="M 10.559,5.794 L 10.559,5.794 L 10.558,5.794" stroke="#D62728" stroke-width="0.18" fill="none" stroke-linecap="round" stroke-linejoin="miter"><title>Ring H5 Leg 2: N6 -> H5
+Length: 0.00 m</title></path>
+<rect class="layer-hubs" x="5.566" y="2.130" width="0.5" height="0.5" fill="#1F77B4" stroke="#1A202C" stroke-width="0.08"><title>Hub H1 at (5.82, 2.38)
+Rooms: kitchen_01, living_01</title></rect>
+<text class="layer-hubs" x="5.816" y="2.460" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H1</text>
+<rect class="layer-hubs" x="1.836" y="10.165" width="0.5" height="0.5" fill="#E6550D" stroke="#1A202C" stroke-width="0.08"><title>Hub H2 at (2.09, 10.41)
+Rooms: bedroom_03</title></rect>
+<text class="layer-hubs" x="2.086" y="10.495" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H2</text>
+<rect class="layer-hubs" x="9.987" y="2.170" width="0.5" height="0.5" fill="#2CA02C" stroke="#1A202C" stroke-width="0.08"><title>Hub H3 at (10.24, 2.42)
+Rooms: bedroom_01</title></rect>
+<text class="layer-hubs" x="10.237" y="2.500" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H3</text>
+<rect class="layer-hubs" x="6.023" y="9.812" width="0.5" height="0.5" fill="#9467BD" stroke="#1A202C" stroke-width="0.08"><title>Hub H4 at (6.27, 10.06)
+Rooms: bedroom_02</title></rect>
+<text class="layer-hubs" x="6.273" y="10.142" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H4</text>
+<rect class="layer-hubs" x="10.308" y="5.544" width="0.5" height="0.5" fill="#D62728" stroke="#1A202C" stroke-width="0.08"><title>Hub H5 at (10.56, 5.79)
+Rooms: storage_01</title></rect>
+<text class="layer-hubs" x="10.558" y="5.874" font-size="0.25" font-family="sans-serif" font-weight="bold" fill="white" text-anchor="middle">H5</text>
+<circle class="layer-nodes" cx="10.237" cy="2.420" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N1 (10.24, 2.42)</title></circle>
+<text class="layer-nodes" x="10.237" y="2.490" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N1</text>
+<circle class="layer-nodes" cx="6.273" cy="10.034" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N2 (6.27, 10.03)</title></circle>
+<text class="layer-nodes" x="6.273" y="10.104" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N2</text>
+<circle class="layer-nodes" cx="2.086" cy="10.415" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N3 (2.09, 10.41)</title></circle>
+<text class="layer-nodes" x="2.086" y="10.485" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N3</text>
+<circle class="layer-nodes" cx="5.824" cy="2.381" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N4 (5.82, 2.38)</title></circle>
+<text class="layer-nodes" x="5.824" y="2.451" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N4</text>
+<circle class="layer-nodes" cx="10.237" cy="8.578" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N5 (10.24, 8.58)</title></circle>
+<text class="layer-nodes" x="10.237" y="8.648" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N5</text>
+<circle class="layer-nodes" cx="10.559" cy="5.794" r="0.22" fill="white" stroke="#1A202C" stroke-width="0.08"><title>Fixed Terminal Node: N6 (10.56, 5.79)</title></circle>
+<text class="layer-nodes" x="10.559" y="5.864" font-size="0.20" font-family="sans-serif" font-weight="bold" fill="#1A202C" text-anchor="middle">N6</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Comparison Metrics Table -->
+<table class="diff-table">
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Baseline (PortfolioHybrid)</th>
+      <th>Optimized (LinUCB-ALNS)</th>
+      <th>Delta / Improvement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Total Routing Cost (J)</strong></td>
+      <td>48.9368</td>
+      <td>48.9368</td>
+      <td class="positive">+0.0000 (+0.00%)</td>
+    </tr>
+    <tr>
+      <td><strong>Total Cable Length (L)</strong></td>
+      <td>21.30 m</td>
+      <td>21.30 m</td>
+      <td>+0.00 m</td>
+    </tr>
+    <tr>
+      <td><strong>Total Bends (B)</strong></td>
+      <td>13</td>
+      <td>13</td>
+      <td>+0</td>
+    </tr>
+    <tr>
+      <td><strong>Cable Crossings (X)</strong></td>
+      <td>4</td>
+      <td>4</td>
+      <td>+0</td>
+    </tr>
+    <tr>
+      <td><strong>Collinear Overlap (O)</strong></td>
+      <td>1.14 m</td>
+      <td>1.14 m</td>
+      <td>+0.00 m</td>
+    </tr>
+    <tr>
+      <td><strong>Hub Count (H)</strong></td>
+      <td>5</td>
+      <td>5</td>
+      <td>0 (Invariant Preserved)</td>
+    </tr>
+  </tbody>
+</table>
+
+<script>
+function toggleLayer(className, isVisible) {
+  const elements = document.querySelectorAll('.' + className);
+  elements.forEach(el => {
+    el.style.display = isVisible ? '' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>

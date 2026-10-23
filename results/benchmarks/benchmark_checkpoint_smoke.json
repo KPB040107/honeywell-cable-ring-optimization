@@ -1,0 +1,4990 @@
+{
+  "timestamp": "2026-10-22 17:54:39 UTC",
+  "mode": "smoke",
+  "config": {
+    "mode": "smoke",
+    "plan_ids": [],
+    "algorithms": [
+      {
+        "algo_id": "PortfolioHybrid",
+        "display_name": "PortfolioHybrid",
+        "enabled": true,
+        "max_iterations": null,
+        "checkpoint_path": null,
+        "kwargs": {}
+      },
+      {
+        "algo_id": "ALNS_Bandit",
+        "display_name": "Standalone ALNS (Bandit)",
+        "enabled": true,
+        "max_iterations": 10,
+        "checkpoint_path": null,
+        "kwargs": {
+          "max_iterations": 10
+        }
+      },
+      {
+        "algo_id": "ALNS_Random",
+        "display_name": "Random ALNS",
+        "enabled": true,
+        "max_iterations": 10,
+        "checkpoint_path": null,
+        "kwargs": {
+          "max_iterations": 10
+        }
+      },
+      {
+        "algo_id": "LinUCB_ALNS",
+        "display_name": "LinUCB-ALNS",
+        "enabled": true,
+        "max_iterations": 10,
+        "checkpoint_path": null,
+        "kwargs": {
+          "max_iterations": 10
+        }
+      },
+      {
+        "algo_id": "PPO_ALNS",
+        "display_name": "Trained PPO-ALNS",
+        "enabled": true,
+        "max_iterations": 10,
+        "checkpoint_path": "checkpoints/ppo_alns/best_model.pt",
+        "kwargs": {
+          "max_steps": 10,
+          "checkpoint_path": "checkpoints/ppo_alns/best_model.pt"
+        }
+      }
+    ],
+    "time_limit_seconds": 5.0,
+    "max_iterations": 10,
+    "random_seed": 42,
+    "max_workers": 4,
+    "output_dir": "results\\benchmarks",
+    "checkpoint_interval": 1,
+    "resume": false,
+    "checkpoint_file": "results\\benchmarks\\benchmark_checkpoint_smoke.json",
+    "results_csv_file": "results\\benchmarks\\benchmark_results_smoke.csv",
+    "tall_csv_file": "results\\benchmarks\\benchmark_records_tall_smoke.csv",
+    "summary_json_file": "results\\benchmarks\\benchmark_summary_smoke.json",
+    "report_md_file": "reports\\benchmark_smoke_report.md",
+    "ppo_checkpoint_path": "checkpoints/ppo_alns/best_model.pt"
+  },
+  "completed_plan_ids": [
+    0,
+    4,
+    5,
+    12,
+    24,
+    28,
+    40,
+    51,
+    73,
+    78,
+    92,
+    95,
+    101,
+    111,
+    119,
+    121,
+    129,
+    160,
+    172,
+    199,
+    203,
+    210,
+    239,
+    252,
+    256
+  ],
+  "records": [
+    {
+      "plan_id": 12,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 92.9,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 26.0277,
+          "total_length_m": 11.35,
+          "total_bends": 8,
+          "total_crossings": 1,
+          "total_overlap_m": 5.6745,
+          "area_gap_m2": 16.5592,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.557,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Lower_J_26.03_vs_26.03",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 26.0277,
+            "greedy_J": 26.0344,
+            "timing_dp_s": 1.8373,
+            "timing_greedy_s": 1.72
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 26.0277,
+          "total_length_m": 11.35,
+          "total_bends": 8,
+          "total_crossings": 1,
+          "total_overlap_m": 5.6745,
+          "area_gap_m2": 16.5592,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.748,
+          "diagnostic_info": {
+            "iterations": 3,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 26.0277,
+          "total_length_m": 11.35,
+          "total_bends": 8,
+          "total_crossings": 1,
+          "total_overlap_m": 5.6745,
+          "area_gap_m2": 16.5592,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.652,
+          "diagnostic_info": {
+            "iterations": 3,
+            "final_temperature": 8.5738
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 26.0277,
+          "total_length_m": 11.35,
+          "total_bends": 8,
+          "total_crossings": 1,
+          "total_overlap_m": 5.6745,
+          "area_gap_m2": 16.5592,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.092,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 5,
+            "stagnation_steps": 10,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 26.0277,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 2,
+                "3": 1,
+                "4": 2,
+                "5": 1,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0103,
+                "3": -1.0,
+                "4": -0.0195,
+                "5": -0.0103,
+                "6": -1.0,
+                "7": -0.0676
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.5051,
+                "3": -1.0,
+                "4": -0.0097,
+                "5": -0.0103,
+                "6": -1.0,
+                "7": -0.0676
+              },
+              "condition_numbers": {
+                "0": 3.226,
+                "1": 3.5859,
+                "2": 4.1784,
+                "3": 3.3252,
+                "4": 4.2555,
+                "5": 3.9426,
+                "6": 3.7547,
+                "7": 3.4403
+              },
+              "theta_norms": {
+                "0": 0.4625,
+                "1": 0.4484,
+                "2": 0.4654,
+                "3": 0.4586,
+                "4": 0.0058,
+                "5": 0.0045,
+                "6": 0.442,
+                "7": 0.0307
+              },
+              "recent_residual_mae": 0.5102,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 26.0277,
+          "total_length_m": 11.35,
+          "total_bends": 8,
+          "total_crossings": 1,
+          "total_overlap_m": 5.6745,
+          "area_gap_m2": 16.5592,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 6.657,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 26.0277,
+            "final_J": 26.0277,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 4,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 106.84,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 27.9239,
+          "total_length_m": 13.79,
+          "total_bends": 12,
+          "total_crossings": 1,
+          "total_overlap_m": 3.1305,
+          "area_gap_m2": 32.0862,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.955,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Lower_J_27.92_vs_32.92",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 27.9239,
+            "greedy_J": 32.9248,
+            "timing_dp_s": 1.7471,
+            "timing_greedy_s": 1.2076
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 27.9239,
+          "total_length_m": 13.79,
+          "total_bends": 12,
+          "total_crossings": 1,
+          "total_overlap_m": 3.1305,
+          "area_gap_m2": 32.0862,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.716,
+          "diagnostic_info": {
+            "iterations": 3,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 27.9239,
+          "total_length_m": 13.79,
+          "total_bends": 12,
+          "total_crossings": 1,
+          "total_overlap_m": 3.1305,
+          "area_gap_m2": 32.0862,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.962,
+          "diagnostic_info": {
+            "iterations": 9,
+            "final_temperature": 6.3025
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 27.9239,
+          "total_length_m": 13.79,
+          "total_bends": 12,
+          "total_crossings": 1,
+          "total_overlap_m": 3.1305,
+          "area_gap_m2": 32.0862,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.498,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 5,
+            "stagnation_steps": 10,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 27.9239,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 2,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 2,
+                "4": 2,
+                "5": 1,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.01,
+                "3": -0.8309,
+                "4": -0.1991,
+                "5": -0.01,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.01,
+                "3": -0.4155,
+                "4": -0.0995,
+                "5": -0.01,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "condition_numbers": {
+                "0": 3.5438,
+                "1": 3.5041,
+                "2": 4.3225,
+                "3": 5.5299,
+                "4": 4.8546,
+                "5": 3.4214,
+                "6": 3.1356,
+                "7": 2.9436
+              },
+              "theta_norms": {
+                "0": 0.4501,
+                "1": 0.4516,
+                "2": 0.0042,
+                "3": 0.434,
+                "4": 0.0865,
+                "5": 0.0045,
+                "6": 0.4661,
+                "7": 0.4736
+              },
+              "recent_residual_mae": 0.5561,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 27.9239,
+          "total_length_m": 13.79,
+          "total_bends": 12,
+          "total_crossings": 1,
+          "total_overlap_m": 3.1305,
+          "area_gap_m2": 32.0862,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 7.873,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 27.9239,
+            "final_J": 27.9239,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 5,
+      "tier": "standard",
+      "eligible_rooms": 5,
+      "total_area_m2": 127.74,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 4,
+          "total_cost_J": 28.8569,
+          "total_length_m": 16.07,
+          "total_bends": 11,
+          "total_crossings": 1,
+          "total_overlap_m": 2.2859,
+          "area_gap_m2": 62.2986,
+          "is_valid": true,
+          "solver_status": "FEASIBLE",
+          "runtime_s": 6.035,
+          "diagnostic_info": {
+            "selection_reason": "Greedy_Lower_J_28.86_vs_33.81",
+            "winner": "GreedyBaseline",
+            "bitmask_dp_J": 33.8088,
+            "greedy_J": 28.8569,
+            "timing_dp_s": 2.7131,
+            "timing_greedy_s": 3.3215
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 4,
+          "total_cost_J": 28.8569,
+          "total_length_m": 16.07,
+          "total_bends": 11,
+          "total_crossings": 1,
+          "total_overlap_m": 2.2859,
+          "area_gap_m2": 62.2986,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.574,
+          "diagnostic_info": {
+            "iterations": 0,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 4,
+          "total_cost_J": 28.8569,
+          "total_length_m": 16.07,
+          "total_bends": 11,
+          "total_crossings": 1,
+          "total_overlap_m": 2.2859,
+          "area_gap_m2": 62.2986,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.353,
+          "diagnostic_info": {
+            "iterations": 0,
+            "final_temperature": 10.0
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 4,
+          "total_cost_J": 28.8569,
+          "total_length_m": 16.07,
+          "total_bends": 11,
+          "total_crossings": 1,
+          "total_overlap_m": 2.2859,
+          "area_gap_m2": 62.2986,
+          "is_valid": true,
+          "solver_status": "FEASIBLE",
+          "runtime_s": 4.769,
+          "diagnostic_info": {
+            "iterations": 7,
+            "incumbent_updates": 0,
+            "accepted_moves": 3,
+            "stagnation_steps": 7,
+            "baseline_h_count": 4,
+            "baseline_cost_J": 28.8569,
+            "final_temperature": 6.9834,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 7,
+              "pull_counts": {
+                "0": 1,
+                "1": 0,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": 0.0,
+                "2": -0.2007,
+                "3": -1.0,
+                "4": 0.1616,
+                "5": -0.1816,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": 0.0,
+                "2": -0.2007,
+                "3": -1.0,
+                "4": 0.1616,
+                "5": -0.1816,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "condition_numbers": {
+                "0": 4.3098,
+                "1": 1.0,
+                "2": 4.5765,
+                "3": 4.0418,
+                "4": 3.8698,
+                "5": 4.0301,
+                "6": 4.4786,
+                "7": 4.1642
+              },
+              "theta_norms": {
+                "0": 0.4221,
+                "1": 0.0,
+                "2": 0.0829,
+                "3": 0.4315,
+                "4": 0.0707,
+                "5": 0.0784,
+                "6": 0.4164,
+                "7": 0.4272
+              },
+              "recent_residual_mae": 0.6491,
+              "history_length": 7,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 4,
+          "total_cost_J": 28.8569,
+          "total_length_m": 16.07,
+          "total_bends": 11,
+          "total_crossings": 1,
+          "total_overlap_m": 2.2859,
+          "area_gap_m2": 62.2986,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 7.571,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 28.8569,
+            "final_J": 28.8569,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 0,
+      "tier": "standard",
+      "eligible_rooms": 5,
+      "total_area_m2": 130.99,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 5,
+          "total_cost_J": 3.4828,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1546,
+          "area_gap_m2": 31.941,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 9.196,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 3.4828,
+            "greedy_J": 3.4828,
+            "timing_dp_s": 4.5949,
+            "timing_greedy_s": 4.6014
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 5,
+          "total_cost_J": 3.4828,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1546,
+          "area_gap_m2": 31.941,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 8.895,
+          "diagnostic_info": {
+            "iterations": 0,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 5,
+          "total_cost_J": 3.4828,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1546,
+          "area_gap_m2": 31.941,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 8.718,
+          "diagnostic_info": {
+            "iterations": 0,
+            "final_temperature": 10.0
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 5,
+          "total_cost_J": 3.4828,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1546,
+          "area_gap_m2": 31.941,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.051,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 2,
+            "stagnation_steps": 10,
+            "baseline_h_count": 5,
+            "baseline_cost_J": 3.4828,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 2
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 2,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 2
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.4801,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.8083
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.2401,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.4041
+              },
+              "condition_numbers": {
+                "0": 3.6719,
+                "1": 3.9103,
+                "2": 5.5395,
+                "3": 3.6575,
+                "4": 3.3895,
+                "5": 3.5119,
+                "6": 3.8263,
+                "7": 4.6591
+              },
+              "theta_norms": {
+                "0": 0.4452,
+                "1": 0.4363,
+                "2": 0.5017,
+                "3": 0.4457,
+                "4": 0.4561,
+                "5": 0.4513,
+                "6": 0.4394,
+                "7": 0.2514
+              },
+              "recent_residual_mae": 0.844,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 5,
+          "total_cost_J": 3.4828,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1546,
+          "area_gap_m2": 31.941,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 10.795,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 3.4828,
+            "final_J": 3.4828,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 28,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 112.13,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 30.4711,
+          "total_length_m": 14.98,
+          "total_bends": 6,
+          "total_crossings": 1,
+          "total_overlap_m": 7.4891,
+          "area_gap_m2": 41.4673,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.217,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 30.4711,
+            "greedy_J": 30.4711,
+            "timing_dp_s": 1.2916,
+            "timing_greedy_s": 0.925
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 29.3581,
+          "total_length_m": 15.98,
+          "total_bends": 9,
+          "total_crossings": 1,
+          "total_overlap_m": 3.8733,
+          "area_gap_m2": 41.4673,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.026,
+          "diagnostic_info": {
+            "iterations": 6,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.6,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 26.8621,
+          "total_length_m": 14.99,
+          "total_bends": 7,
+          "total_crossings": 1,
+          "total_overlap_m": 3.3741,
+          "area_gap_m2": 41.4673,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.929,
+          "diagnostic_info": {
+            "iterations": 8,
+            "final_temperature": 6.6342
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 26.8621,
+          "total_length_m": 14.99,
+          "total_bends": 7,
+          "total_crossings": 1,
+          "total_overlap_m": 3.3741,
+          "area_gap_m2": 41.4673,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.449,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 1,
+            "accepted_moves": 3,
+            "stagnation_steps": 7,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 30.4711,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 2,
+                "3": 1,
+                "4": 1,
+                "5": 2,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.1284,
+                "3": -1.0,
+                "4": -0.1284,
+                "5": -0.0003,
+                "6": -1.0,
+                "7": -0.0297
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.5642,
+                "3": -1.0,
+                "4": -0.1284,
+                "5": -0.0002,
+                "6": -1.0,
+                "7": -0.0297
+              },
+              "condition_numbers": {
+                "0": 3.3629,
+                "1": 3.5981,
+                "2": 4.8254,
+                "3": 3.3597,
+                "4": 3.7623,
+                "5": 4.4798,
+                "6": 3.4717,
+                "7": 3.6071
+              },
+              "theta_norms": {
+                "0": 0.4571,
+                "1": 0.448,
+                "2": 0.4654,
+                "3": 0.4572,
+                "4": 0.0567,
+                "5": 0.0767,
+                "6": 0.4529,
+                "7": 0.0133
+              },
+              "recent_residual_mae": 0.5503,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 26.8621,
+          "total_length_m": 14.99,
+          "total_bends": 7,
+          "total_crossings": 1,
+          "total_overlap_m": 3.3741,
+          "area_gap_m2": 41.4673,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.738,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 30.4711,
+            "final_J": 26.8621,
+            "delta_J": 3.609
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 51,
+      "tier": "compact",
+      "eligible_rooms": 3,
+      "total_area_m2": 62.24,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 2,
+          "total_cost_J": 26.6664,
+          "total_length_m": 10.96,
+          "total_bends": 6,
+          "total_crossings": 2,
+          "total_overlap_m": 2.7072,
+          "area_gap_m2": 18.3058,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 1.175,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Lower_J_26.67_vs_26.67",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 26.6664,
+            "greedy_J": 26.6668,
+            "timing_dp_s": 0.7649,
+            "timing_greedy_s": 0.4105
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 2,
+          "total_cost_J": 26.6664,
+          "total_length_m": 10.96,
+          "total_bends": 6,
+          "total_crossings": 2,
+          "total_overlap_m": 2.7072,
+          "area_gap_m2": 18.3058,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.019,
+          "diagnostic_info": {
+            "iterations": 10,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.288,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 2,
+          "total_cost_J": 21.6668,
+          "total_length_m": 10.96,
+          "total_bends": 6,
+          "total_crossings": 1,
+          "total_overlap_m": 2.7072,
+          "area_gap_m2": 18.3058,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.481,
+          "diagnostic_info": {
+            "iterations": 10,
+            "final_temperature": 5.9874
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 2,
+          "total_cost_J": 21.6668,
+          "total_length_m": 10.96,
+          "total_bends": 6,
+          "total_crossings": 1,
+          "total_overlap_m": 2.7072,
+          "area_gap_m2": 18.3058,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 1.943,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 2,
+            "accepted_moves": 4,
+            "stagnation_steps": 2,
+            "baseline_h_count": 2,
+            "baseline_cost_J": 26.6664,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 2
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 2,
+                "5": 1,
+                "6": 1,
+                "7": 2
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": 0.1775,
+                "3": -1.0,
+                "4": -0.2162,
+                "5": -0.01,
+                "6": -1.0,
+                "7": -1.0013
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": 0.1775,
+                "3": -1.0,
+                "4": -0.1081,
+                "5": -0.01,
+                "6": -1.0,
+                "7": -0.5006
+              },
+              "condition_numbers": {
+                "0": 3.5781,
+                "1": 4.1205,
+                "2": 4.0181,
+                "3": 4.2461,
+                "4": 5.9582,
+                "5": 3.4061,
+                "6": 3.993,
+                "7": 5.9575
+              },
+              "theta_norms": {
+                "0": 0.4487,
+                "1": 0.4287,
+                "2": 0.0767,
+                "3": 0.4243,
+                "4": 0.0834,
+                "5": 0.0045,
+                "6": 0.4333,
+                "7": 0.4127
+              },
+              "recent_residual_mae": 0.5395,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 2,
+          "total_cost_J": 26.6664,
+          "total_length_m": 10.96,
+          "total_bends": 6,
+          "total_crossings": 2,
+          "total_overlap_m": 2.7072,
+          "area_gap_m2": 18.3058,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 1.728,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 26.6664,
+            "final_J": 26.6664,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 73,
+      "tier": "compact",
+      "eligible_rooms": 3,
+      "total_area_m2": 221.02,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 3.496,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1622,
+          "area_gap_m2": 47.4806,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.449,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 3.496,
+            "greedy_J": 3.496,
+            "timing_dp_s": 1.2188,
+            "timing_greedy_s": 1.2302
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 3.496,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1622,
+          "area_gap_m2": 47.4806,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.712,
+          "diagnostic_info": {
+            "iterations": 10,
+            "weights": [
+              1.0,
+              1.0,
+              1.2,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 3.496,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1622,
+          "area_gap_m2": 47.4806,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.563,
+          "diagnostic_info": {
+            "iterations": 10,
+            "final_temperature": 5.9874
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 3.496,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1622,
+          "area_gap_m2": 47.4806,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 1.545,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 2,
+            "stagnation_steps": 10,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 3.496,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 2,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 2,
+                "4": 2,
+                "5": 1,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -0.4663,
+                "4": -2.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.5537
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -0.2332,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.5537
+              },
+              "condition_numbers": {
+                "0": 3.5383,
+                "1": 3.7535,
+                "2": 3.5008,
+                "3": 5.716,
+                "4": 4.8931,
+                "5": 3.3463,
+                "6": 3.1775,
+                "7": 3.0319
+              },
+              "theta_norms": {
+                "0": 0.4503,
+                "1": 0.4421,
+                "2": 0.4517,
+                "3": 0.5087,
+                "4": 0.5739,
+                "5": 0.4577,
+                "6": 0.4644,
+                "7": 0.2603
+              },
+              "recent_residual_mae": 0.9112,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 3.496,
+          "total_length_m": 0.33,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1622,
+          "area_gap_m2": 47.4806,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.24,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 3.496,
+            "final_J": 3.496,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 24,
+      "tier": "standard",
+      "eligible_rooms": 5,
+      "total_area_m2": 111.58,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 5,
+          "total_cost_J": 5.5267,
+          "total_length_m": 0.53,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.001,
+          "area_gap_m2": 28.1577,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 8.337,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 5.5267,
+            "greedy_J": 5.5267,
+            "timing_dp_s": 4.2223,
+            "timing_greedy_s": 4.1147
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 5,
+          "total_cost_J": 5.5267,
+          "total_length_m": 0.53,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.001,
+          "area_gap_m2": 28.1577,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 8.044,
+          "diagnostic_info": {
+            "iterations": 0,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 5,
+          "total_cost_J": 5.5267,
+          "total_length_m": 0.53,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.001,
+          "area_gap_m2": 28.1577,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 8.206,
+          "diagnostic_info": {
+            "iterations": 0,
+            "final_temperature": 10.0
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 5,
+          "total_cost_J": 5.5267,
+          "total_length_m": 0.53,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.001,
+          "area_gap_m2": 28.1577,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.825,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 1,
+            "stagnation_steps": 10,
+            "baseline_h_count": 5,
+            "baseline_cost_J": 5.5267,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 2,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 2
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 2,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 2
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -2.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.9248
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.4624
+              },
+              "condition_numbers": {
+                "0": 3.067,
+                "1": 4.3553,
+                "2": 3.3855,
+                "3": 3.6007,
+                "4": 3.1662,
+                "5": 3.2886,
+                "6": 3.1935,
+                "7": 4.3659
+              },
+              "theta_norms": {
+                "0": 0.4688,
+                "1": 0.6005,
+                "2": 0.4562,
+                "3": 0.4479,
+                "4": 0.4648,
+                "5": 0.46,
+                "6": 0.4638,
+                "7": 0.2749
+              },
+              "recent_residual_mae": 0.8514,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 5,
+          "total_cost_J": 5.5267,
+          "total_length_m": 0.53,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.001,
+          "area_gap_m2": 28.1577,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 8.189,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 5.5267,
+            "final_J": 5.5267,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 40,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 104.79,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 15.5658,
+          "total_length_m": 11.57,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 30.6195,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 6.525,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Lower_J_15.57_vs_16.57",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 15.5658,
+            "greedy_J": 16.572,
+            "timing_dp_s": 3.4599,
+            "timing_greedy_s": 3.0652
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 15.5658,
+          "total_length_m": 11.57,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 30.6195,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 7.04,
+          "diagnostic_info": {
+            "iterations": 0,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 15.5658,
+          "total_length_m": 11.57,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 30.6195,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 6.666,
+          "diagnostic_info": {
+            "iterations": 0,
+            "final_temperature": 10.0
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 14.5658,
+          "total_length_m": 10.57,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 30.6195,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.554,
+          "diagnostic_info": {
+            "iterations": 8,
+            "incumbent_updates": 1,
+            "accepted_moves": 3,
+            "stagnation_steps": 0,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 15.5658,
+            "final_temperature": 6.6342,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "bandit_telemetry": {
+              "total_pulls": 8,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.0746,
+                "3": -1.0,
+                "4": 0.0546,
+                "5": -0.0746,
+                "6": -1.0,
+                "7": 0.0542
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.0746,
+                "3": -1.0,
+                "4": 0.0546,
+                "5": -0.0746,
+                "6": -1.0,
+                "7": 0.0542
+              },
+              "condition_numbers": {
+                "0": 2.6703,
+                "1": 3.0451,
+                "2": 3.4987,
+                "3": 3.2603,
+                "4": 3.2943,
+                "5": 2.8531,
+                "6": 3.3935,
+                "7": 2.5247
+              },
+              "theta_norms": {
+                "0": 0.484,
+                "1": 0.4696,
+                "2": 0.0337,
+                "3": 0.4611,
+                "4": 0.0251,
+                "5": 0.0356,
+                "6": 0.4559,
+                "7": 0.0265
+              },
+              "recent_residual_mae": 0.5323,
+              "history_length": 8,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 15.5658,
+          "total_length_m": 11.57,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 30.6195,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 6.231,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 15.5658,
+            "final_J": 15.5658,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 92,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 89.09,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 4,
+          "total_cost_J": 3.0955,
+          "total_length_m": 0.07,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0281,
+          "area_gap_m2": 22.5306,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.981,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 3.0955,
+            "greedy_J": 3.0955,
+            "timing_dp_s": 1.4928,
+            "timing_greedy_s": 1.4886
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 4,
+          "total_cost_J": 3.0955,
+          "total_length_m": 0.07,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0281,
+          "area_gap_m2": 22.5306,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.523,
+          "diagnostic_info": {
+            "iterations": 10,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 4,
+          "total_cost_J": 3.0955,
+          "total_length_m": 0.07,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0281,
+          "area_gap_m2": 22.5306,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.704,
+          "diagnostic_info": {
+            "iterations": 10,
+            "final_temperature": 5.9874
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 4,
+          "total_cost_J": 3.0955,
+          "total_length_m": 0.07,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0281,
+          "area_gap_m2": 22.5306,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 1.39,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 2,
+            "stagnation_steps": 10,
+            "baseline_h_count": 4,
+            "baseline_cost_J": 3.0955,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 2,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 2
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 2,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 2
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -2.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -1.4413
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.7207
+              },
+              "condition_numbers": {
+                "0": 3.7557,
+                "1": 6.7935,
+                "2": 3.8781,
+                "3": 4.0237,
+                "4": 3.6565,
+                "5": 4.3845,
+                "6": 4.1925,
+                "7": 4.0915
+              },
+              "theta_norms": {
+                "0": 0.442,
+                "1": 0.5011,
+                "2": 0.4375,
+                "3": 0.4322,
+                "4": 0.4457,
+                "5": 0.4196,
+                "6": 0.4262,
+                "7": 0.443
+              },
+              "recent_residual_mae": 0.8828,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 4,
+          "total_cost_J": 3.0955,
+          "total_length_m": 0.07,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0281,
+          "area_gap_m2": 22.5306,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.498,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 3.0955,
+            "final_J": 3.0955,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 95,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 160.63,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 4,
+          "total_cost_J": 4.1558,
+          "total_length_m": 1.0,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1536,
+          "area_gap_m2": 43.384,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.519,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 4.1558,
+            "greedy_J": 4.1558,
+            "timing_dp_s": 1.4375,
+            "timing_greedy_s": 1.0813
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 4,
+          "total_cost_J": 4.1558,
+          "total_length_m": 1.0,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1536,
+          "area_gap_m2": 43.384,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.122,
+          "diagnostic_info": {
+            "iterations": 10,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 4,
+          "total_cost_J": 4.1558,
+          "total_length_m": 1.0,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1536,
+          "area_gap_m2": 43.384,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.357,
+          "diagnostic_info": {
+            "iterations": 10,
+            "final_temperature": 5.9874
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 4,
+          "total_cost_J": 4.1558,
+          "total_length_m": 1.0,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1536,
+          "area_gap_m2": 43.384,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 1.42,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 1,
+            "stagnation_steps": 10,
+            "baseline_h_count": 4,
+            "baseline_cost_J": 4.1558,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 2,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 2,
+                "2": 2,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -2.0,
+                "2": -2.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.6112
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.6112
+              },
+              "condition_numbers": {
+                "0": 3.4113,
+                "1": 4.5126,
+                "2": 4.5575,
+                "3": 3.0554,
+                "4": 3.2242,
+                "5": 3.4162,
+                "6": 2.9098,
+                "7": 2.7874
+              },
+              "theta_norms": {
+                "0": 0.4552,
+                "1": 0.5896,
+                "2": 0.5853,
+                "3": 0.4692,
+                "4": 0.4626,
+                "5": 0.455,
+                "6": 0.4749,
+                "7": 0.2932
+              },
+              "recent_residual_mae": 0.9118,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 4,
+          "total_cost_J": 4.1558,
+          "total_length_m": 1.0,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.1536,
+          "area_gap_m2": 43.384,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.546,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 4.1558,
+            "final_J": 4.1558,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 111,
+      "tier": "compact",
+      "eligible_rooms": 3,
+      "total_area_m2": 131.92,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 2,
+          "total_cost_J": 62.7316,
+          "total_length_m": 29.02,
+          "total_bends": 12,
+          "total_crossings": 4,
+          "total_overlap_m": 7.7072,
+          "area_gap_m2": 49.1131,
+          "is_valid": true,
+          "solver_status": "FEASIBLE",
+          "runtime_s": 1.049,
+          "diagnostic_info": {
+            "selection_reason": "Greedy_Lower_J_62.73_vs_64.03",
+            "winner": "GreedyBaseline",
+            "bitmask_dp_J": 64.0318,
+            "greedy_J": 62.7316,
+            "timing_dp_s": 0.6495,
+            "timing_greedy_s": 0.3995
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 2,
+          "total_cost_J": 62.7316,
+          "total_length_m": 29.02,
+          "total_bends": 12,
+          "total_crossings": 4,
+          "total_overlap_m": 7.7072,
+          "area_gap_m2": 49.1131,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.759,
+          "diagnostic_info": {
+            "iterations": 10,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.16,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 2,
+          "total_cost_J": 62.1998,
+          "total_length_m": 29.02,
+          "total_bends": 11,
+          "total_crossings": 4,
+          "total_overlap_m": 7.6754,
+          "area_gap_m2": 49.1131,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.4,
+          "diagnostic_info": {
+            "iterations": 10,
+            "final_temperature": 5.9874
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 2,
+          "total_cost_J": 62.1998,
+          "total_length_m": 29.02,
+          "total_bends": 11,
+          "total_crossings": 4,
+          "total_overlap_m": 7.6754,
+          "area_gap_m2": 49.1131,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.149,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 1,
+            "accepted_moves": 4,
+            "stagnation_steps": 5,
+            "baseline_h_count": 2,
+            "baseline_cost_J": 62.7316,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 2,
+                "3": 1,
+                "4": 1,
+                "5": 2,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": 0.0384,
+                "3": -1.0,
+                "4": -0.0392,
+                "5": -0.0699,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": 0.0192,
+                "3": -1.0,
+                "4": -0.0392,
+                "5": -0.035,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "condition_numbers": {
+                "0": 3.4153,
+                "1": 3.0468,
+                "2": 4.8143,
+                "3": 3.6689,
+                "4": 3.5305,
+                "5": 4.6254,
+                "6": 3.4486,
+                "7": 3.687
+              },
+              "theta_norms": {
+                "0": 0.455,
+                "1": 0.4696,
+                "2": 0.011,
+                "3": 0.4453,
+                "4": 0.0177,
+                "5": 0.0206,
+                "6": 0.4537,
+                "7": 0.4446
+              },
+              "recent_residual_mae": 0.5124,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 2,
+          "total_cost_J": 62.7316,
+          "total_length_m": 29.02,
+          "total_bends": 12,
+          "total_crossings": 4,
+          "total_overlap_m": 7.7072,
+          "area_gap_m2": 49.1131,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 1.971,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 62.7316,
+            "final_J": 62.7316,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 78,
+      "tier": "standard",
+      "eligible_rooms": 5,
+      "total_area_m2": 135.64,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 4,
+          "total_cost_J": 36.857,
+          "total_length_m": 15.24,
+          "total_bends": 14,
+          "total_crossings": 2,
+          "total_overlap_m": 4.6122,
+          "area_gap_m2": 52.4791,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 6.646,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 36.857,
+            "greedy_J": 36.857,
+            "timing_dp_s": 3.3445,
+            "timing_greedy_s": 3.3015
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 4,
+          "total_cost_J": 36.857,
+          "total_length_m": 15.24,
+          "total_bends": 14,
+          "total_crossings": 2,
+          "total_overlap_m": 4.6122,
+          "area_gap_m2": 52.4791,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 6.111,
+          "diagnostic_info": {
+            "iterations": 0,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 4,
+          "total_cost_J": 36.857,
+          "total_length_m": 15.24,
+          "total_bends": 14,
+          "total_crossings": 2,
+          "total_overlap_m": 4.6122,
+          "area_gap_m2": 52.4791,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 6.487,
+          "diagnostic_info": {
+            "iterations": 0,
+            "final_temperature": 10.0
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 4,
+          "total_cost_J": 31.355,
+          "total_length_m": 15.24,
+          "total_bends": 13,
+          "total_crossings": 1,
+          "total_overlap_m": 4.6102,
+          "area_gap_m2": 52.4791,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.388,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 1,
+            "accepted_moves": 5,
+            "stagnation_steps": 9,
+            "baseline_h_count": 4,
+            "baseline_cost_J": 36.857,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 2,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 2,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 2,
+                "4": 1,
+                "5": 2,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": 0.1977,
+                "4": -1.0,
+                "5": -0.1568,
+                "6": -1.0,
+                "7": -0.0529
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": 0.0988,
+                "4": -1.0,
+                "5": -0.0784,
+                "6": -1.0,
+                "7": -0.0529
+              },
+              "condition_numbers": {
+                "0": 3.9956,
+                "1": 4.5097,
+                "2": 4.3145,
+                "3": 5.2814,
+                "4": 3.7737,
+                "5": 6.3719,
+                "6": 4.7281,
+                "7": 3.87
+              },
+              "theta_norms": {
+                "0": 0.4332,
+                "1": 0.4154,
+                "2": 0.422,
+                "3": 0.0611,
+                "4": 0.4413,
+                "5": 0.0404,
+                "6": 0.4084,
+                "7": 0.0231
+              },
+              "recent_residual_mae": 0.5312,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 4,
+          "total_cost_J": 36.857,
+          "total_length_m": 15.24,
+          "total_bends": 14,
+          "total_crossings": 2,
+          "total_overlap_m": 4.6122,
+          "area_gap_m2": 52.4791,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 6.777,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 36.857,
+            "final_J": 36.857,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 119,
+      "tier": "standard",
+      "eligible_rooms": 5,
+      "total_area_m2": 104.42,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 4,
+          "total_cost_J": 16.8052,
+          "total_length_m": 12.81,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 29.2349,
+          "is_valid": true,
+          "solver_status": "FEASIBLE",
+          "runtime_s": 4.865,
+          "diagnostic_info": {
+            "selection_reason": "Greedy_Lower_J_16.81_vs_17.31",
+            "winner": "GreedyBaseline",
+            "bitmask_dp_J": 17.3054,
+            "greedy_J": 16.8052,
+            "timing_dp_s": 2.5711,
+            "timing_greedy_s": 2.2943
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 4,
+          "total_cost_J": 16.8052,
+          "total_length_m": 12.81,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 29.2349,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.971,
+          "diagnostic_info": {
+            "iterations": 0,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 4,
+          "total_cost_J": 16.8052,
+          "total_length_m": 12.81,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 29.2349,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.926,
+          "diagnostic_info": {
+            "iterations": 1,
+            "final_temperature": 9.5
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 4,
+          "total_cost_J": 16.8052,
+          "total_length_m": 12.81,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 29.2349,
+          "is_valid": true,
+          "solver_status": "FEASIBLE",
+          "runtime_s": 4.737,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 4,
+            "stagnation_steps": 10,
+            "baseline_h_count": 4,
+            "baseline_cost_J": 16.8052,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 2
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 2,
+                "6": 1,
+                "7": 2
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": 0.0198,
+                "5": -0.0795,
+                "6": -1.0,
+                "7": -0.2045
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": 0.0198,
+                "5": -0.0398,
+                "6": -1.0,
+                "7": -0.1022
+              },
+              "condition_numbers": {
+                "0": 3.0038,
+                "1": 3.4081,
+                "2": 3.4678,
+                "3": 3.6465,
+                "4": 2.5768,
+                "5": 4.87,
+                "6": 2.835,
+                "7": 4.6283
+              },
+              "theta_norms": {
+                "0": 0.4713,
+                "1": 0.4553,
+                "2": 0.453,
+                "3": 0.4461,
+                "4": 0.0096,
+                "5": 0.0228,
+                "6": 0.4778,
+                "7": 0.0712
+              },
+              "recent_residual_mae": 0.526,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 4,
+          "total_cost_J": 16.8052,
+          "total_length_m": 12.81,
+          "total_bends": 8,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0,
+          "area_gap_m2": 29.2349,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.305,
+          "diagnostic_info": {
+            "steps": 8,
+            "initial_J": 16.8052,
+            "final_J": 16.8052,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 121,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 90.49,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 45.2639,
+          "total_length_m": 20.84,
+          "total_bends": 8,
+          "total_crossings": 2,
+          "total_overlap_m": 10.4197,
+          "area_gap_m2": 27.6175,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.295,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 45.2639,
+            "greedy_J": 45.2639,
+            "timing_dp_s": 0.9947,
+            "timing_greedy_s": 1.3005
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 45.2639,
+          "total_length_m": 20.84,
+          "total_bends": 8,
+          "total_crossings": 2,
+          "total_overlap_m": 10.4197,
+          "area_gap_m2": 27.6175,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.721,
+          "diagnostic_info": {
+            "iterations": 6,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.2,
+              1.2,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 45.2639,
+          "total_length_m": 20.84,
+          "total_bends": 8,
+          "total_crossings": 2,
+          "total_overlap_m": 10.4197,
+          "area_gap_m2": 27.6175,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.087,
+          "diagnostic_info": {
+            "iterations": 5,
+            "final_temperature": 7.7378
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 45.2639,
+          "total_length_m": 20.84,
+          "total_bends": 8,
+          "total_crossings": 2,
+          "total_overlap_m": 10.4197,
+          "area_gap_m2": 27.6175,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.623,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 4,
+            "stagnation_steps": 10,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 45.2639,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 2,
+                "5": 2,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -0.0201,
+                "5": -0.0199,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -0.01,
+                "5": -0.01,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "condition_numbers": {
+                "0": 2.839,
+                "1": 2.6702,
+                "2": 3.406,
+                "3": 3.3068,
+                "4": 4.3109,
+                "5": 4.5466,
+                "6": 3.25,
+                "7": 3.4884
+              },
+              "theta_norms": {
+                "0": 0.4777,
+                "1": 0.484,
+                "2": 0.4554,
+                "3": 0.4593,
+                "4": 0.006,
+                "5": 0.0058,
+                "6": 0.4615,
+                "7": 0.4522
+              },
+              "recent_residual_mae": 0.603,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 45.2639,
+          "total_length_m": 20.84,
+          "total_bends": 8,
+          "total_crossings": 2,
+          "total_overlap_m": 10.4197,
+          "area_gap_m2": 27.6175,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.755,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 45.2639,
+            "final_J": 45.2639,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 129,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 84.54,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 42.9198,
+          "total_length_m": 19.54,
+          "total_bends": 12,
+          "total_crossings": 3,
+          "total_overlap_m": 2.3778,
+          "area_gap_m2": 18.6674,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.213,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 42.9198,
+            "greedy_J": 42.9198,
+            "timing_dp_s": 1.2473,
+            "timing_greedy_s": 0.9658
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 40.9969,
+          "total_length_m": 21.13,
+          "total_bends": 14,
+          "total_crossings": 2,
+          "total_overlap_m": 2.8696,
+          "area_gap_m2": 18.6674,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.434,
+          "diagnostic_info": {
+            "iterations": 10,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.6,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 37.9199,
+          "total_length_m": 19.54,
+          "total_bends": 12,
+          "total_crossings": 2,
+          "total_overlap_m": 2.3778,
+          "area_gap_m2": 18.6674,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.929,
+          "diagnostic_info": {
+            "iterations": 7,
+            "final_temperature": 6.9834
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 37.9199,
+          "total_length_m": 19.54,
+          "total_bends": 12,
+          "total_crossings": 2,
+          "total_overlap_m": 2.3778,
+          "area_gap_m2": 18.6674,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.175,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 1,
+            "accepted_moves": 3,
+            "stagnation_steps": 8,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 42.9198,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 2,
+                "5": 2,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -0.1265,
+                "4": -0.253,
+                "5": 0.213,
+                "6": -1.0,
+                "7": -0.0472
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -0.1265,
+                "4": -0.1265,
+                "5": 0.1065,
+                "6": -1.0,
+                "7": -0.0472
+              },
+              "condition_numbers": {
+                "0": 3.4566,
+                "1": 3.9644,
+                "2": 3.3278,
+                "3": 3.5908,
+                "4": 5.26,
+                "5": 4.1795,
+                "6": 3.4265,
+                "7": 3.2222
+              },
+              "theta_norms": {
+                "0": 0.4534,
+                "1": 0.4343,
+                "2": 0.4585,
+                "3": 0.0567,
+                "4": 0.0703,
+                "5": 0.0643,
+                "6": 0.4546,
+                "7": 0.0218
+              },
+              "recent_residual_mae": 0.4548,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 37.9199,
+          "total_length_m": 19.54,
+          "total_bends": 12,
+          "total_crossings": 2,
+          "total_overlap_m": 2.3778,
+          "area_gap_m2": 18.6674,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.176,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 42.9198,
+            "final_J": 37.9199,
+            "delta_J": 4.9999
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 101,
+      "tier": "standard",
+      "eligible_rooms": 5,
+      "total_area_m2": 115.39,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 5,
+          "total_cost_J": 5.4961,
+          "total_length_m": 0.49,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0013,
+          "area_gap_m2": 33.738,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 10.179,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 5.4961,
+            "greedy_J": 5.4961,
+            "timing_dp_s": 5.0823,
+            "timing_greedy_s": 5.0966
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 5,
+          "total_cost_J": 5.4961,
+          "total_length_m": 0.49,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0013,
+          "area_gap_m2": 33.738,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 10.593,
+          "diagnostic_info": {
+            "iterations": 0,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 5,
+          "total_cost_J": 5.4961,
+          "total_length_m": 0.49,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0013,
+          "area_gap_m2": 33.738,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 10.442,
+          "diagnostic_info": {
+            "iterations": 0,
+            "final_temperature": 10.0
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 5,
+          "total_cost_J": 5.4961,
+          "total_length_m": 0.49,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0013,
+          "area_gap_m2": 33.738,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.106,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 3,
+            "stagnation_steps": 10,
+            "baseline_h_count": 5,
+            "baseline_cost_J": 5.4961,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 2
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 2,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 2
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.9016,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.3985
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.4508,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.1993
+              },
+              "condition_numbers": {
+                "0": 3.0888,
+                "1": 3.2576,
+                "2": 4.4538,
+                "3": 2.7216,
+                "4": 2.9432,
+                "5": 3.4496,
+                "6": 2.8208,
+                "7": 4.2359
+              },
+              "theta_norms": {
+                "0": 0.4679,
+                "1": 0.4612,
+                "2": 0.4488,
+                "3": 0.4821,
+                "4": 0.4736,
+                "5": 0.4537,
+                "6": 0.4784,
+                "7": 0.1373
+              },
+              "recent_residual_mae": 0.7692,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 5,
+          "total_cost_J": 5.4961,
+          "total_length_m": 0.49,
+          "total_bends": 10,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0013,
+          "area_gap_m2": 33.738,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 10.092,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 5.4961,
+            "final_J": 5.4961,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 160,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 108.32,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 27.3103,
+          "total_length_m": 13.54,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 6.7683,
+          "area_gap_m2": 42.2452,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.272,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Lower_J_27.31_vs_27.31",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 27.3103,
+            "greedy_J": 27.3122,
+            "timing_dp_s": 1.2128,
+            "timing_greedy_s": 1.0594
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 27.3103,
+          "total_length_m": 13.54,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 6.7683,
+          "area_gap_m2": 42.2452,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.713,
+          "diagnostic_info": {
+            "iterations": 10,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.2,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 27.3103,
+          "total_length_m": 13.54,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 6.7683,
+          "area_gap_m2": 42.2452,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.795,
+          "diagnostic_info": {
+            "iterations": 9,
+            "final_temperature": 6.3025
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 27.3103,
+          "total_length_m": 13.54,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 6.7683,
+          "area_gap_m2": 42.2452,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.81,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 4,
+            "stagnation_steps": 10,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 27.3103,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 2
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 2,
+                "5": 1,
+                "6": 1,
+                "7": 2
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -0.0201,
+                "5": -0.0099,
+                "6": -1.0,
+                "7": -1.1016
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -0.0101,
+                "5": -0.0099,
+                "6": -1.0,
+                "7": -0.5508
+              },
+              "condition_numbers": {
+                "0": 2.5186,
+                "1": 3.3442,
+                "2": 2.7866,
+                "3": 2.641,
+                "4": 4.5408,
+                "5": 2.4194,
+                "6": 3.5826,
+                "7": 4.6432
+              },
+              "theta_norms": {
+                "0": 0.4893,
+                "1": 0.4578,
+                "2": 0.4797,
+                "3": 0.485,
+                "4": 0.0059,
+                "5": 0.0049,
+                "6": 0.4486,
+                "7": 0.4441
+              },
+              "recent_residual_mae": 0.6085,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 27.3103,
+          "total_length_m": 13.54,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 6.7683,
+          "area_gap_m2": 42.2452,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.484,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 27.3103,
+            "final_J": 27.3103,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 199,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 102.19,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 26.4652,
+          "total_length_m": 16.24,
+          "total_bends": 6,
+          "total_crossings": 1,
+          "total_overlap_m": 2.224,
+          "area_gap_m2": 31.146,
+          "is_valid": true,
+          "solver_status": "FEASIBLE",
+          "runtime_s": 2.058,
+          "diagnostic_info": {
+            "selection_reason": "Greedy_Lower_J_26.47_vs_31.36",
+            "winner": "GreedyBaseline",
+            "bitmask_dp_J": 31.356,
+            "greedy_J": 26.4652,
+            "timing_dp_s": 0.8822,
+            "timing_greedy_s": 1.1761
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 25.9638,
+          "total_length_m": 16.24,
+          "total_bends": 5,
+          "total_crossings": 1,
+          "total_overlap_m": 2.2226,
+          "area_gap_m2": 31.146,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.013,
+          "diagnostic_info": {
+            "iterations": 7,
+            "weights": [
+              1.0,
+              1.0,
+              1.48,
+              1.0,
+              1.0,
+              1.2,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 25.9638,
+          "total_length_m": 16.24,
+          "total_bends": 5,
+          "total_crossings": 1,
+          "total_overlap_m": 2.2226,
+          "area_gap_m2": 31.146,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.511,
+          "diagnostic_info": {
+            "iterations": 10,
+            "final_temperature": 5.9874
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 25.9638,
+          "total_length_m": 16.24,
+          "total_bends": 5,
+          "total_crossings": 1,
+          "total_overlap_m": 2.2226,
+          "area_gap_m2": 31.146,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.434,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 1,
+            "accepted_moves": 2,
+            "stagnation_steps": 8,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 26.4652,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 2,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 2,
+                "4": 1,
+                "5": 2,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -0.9911,
+                "4": -0.2137,
+                "5": -0.4275,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -0.4955,
+                "4": -0.2137,
+                "5": -0.2137,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "condition_numbers": {
+                "0": 3.4994,
+                "1": 3.4924,
+                "2": 4.025,
+                "3": 4.2958,
+                "4": 3.3706,
+                "5": 4.6269,
+                "6": 3.6514,
+                "7": 3.265
+              },
+              "theta_norms": {
+                "0": 0.4518,
+                "1": 0.452,
+                "2": 0.4321,
+                "3": 0.4643,
+                "4": 0.0976,
+                "5": 0.1258,
+                "6": 0.4459,
+                "7": 0.4609
+              },
+              "recent_residual_mae": 0.6582,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 26.4652,
+          "total_length_m": 16.24,
+          "total_bends": 6,
+          "total_crossings": 1,
+          "total_overlap_m": 2.224,
+          "area_gap_m2": 31.146,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.218,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 26.4652,
+            "final_J": 26.4652,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 203,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 79.16,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 3,
+          "total_cost_J": 21.003,
+          "total_length_m": 9.34,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 4.6665,
+          "area_gap_m2": 21.9978,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.044,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Lower_J_21.00_vs_21.00",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 21.003,
+            "greedy_J": 21.0039,
+            "timing_dp_s": 1.163,
+            "timing_greedy_s": 0.8807
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 3,
+          "total_cost_J": 21.003,
+          "total_length_m": 9.34,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 4.6665,
+          "area_gap_m2": 21.9978,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.622,
+          "diagnostic_info": {
+            "iterations": 7,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.2,
+              1.16,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 3,
+          "total_cost_J": 21.003,
+          "total_length_m": 9.34,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 4.6665,
+          "area_gap_m2": 21.9978,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.806,
+          "diagnostic_info": {
+            "iterations": 8,
+            "final_temperature": 6.6342
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 3,
+          "total_cost_J": 21.003,
+          "total_length_m": 9.34,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 4.6665,
+          "area_gap_m2": 21.9978,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.885,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 4,
+            "stagnation_steps": 10,
+            "baseline_h_count": 3,
+            "baseline_cost_J": 21.003,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 2,
+                "3": 1,
+                "4": 2,
+                "5": 1,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.01,
+                "3": -1.0,
+                "4": -0.0199,
+                "5": -0.01,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.505,
+                "3": -1.0,
+                "4": -0.01,
+                "5": -0.01,
+                "6": -1.0,
+                "7": -1.0
+              },
+              "condition_numbers": {
+                "0": 3.1545,
+                "1": 3.2038,
+                "2": 4.1415,
+                "3": 3.564,
+                "4": 4.2716,
+                "5": 3.296,
+                "6": 3.4184,
+                "7": 2.9393
+              },
+              "theta_norms": {
+                "0": 0.4653,
+                "1": 0.4634,
+                "2": 0.4662,
+                "3": 0.4493,
+                "4": 0.006,
+                "5": 0.0046,
+                "6": 0.4549,
+                "7": 0.4738
+              },
+              "recent_residual_mae": 0.6033,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 3,
+          "total_cost_J": 21.003,
+          "total_length_m": 9.34,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 4.6665,
+          "area_gap_m2": 21.9978,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.265,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 21.003,
+            "final_J": 21.003,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 210,
+      "tier": "standard",
+      "eligible_rooms": 4,
+      "total_area_m2": 108.23,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 4,
+          "total_cost_J": 2.7383,
+          "total_length_m": 0.49,
+          "total_bends": 4,
+          "total_crossings": 0,
+          "total_overlap_m": 0.2447,
+          "area_gap_m2": 26.2055,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.406,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 2.7383,
+            "greedy_J": 2.7383,
+            "timing_dp_s": 1.6408,
+            "timing_greedy_s": 1.7648
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 4,
+          "total_cost_J": 2.7383,
+          "total_length_m": 0.49,
+          "total_bends": 4,
+          "total_crossings": 0,
+          "total_overlap_m": 0.2447,
+          "area_gap_m2": 26.2055,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.886,
+          "diagnostic_info": {
+            "iterations": 10,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 4,
+          "total_cost_J": 2.7383,
+          "total_length_m": 0.49,
+          "total_bends": 4,
+          "total_crossings": 0,
+          "total_overlap_m": 0.2447,
+          "area_gap_m2": 26.2055,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.625,
+          "diagnostic_info": {
+            "iterations": 4,
+            "final_temperature": 8.1451
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 4,
+          "total_cost_J": 2.2049,
+          "total_length_m": 0.14,
+          "total_bends": 4,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0669,
+          "area_gap_m2": 26.2055,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 1.688,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 1,
+            "accepted_moves": 2,
+            "stagnation_steps": 8,
+            "baseline_h_count": 4,
+            "baseline_cost_J": 2.7383,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 2,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 2
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 2,
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 2
+              },
+              "cumulative_rewards": {
+                "0": -2.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.373
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.1865
+              },
+              "condition_numbers": {
+                "0": 4.3169,
+                "1": 3.8008,
+                "2": 3.52,
+                "3": 3.976,
+                "4": 3.4144,
+                "5": 4.1744,
+                "6": 3.6488,
+                "7": 4.5311
+              },
+              "theta_norms": {
+                "0": 0.5973,
+                "1": 0.4403,
+                "2": 0.451,
+                "3": 0.4339,
+                "4": 0.4551,
+                "5": 0.4268,
+                "6": 0.446,
+                "7": 0.284
+              },
+              "recent_residual_mae": 0.8572,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 4,
+          "total_cost_J": 2.7383,
+          "total_length_m": 0.49,
+          "total_bends": 4,
+          "total_crossings": 0,
+          "total_overlap_m": 0.2447,
+          "area_gap_m2": 26.2055,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.316,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 2.7383,
+            "final_J": 2.7383,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 252,
+      "tier": "compact",
+      "eligible_rooms": 3,
+      "total_area_m2": 60.39,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 2,
+          "total_cost_J": 25.8789,
+          "total_length_m": 12.59,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 6.2921,
+          "area_gap_m2": 19.5369,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 1.334,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Lower_J_25.88_vs_29.43",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 25.8789,
+            "greedy_J": 29.4305,
+            "timing_dp_s": 0.4688,
+            "timing_greedy_s": 0.8651
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 2,
+          "total_cost_J": 23.928,
+          "total_length_m": 12.59,
+          "total_bends": 5,
+          "total_crossings": 1,
+          "total_overlap_m": 3.8362,
+          "area_gap_m2": 19.5369,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.901,
+          "diagnostic_info": {
+            "iterations": 10,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.384,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 2,
+          "total_cost_J": 23.928,
+          "total_length_m": 12.59,
+          "total_bends": 5,
+          "total_crossings": 1,
+          "total_overlap_m": 3.8362,
+          "area_gap_m2": 19.5369,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.246,
+          "diagnostic_info": {
+            "iterations": 10,
+            "final_temperature": 5.9874
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 2,
+          "total_cost_J": 23.928,
+          "total_length_m": 12.59,
+          "total_bends": 5,
+          "total_crossings": 1,
+          "total_overlap_m": 3.8362,
+          "area_gap_m2": 19.5369,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.142,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 1,
+            "accepted_moves": 5,
+            "stagnation_steps": 9,
+            "baseline_h_count": 2,
+            "baseline_cost_J": 25.8789,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 2,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 2,
+                "3": 1,
+                "4": 2,
+                "5": 1,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": 0.1308,
+                "3": -1.0,
+                "4": -0.1708,
+                "5": -0.0854,
+                "6": -1.0,
+                "7": -0.0834
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": 0.0654,
+                "3": -1.0,
+                "4": -0.0854,
+                "5": -0.0854,
+                "6": -1.0,
+                "7": -0.0834
+              },
+              "condition_numbers": {
+                "0": 3.0525,
+                "1": 3.2511,
+                "2": 3.8325,
+                "3": 3.3999,
+                "4": 4.9368,
+                "5": 3.1255,
+                "6": 3.5719,
+                "7": 3.7659
+              },
+              "theta_norms": {
+                "0": 0.4693,
+                "1": 0.4615,
+                "2": 0.0406,
+                "3": 0.4557,
+                "4": 0.0488,
+                "5": 0.0398,
+                "6": 0.449,
+                "7": 0.0368
+              },
+              "recent_residual_mae": 0.4428,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 2,
+          "total_cost_J": 25.8789,
+          "total_length_m": 12.59,
+          "total_bends": 4,
+          "total_crossings": 1,
+          "total_overlap_m": 6.2921,
+          "area_gap_m2": 19.5369,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 2.425,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 25.8789,
+            "final_J": 25.8789,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 172,
+      "tier": "standard",
+      "eligible_rooms": 5,
+      "total_area_m2": 100.34,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 5,
+          "total_cost_J": 3.0488,
+          "total_length_m": 0.04,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0038,
+          "area_gap_m2": 23.4527,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 9.168,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 3.0488,
+            "greedy_J": 3.0488,
+            "timing_dp_s": 4.2765,
+            "timing_greedy_s": 4.8914
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 5,
+          "total_cost_J": 3.0488,
+          "total_length_m": 0.04,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0038,
+          "area_gap_m2": 23.4527,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 9.421,
+          "diagnostic_info": {
+            "iterations": 0,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 5,
+          "total_cost_J": 3.0488,
+          "total_length_m": 0.04,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0038,
+          "area_gap_m2": 23.4527,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 9.547,
+          "diagnostic_info": {
+            "iterations": 0,
+            "final_temperature": 10.0
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 5,
+          "total_cost_J": 3.0488,
+          "total_length_m": 0.04,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0038,
+          "area_gap_m2": 23.4527,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.637,
+          "diagnostic_info": {
+            "iterations": 10,
+            "incumbent_updates": 0,
+            "accepted_moves": 1,
+            "stagnation_steps": 10,
+            "baseline_h_count": 5,
+            "baseline_cost_J": 3.0488,
+            "final_temperature": 5.9874,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 2
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 10,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 2,
+                "6": 1,
+                "7": 2
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -2.0,
+                "6": -1.0,
+                "7": -1.1675
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -1.0,
+                "3": -1.0,
+                "4": -1.0,
+                "5": -1.0,
+                "6": -1.0,
+                "7": -0.5838
+              },
+              "condition_numbers": {
+                "0": 2.7057,
+                "1": 3.1425,
+                "2": 2.6065,
+                "3": 3.5497,
+                "4": 2.9737,
+                "5": 4.7302,
+                "6": 2.8281,
+                "7": 3.9859
+              },
+              "theta_norms": {
+                "0": 0.4827,
+                "1": 0.4658,
+                "2": 0.4863,
+                "3": 0.4498,
+                "4": 0.4724,
+                "5": 0.5781,
+                "6": 0.4781,
+                "7": 0.4076
+              },
+              "recent_residual_mae": 0.8861,
+              "history_length": 10,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            },
+            "fallback_to_baseline": true
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 5,
+          "total_cost_J": 3.0488,
+          "total_length_m": 0.04,
+          "total_bends": 6,
+          "total_crossings": 0,
+          "total_overlap_m": 0.0038,
+          "area_gap_m2": 23.4527,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 8.836,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 3.0488,
+            "final_J": 3.0488,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 239,
+      "tier": "complex",
+      "eligible_rooms": 6,
+      "total_area_m2": 149.11,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 5,
+          "total_cost_J": 43.4649,
+          "total_length_m": 21.3,
+          "total_bends": 12,
+          "total_crossings": 3,
+          "total_overlap_m": 1.1659,
+          "area_gap_m2": 67.5776,
+          "is_valid": true,
+          "solver_status": "FEASIBLE",
+          "runtime_s": 8.305,
+          "diagnostic_info": {
+            "selection_reason": "Greedy_Lower_J_43.46_vs_45.22",
+            "winner": "GreedyBaseline",
+            "bitmask_dp_J": 45.2238,
+            "greedy_J": 43.4649,
+            "timing_dp_s": 4.0292,
+            "timing_greedy_s": 4.2757
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 5,
+          "total_cost_J": 43.4649,
+          "total_length_m": 21.3,
+          "total_bends": 12,
+          "total_crossings": 3,
+          "total_overlap_m": 1.1659,
+          "area_gap_m2": 67.5776,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 7.856,
+          "diagnostic_info": {
+            "iterations": 0,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 5,
+          "total_cost_J": 43.4649,
+          "total_length_m": 21.3,
+          "total_bends": 12,
+          "total_crossings": 3,
+          "total_overlap_m": 1.1659,
+          "area_gap_m2": 67.5776,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 7.982,
+          "diagnostic_info": {
+            "iterations": 0,
+            "final_temperature": 10.0
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 5,
+          "total_cost_J": 37.9634,
+          "total_length_m": 21.3,
+          "total_bends": 11,
+          "total_crossings": 2,
+          "total_overlap_m": 1.1644,
+          "area_gap_m2": 67.5776,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.02,
+          "diagnostic_info": {
+            "iterations": 9,
+            "incumbent_updates": 1,
+            "accepted_moves": 2,
+            "stagnation_steps": 6,
+            "baseline_h_count": 5,
+            "baseline_cost_J": 43.4649,
+            "final_temperature": 6.3025,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 2,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 1,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 0,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 9,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 2,
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.8834,
+                "3": -1.0,
+                "4": -0.0505,
+                "5": -0.177,
+                "6": -1.0,
+                "7": -0.0675
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.4417,
+                "3": -1.0,
+                "4": -0.0505,
+                "5": -0.177,
+                "6": -1.0,
+                "7": -0.0675
+              },
+              "condition_numbers": {
+                "0": 4.4488,
+                "1": 4.5872,
+                "2": 6.1548,
+                "3": 4.3,
+                "4": 4.2104,
+                "5": 4.432,
+                "6": 4.1912,
+                "7": 4.7713
+              },
+              "theta_norms": {
+                "0": 0.4174,
+                "1": 0.4129,
+                "2": 0.4554,
+                "3": 0.4225,
+                "4": 0.0215,
+                "5": 0.074,
+                "6": 0.4262,
+                "7": 0.0275
+              },
+              "recent_residual_mae": 0.6081,
+              "history_length": 9,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 5,
+          "total_cost_J": 43.4649,
+          "total_length_m": 21.3,
+          "total_bends": 12,
+          "total_crossings": 3,
+          "total_overlap_m": 1.1659,
+          "area_gap_m2": 67.5776,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 7.281,
+          "diagnostic_info": {
+            "steps": 0,
+            "initial_J": 43.4649,
+            "final_J": 43.4649,
+            "delta_J": 0.0
+          },
+          "violations": []
+        }
+      }
+    },
+    {
+      "plan_id": 256,
+      "tier": "compact",
+      "eligible_rooms": 3,
+      "total_area_m2": 67.82,
+      "results": {
+        "PortfolioHybrid": {
+          "algorithm_name": "PortfolioHybrid",
+          "h_count": 2,
+          "total_cost_J": 38.3557,
+          "total_length_m": 21.35,
+          "total_bends": 6,
+          "total_crossings": 2,
+          "total_overlap_m": 4.0083,
+          "area_gap_m2": 23.6578,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 3.542,
+          "diagnostic_info": {
+            "selection_reason": "BitmaskDP_Smaller_Area_Gap",
+            "winner": "BitmaskDP",
+            "bitmask_dp_J": 38.3557,
+            "greedy_J": 38.3557,
+            "timing_dp_s": 1.7627,
+            "timing_greedy_s": 1.7792
+          },
+          "violations": []
+        },
+        "ALNS_Bandit": {
+          "algorithm_name": "ALNS_Bandit",
+          "h_count": 2,
+          "total_cost_J": 33.9359,
+          "total_length_m": 21.36,
+          "total_bends": 8,
+          "total_crossings": 1,
+          "total_overlap_m": 3.5807,
+          "area_gap_m2": 23.6578,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.296,
+          "diagnostic_info": {
+            "iterations": 5,
+            "weights": [
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              1.48,
+              1.0,
+              1.0
+            ]
+          },
+          "violations": []
+        },
+        "ALNS_Random": {
+          "algorithm_name": "ALNS_Random",
+          "h_count": 2,
+          "total_cost_J": 38.3557,
+          "total_length_m": 21.35,
+          "total_bends": 6,
+          "total_crossings": 2,
+          "total_overlap_m": 4.0083,
+          "area_gap_m2": 23.6578,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.215,
+          "diagnostic_info": {
+            "iterations": 2,
+            "final_temperature": 9.025
+          },
+          "violations": []
+        },
+        "LinUCB_ALNS": {
+          "algorithm_name": "LinUCB_ALNS",
+          "h_count": 2,
+          "total_cost_J": 33.9359,
+          "total_length_m": 21.36,
+          "total_bends": 8,
+          "total_crossings": 1,
+          "total_overlap_m": 3.5807,
+          "area_gap_m2": 23.6578,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 5.68,
+          "diagnostic_info": {
+            "iterations": 9,
+            "incumbent_updates": 1,
+            "accepted_moves": 4,
+            "stagnation_steps": 7,
+            "baseline_h_count": 2,
+            "baseline_cost_J": 38.3557,
+            "final_temperature": 6.3025,
+            "operator_calls": {
+              "BOUNDARY_EXCHANGE": 1,
+              "MERGE_SPLIT": 1,
+              "CROSSING_ELIM": 1,
+              "OVERLAP_REDUCE": 1,
+              "BEND_SMOOTH": 1,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 1,
+              "HUB_CENTROID_RELOC": 1
+            },
+            "operator_successes": {
+              "BOUNDARY_EXCHANGE": 0,
+              "MERGE_SPLIT": 0,
+              "CROSSING_ELIM": 0,
+              "OVERLAP_REDUCE": 0,
+              "BEND_SMOOTH": 0,
+              "WORST_ROUTE_REBUILD": 2,
+              "RANDOM_EXPLORATION": 0,
+              "HUB_CENTROID_RELOC": 0
+            },
+            "bandit_telemetry": {
+              "total_pulls": 9,
+              "pull_counts": {
+                "0": 1,
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 2,
+                "6": 1,
+                "7": 1
+              },
+              "cumulative_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.1227,
+                "3": -1.0,
+                "4": -0.1252,
+                "5": 0.2105,
+                "6": -1.0,
+                "7": -0.0125
+              },
+              "mean_rewards": {
+                "0": -1.0,
+                "1": -1.0,
+                "2": -0.1227,
+                "3": -1.0,
+                "4": -0.1252,
+                "5": 0.1052,
+                "6": -1.0,
+                "7": -0.0125
+              },
+              "condition_numbers": {
+                "0": 3.2872,
+                "1": 3.8205,
+                "2": 3.0528,
+                "3": 3.2698,
+                "4": 3.6221,
+                "5": 3.8663,
+                "6": 3.1584,
+                "7": 3.4469
+              },
+              "theta_norms": {
+                "0": 0.4601,
+                "1": 0.4396,
+                "2": 0.0576,
+                "3": 0.4608,
+                "4": 0.056,
+                "5": 0.0652,
+                "6": 0.4652,
+                "7": 0.0057
+              },
+              "recent_residual_mae": 0.4935,
+              "history_length": 9,
+              "alpha": 0.5,
+              "lambda_reg": 1.0
+            }
+          },
+          "violations": []
+        },
+        "PPO_ALNS": {
+          "algorithm_name": "PPO_ALNS",
+          "h_count": 2,
+          "total_cost_J": 33.9359,
+          "total_length_m": 21.36,
+          "total_bends": 8,
+          "total_crossings": 1,
+          "total_overlap_m": 3.5807,
+          "area_gap_m2": 23.6578,
+          "is_valid": true,
+          "solver_status": "OPTIMAL",
+          "runtime_s": 4.081,
+          "diagnostic_info": {
+            "steps": 10,
+            "initial_J": 38.3557,
+            "final_J": 33.9359,
+            "delta_J": 4.4198
+          },
+          "violations": []
+        }
+      }
+    }
+  ]
+}

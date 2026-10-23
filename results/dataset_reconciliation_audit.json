@@ -1,0 +1,1663 @@
+{
+  "dataset_total": 17000,
+  "split_sizes": {
+    "train": 13053,
+    "val": 1632,
+    "test": 1632,
+    "augmented": 683
+  },
+  "per_split_breakdown": {
+    "train": {
+      "total": 13053,
+      "clean_feasible": 12632,
+      "strictly_infeasible_gt_100": 331,
+      "tight_95_to_100": 58,
+      "anomalous_geometry": 83,
+      "zero_rooms": 7
+    },
+    "val": {
+      "total": 1632,
+      "clean_feasible": 1585,
+      "strictly_infeasible_gt_100": 40,
+      "tight_95_to_100": 10,
+      "anomalous_geometry": 6,
+      "zero_rooms": 1
+    },
+    "test": {
+      "total": 1632,
+      "clean_feasible": 1577,
+      "strictly_infeasible_gt_100": 42,
+      "tight_95_to_100": 7,
+      "anomalous_geometry": 12,
+      "zero_rooms": 1
+    },
+    "augmented": {
+      "total": 683,
+      "clean_feasible": 452,
+      "strictly_infeasible_gt_100": 12,
+      "tight_95_to_100": 1,
+      "anomalous_geometry": 3,
+      "zero_rooms": 216
+    }
+  },
+  "strictly_infeasible_gt_100_count": 425,
+  "strictly_infeasible_pids": [
+    1448,
+    15681,
+    6125,
+    14171,
+    33,
+    14361,
+    4167,
+    15059,
+    8117,
+    15468,
+    580728,
+    141043,
+    12852,
+    12813,
+    8820,
+    10110,
+    11055,
+    4053,
+    151,
+    11410,
+    2455,
+    17064,
+    12221,
+    5343,
+    900441,
+    74,
+    11670,
+    388,
+    15278,
+    4103,
+    12439,
+    16098,
+    13802,
+    498,
+    4259,
+    15461,
+    720556,
+    9014,
+    2366,
+    13354,
+    693643,
+    2422,
+    16632,
+    13804,
+    13803,
+    3236,
+    14181,
+    359295,
+    2499,
+    2560,
+    3659,
+    12152,
+    3827,
+    12769,
+    7395,
+    969032,
+    3674,
+    9774,
+    15361,
+    7398,
+    3723,
+    6446,
+    9480,
+    357,
+    1306,
+    13288,
+    15369,
+    7104,
+    13205,
+    9229,
+    12603,
+    497,
+    6899,
+    1177,
+    8959,
+    8765,
+    12883,
+    13884,
+    12592,
+    13080,
+    9848,
+    385320,
+    13204,
+    3829,
+    6691,
+    15311,
+    16096,
+    4335,
+    14384,
+    9207,
+    8444,
+    596,
+    5341,
+    16207,
+    14241,
+    13835,
+    12467,
+    8388,
+    2820,
+    16250,
+    7371,
+    15289,
+    3945,
+    16172,
+    3935,
+    13439,
+    11364,
+    1841,
+    2425,
+    11163,
+    5340,
+    279,
+    10245,
+    3520,
+    178,
+    10282,
+    16793,
+    5493,
+    717,
+    13279,
+    1773,
+    1398,
+    6897,
+    8957,
+    12151,
+    12810,
+    2222,
+    16338,
+    7907,
+    2220,
+    6445,
+    8940,
+    6898,
+    496,
+    6444,
+    4114,
+    16053,
+    15290,
+    4255,
+    1219,
+    2101,
+    15282,
+    14381,
+    916232,
+    10111,
+    12608,
+    4078,
+    1775,
+    16631,
+    7370,
+    13187,
+    4117,
+    3726,
+    4283,
+    12851,
+    4299,
+    4118,
+    5937,
+    12469,
+    1781,
+    15330,
+    2643,
+    11866,
+    972,
+    3634,
+    3592,
+    2454,
+    4162,
+    12220,
+    9295,
+    3591,
+    14701,
+    8978,
+    4066,
+    16171,
+    4363,
+    16095,
+    15291,
+    421,
+    9841,
+    4912,
+    7995,
+    1022,
+    5885,
+    16118,
+    14382,
+    16078,
+    7293,
+    9248,
+    15998,
+    3722,
+    11404,
+    14185,
+    9846,
+    15682,
+    633469,
+    3828,
+    10115,
+    16097,
+    6340,
+    15373,
+    8979,
+    12414,
+    8941,
+    6346,
+    14186,
+    1458,
+    16884,
+    12154,
+    2223,
+    8152,
+    13186,
+    7396,
+    4102,
+    4386,
+    15474,
+    8566,
+    14620,
+    8796,
+    6447,
+    15181,
+    651640,
+    147,
+    16195,
+    12278,
+    13206,
+    14579,
+    7478,
+    2914,
+    10669,
+    10019,
+    9296,
+    4843,
+    16102,
+    8143,
+    9274,
+    10121,
+    9912,
+    14700,
+    16591,
+    5762,
+    7397,
+    14182,
+    16199,
+    1222,
+    9225,
+    10399,
+    2881,
+    1782,
+    16259,
+    7366,
+    11166,
+    574,
+    9227,
+    12224,
+    970,
+    10944,
+    1216,
+    16008,
+    8709,
+    10250,
+    1055,
+    12468,
+    11363,
+    2605,
+    4362,
+    2817,
+    2502,
+    13370,
+    12069,
+    410,
+    9013,
+    15473,
+    4324,
+    9689,
+    6448,
+    15471,
+    14375,
+    8150,
+    10875,
+    7909,
+    12153,
+    5496,
+    8153,
+    16433,
+    7906,
+    14702,
+    10876,
+    15312,
+    15460,
+    6921,
+    4113,
+    152,
+    7202,
+    14919,
+    4395,
+    15470,
+    3278,
+    146,
+    9645,
+    591,
+    10749,
+    4060,
+    973,
+    9481,
+    2880,
+    9228,
+    9560,
+    1783,
+    9023,
+    16320,
+    1112,
+    6771,
+    3658,
+    1009,
+    575,
+    5495,
+    13445,
+    15669,
+    7394,
+    1887,
+    13286,
+    5191,
+    9226,
+    8794,
+    3725,
+    9293,
+    10123,
+    2811,
+    4112,
+    2336,
+    13339,
+    11918,
+    15457,
+    6703,
+    4237,
+    8457,
+    2219,
+    9099,
+    3062,
+    9966,
+    8473,
+    14183,
+    971,
+    6713,
+    13240,
+    401603,
+    4300,
+    389,
+    15024,
+    767,
+    14426,
+    12349,
+    713,
+    9652,
+    6772,
+    1111,
+    16173,
+    5731,
+    1568,
+    12812,
+    3695,
+    16188,
+    1307,
+    4263,
+    16434,
+    1569,
+    3706,
+    16194,
+    6684,
+    6938,
+    2498,
+    9651,
+    16200,
+    1220,
+    4128,
+    3237,
+    9994,
+    4723,
+    12612,
+    15472,
+    9974,
+    6117,
+    14766,
+    885,
+    9330,
+    5842,
+    15990,
+    9911,
+    5843,
+    8144,
+    3724,
+    11038,
+    15370,
+    13157,
+    11365,
+    886,
+    14089,
+    3657,
+    7908,
+    13233,
+    16093,
+    14974,
+    8724,
+    16860,
+    9901,
+    5841,
+    2141,
+    11925,
+    11466,
+    16244,
+    1570,
+    8798,
+    12768,
+    4591,
+    3633,
+    1178,
+    15095,
+    4077,
+    9965,
+    7430,
+    11403,
+    5497,
+    13805,
+    9847
+  ],
+  "tight_room_95_to_100_count": 76,
+  "tight_room_95_to_100_plans": [
+    {
+      "plan_id": 20,
+      "split": "train",
+      "max_room_area_m2": 97.83,
+      "room_count": 3,
+      "room_areas": [
+        48.2,
+        97.8,
+        32.5
+      ]
+    },
+    {
+      "plan_id": 187949,
+      "split": "augmented",
+      "max_room_area_m2": 97.65,
+      "room_count": 7,
+      "room_areas": [
+        24.1,
+        6.4,
+        22.7,
+        28.0,
+        24.2,
+        97.6,
+        16.5
+      ]
+    },
+    {
+      "plan_id": 11823,
+      "split": "train",
+      "max_room_area_m2": 96.15,
+      "room_count": 6,
+      "room_areas": [
+        35.9,
+        30.7,
+        26.6,
+        96.2,
+        19.0,
+        3.8
+      ]
+    },
+    {
+      "plan_id": 1221,
+      "split": "test",
+      "max_room_area_m2": 97.14,
+      "room_count": 8,
+      "room_areas": [
+        7.2,
+        25.2,
+        22.1,
+        23.6,
+        33.5,
+        97.1,
+        13.1,
+        3.2
+      ]
+    },
+    {
+      "plan_id": 7957,
+      "split": "train",
+      "max_room_area_m2": 95.38,
+      "room_count": 6,
+      "room_areas": [
+        17.6,
+        19.6,
+        23.9,
+        20.9,
+        95.4,
+        16.6
+      ]
+    },
+    {
+      "plan_id": 14526,
+      "split": "train",
+      "max_room_area_m2": 98.31,
+      "room_count": 7,
+      "room_areas": [
+        24.3,
+        6.4,
+        22.7,
+        26.4,
+        24.0,
+        98.3,
+        16.9
+      ]
+    },
+    {
+      "plan_id": 12345,
+      "split": "train",
+      "max_room_area_m2": 99.46,
+      "room_count": 4,
+      "room_areas": [
+        36.6,
+        37.1,
+        99.5,
+        25.7
+      ]
+    },
+    {
+      "plan_id": 16804,
+      "split": "val",
+      "max_room_area_m2": 96.3,
+      "room_count": 4,
+      "room_areas": [
+        10.6,
+        31.8,
+        96.3,
+        24.7
+      ]
+    },
+    {
+      "plan_id": 9964,
+      "split": "train",
+      "max_room_area_m2": 96.53,
+      "room_count": 5,
+      "room_areas": [
+        32.3,
+        31.8,
+        23.7,
+        96.5,
+        17.9
+      ]
+    },
+    {
+      "plan_id": 1226,
+      "split": "train",
+      "max_room_area_m2": 96.75,
+      "room_count": 6,
+      "room_areas": [
+        21.3,
+        21.8,
+        29.4,
+        31.6,
+        96.8,
+        13.8
+      ]
+    },
+    {
+      "plan_id": 8154,
+      "split": "train",
+      "max_room_area_m2": 98.72,
+      "room_count": 6,
+      "room_areas": [
+        25.5,
+        26.5,
+        33.9,
+        28.7,
+        98.7,
+        19.7
+      ]
+    },
+    {
+      "plan_id": 1024,
+      "split": "train",
+      "max_room_area_m2": 95.16,
+      "room_count": 7,
+      "room_areas": [
+        5.9,
+        26.3,
+        21.6,
+        30.7,
+        95.2,
+        17.6,
+        5.5
+      ]
+    },
+    {
+      "plan_id": 16369,
+      "split": "train",
+      "max_room_area_m2": 96.88,
+      "room_count": 5,
+      "room_areas": [
+        22.4,
+        29.3,
+        31.1,
+        96.9,
+        26.5
+      ]
+    },
+    {
+      "plan_id": 8958,
+      "split": "val",
+      "max_room_area_m2": 95.17,
+      "room_count": 3,
+      "room_areas": [
+        37.1,
+        95.2,
+        23.1
+      ]
+    },
+    {
+      "plan_id": 1023,
+      "split": "val",
+      "max_room_area_m2": 95.99,
+      "room_count": 8,
+      "room_areas": [
+        4.2,
+        25.5,
+        21.4,
+        29.9,
+        96.0,
+        17.4,
+        3.2,
+        5.3
+      ]
+    },
+    {
+      "plan_id": 13174,
+      "split": "train",
+      "max_room_area_m2": 97.84,
+      "room_count": 7,
+      "room_areas": [
+        38.0,
+        30.1,
+        5.7,
+        31.3,
+        97.8,
+        21.3,
+        3.5
+      ]
+    },
+    {
+      "plan_id": 8225,
+      "split": "train",
+      "max_room_area_m2": 96.15,
+      "room_count": 4,
+      "room_areas": [
+        22.9,
+        26.7,
+        30.7,
+        96.2
+      ]
+    },
+    {
+      "plan_id": 3312,
+      "split": "val",
+      "max_room_area_m2": 98.91,
+      "room_count": 7,
+      "room_areas": [
+        23.3,
+        6.5,
+        27.5,
+        28.2,
+        29.5,
+        98.9,
+        9.0
+      ]
+    },
+    {
+      "plan_id": 1351,
+      "split": "train",
+      "max_room_area_m2": 95.66,
+      "room_count": 6,
+      "room_areas": [
+        5.0,
+        31.2,
+        23.2,
+        44.5,
+        95.7,
+        14.3
+      ]
+    },
+    {
+      "plan_id": 278,
+      "split": "train",
+      "max_room_area_m2": 95.31,
+      "room_count": 8,
+      "room_areas": [
+        5.8,
+        30.1,
+        22.9,
+        32.1,
+        30.2,
+        95.3,
+        21.5,
+        4.5
+      ]
+    },
+    {
+      "plan_id": 3624,
+      "split": "train",
+      "max_room_area_m2": 99.99,
+      "room_count": 4,
+      "room_areas": [
+        43.1,
+        47.5,
+        100.0,
+        19.0
+      ]
+    },
+    {
+      "plan_id": 9706,
+      "split": "val",
+      "max_room_area_m2": 98.55,
+      "room_count": 6,
+      "room_areas": [
+        10.2,
+        25.4,
+        24.5,
+        30.6,
+        98.6,
+        14.5
+      ]
+    },
+    {
+      "plan_id": 14581,
+      "split": "train",
+      "max_room_area_m2": 95.47,
+      "room_count": 7,
+      "room_areas": [
+        27.6,
+        13.9,
+        24.8,
+        30.1,
+        25.6,
+        95.5,
+        20.8
+      ]
+    },
+    {
+      "plan_id": 1769,
+      "split": "train",
+      "max_room_area_m2": 96.12,
+      "room_count": 6,
+      "room_areas": [
+        32.0,
+        29.4,
+        34.5,
+        96.1,
+        17.3,
+        8.5
+      ]
+    },
+    {
+      "plan_id": 73,
+      "split": "val",
+      "max_room_area_m2": 95.81,
+      "room_count": 3,
+      "room_areas": [
+        52.3,
+        95.8,
+        48.3
+      ]
+    },
+    {
+      "plan_id": 10118,
+      "split": "val",
+      "max_room_area_m2": 98.06,
+      "room_count": 5,
+      "room_areas": [
+        23.7,
+        23.0,
+        27.0,
+        98.1,
+        13.9
+      ]
+    },
+    {
+      "plan_id": 12465,
+      "split": "train",
+      "max_room_area_m2": 95.69,
+      "room_count": 6,
+      "room_areas": [
+        26.6,
+        25.9,
+        4.7,
+        23.3,
+        95.7,
+        16.5
+      ]
+    },
+    {
+      "plan_id": 2070,
+      "split": "train",
+      "max_room_area_m2": 98.0,
+      "room_count": 4,
+      "room_areas": [
+        51.2,
+        45.3,
+        98.0,
+        21.4
+      ]
+    },
+    {
+      "plan_id": 1292,
+      "split": "train",
+      "max_room_area_m2": 95.85,
+      "room_count": 7,
+      "room_areas": [
+        24.8,
+        22.6,
+        10.8,
+        27.1,
+        23.7,
+        95.8,
+        18.4
+      ]
+    },
+    {
+      "plan_id": 6598,
+      "split": "train",
+      "max_room_area_m2": 99.57,
+      "room_count": 3,
+      "room_areas": [
+        47.6,
+        99.6,
+        32.2
+      ]
+    },
+    {
+      "plan_id": 16130,
+      "split": "val",
+      "max_room_area_m2": 97.04,
+      "room_count": 4,
+      "room_areas": [
+        34.9,
+        44.8,
+        97.0,
+        20.9
+      ]
+    },
+    {
+      "plan_id": 17102,
+      "split": "train",
+      "max_room_area_m2": 97.05,
+      "room_count": 7,
+      "room_areas": [
+        30.9,
+        30.5,
+        38.0,
+        26.4,
+        16.9,
+        97.0,
+        22.1
+      ]
+    },
+    {
+      "plan_id": 16212,
+      "split": "train",
+      "max_room_area_m2": 97.55,
+      "room_count": 6,
+      "room_areas": [
+        28.9,
+        28.0,
+        29.4,
+        22.2,
+        97.5,
+        15.7
+      ]
+    },
+    {
+      "plan_id": 2142,
+      "split": "train",
+      "max_room_area_m2": 95.56,
+      "room_count": 8,
+      "room_areas": [
+        6.3,
+        34.1,
+        15.7,
+        22.7,
+        40.0,
+        95.6,
+        23.1,
+        3.1
+      ]
+    },
+    {
+      "plan_id": 2048,
+      "split": "train",
+      "max_room_area_m2": 99.71,
+      "room_count": 6,
+      "room_areas": [
+        23.6,
+        18.9,
+        28.8,
+        23.6,
+        99.7,
+        15.1
+      ]
+    },
+    {
+      "plan_id": 16094,
+      "split": "train",
+      "max_room_area_m2": 99.1,
+      "room_count": 3,
+      "room_areas": [
+        59.7,
+        99.1,
+        26.2
+      ]
+    },
+    {
+      "plan_id": 2719,
+      "split": "train",
+      "max_room_area_m2": 95.02,
+      "room_count": 6,
+      "room_areas": [
+        34.1,
+        19.6,
+        23.7,
+        30.7,
+        95.0,
+        20.3
+      ]
+    },
+    {
+      "plan_id": 13287,
+      "split": "train",
+      "max_room_area_m2": 98.53,
+      "room_count": 5,
+      "room_areas": [
+        13.5,
+        47.9,
+        32.4,
+        98.5,
+        19.1
+      ]
+    },
+    {
+      "plan_id": 9498,
+      "split": "train",
+      "max_room_area_m2": 95.26,
+      "room_count": 7,
+      "room_areas": [
+        20.0,
+        25.7,
+        27.0,
+        23.7,
+        95.3,
+        14.1,
+        4.5
+      ]
+    },
+    {
+      "plan_id": 4161,
+      "split": "train",
+      "max_room_area_m2": 99.68,
+      "room_count": 6,
+      "room_areas": [
+        24.0,
+        24.6,
+        33.0,
+        99.7,
+        13.6,
+        2.1
+      ]
+    },
+    {
+      "plan_id": 14304,
+      "split": "train",
+      "max_room_area_m2": 96.81,
+      "room_count": 4,
+      "room_areas": [
+        22.3,
+        29.6,
+        96.8,
+        13.2
+      ]
+    },
+    {
+      "plan_id": 13158,
+      "split": "train",
+      "max_room_area_m2": 98.91,
+      "room_count": 3,
+      "room_areas": [
+        48.2,
+        98.9,
+        78.7
+      ]
+    },
+    {
+      "plan_id": 2497,
+      "split": "val",
+      "max_room_area_m2": 98.09,
+      "room_count": 7,
+      "room_areas": [
+        8.6,
+        24.1,
+        34.6,
+        30.2,
+        98.1,
+        21.5,
+        4.5
+      ]
+    },
+    {
+      "plan_id": 14973,
+      "split": "train",
+      "max_room_area_m2": 99.62,
+      "room_count": 6,
+      "room_areas": [
+        30.2,
+        38.8,
+        39.9,
+        99.6,
+        18.4,
+        4.6
+      ]
+    },
+    {
+      "plan_id": 1873,
+      "split": "test",
+      "max_room_area_m2": 95.99,
+      "room_count": 5,
+      "room_areas": [
+        42.0,
+        37.8,
+        96.0,
+        14.2,
+        24.5
+      ]
+    },
+    {
+      "plan_id": 10945,
+      "split": "test",
+      "max_room_area_m2": 96.54,
+      "room_count": 4,
+      "room_areas": [
+        39.6,
+        36.0,
+        96.5,
+        12.3
+      ]
+    },
+    {
+      "plan_id": 9423,
+      "split": "train",
+      "max_room_area_m2": 95.41,
+      "room_count": 5,
+      "room_areas": [
+        28.2,
+        19.7,
+        27.6,
+        95.4,
+        14.5
+      ]
+    },
+    {
+      "plan_id": 8542,
+      "split": "train",
+      "max_room_area_m2": 95.22,
+      "room_count": 5,
+      "room_areas": [
+        25.7,
+        28.3,
+        27.3,
+        95.2,
+        12.2
+      ]
+    },
+    {
+      "plan_id": 15054,
+      "split": "train",
+      "max_room_area_m2": 96.85,
+      "room_count": 5,
+      "room_areas": [
+        20.7,
+        25.7,
+        22.7,
+        96.8,
+        18.6
+      ]
+    },
+    {
+      "plan_id": 10572,
+      "split": "train",
+      "max_room_area_m2": 97.78,
+      "room_count": 7,
+      "room_areas": [
+        35.6,
+        48.5,
+        6.6,
+        97.8,
+        6.8,
+        8.1,
+        26.0
+      ]
+    },
+    {
+      "plan_id": 5577,
+      "split": "train",
+      "max_room_area_m2": 96.02,
+      "room_count": 4,
+      "room_areas": [
+        37.8,
+        37.7,
+        96.0,
+        26.3
+      ]
+    },
+    {
+      "plan_id": 13834,
+      "split": "train",
+      "max_room_area_m2": 98.09,
+      "room_count": 8,
+      "room_areas": [
+        31.8,
+        24.1,
+        28.3,
+        7.7,
+        98.1,
+        19.1,
+        8.7,
+        4.4
+      ]
+    },
+    {
+      "plan_id": 15680,
+      "split": "train",
+      "max_room_area_m2": 99.82,
+      "room_count": 5,
+      "room_areas": [
+        28.5,
+        24.2,
+        24.7,
+        99.8,
+        29.1
+      ]
+    },
+    {
+      "plan_id": 8151,
+      "split": "train",
+      "max_room_area_m2": 97.33,
+      "room_count": 5,
+      "room_areas": [
+        29.3,
+        34.3,
+        26.6,
+        97.3,
+        17.2
+      ]
+    },
+    {
+      "plan_id": 4099,
+      "split": "train",
+      "max_room_area_m2": 96.86,
+      "room_count": 5,
+      "room_areas": [
+        32.7,
+        35.3,
+        34.1,
+        96.9,
+        27.8
+      ]
+    },
+    {
+      "plan_id": 13272,
+      "split": "train",
+      "max_room_area_m2": 97.81,
+      "room_count": 5,
+      "room_areas": [
+        25.6,
+        32.9,
+        33.2,
+        97.8,
+        19.0
+      ]
+    },
+    {
+      "plan_id": 15469,
+      "split": "train",
+      "max_room_area_m2": 97.15,
+      "room_count": 7,
+      "room_areas": [
+        36.0,
+        28.6,
+        27.3,
+        97.1,
+        20.7,
+        12.6,
+        3.2
+      ]
+    },
+    {
+      "plan_id": 4254,
+      "split": "train",
+      "max_room_area_m2": 95.83,
+      "room_count": 6,
+      "room_areas": [
+        8.7,
+        30.9,
+        25.6,
+        40.7,
+        95.8,
+        11.7
+      ]
+    },
+    {
+      "plan_id": 7014,
+      "split": "val",
+      "max_room_area_m2": 97.6,
+      "room_count": 4,
+      "room_areas": [
+        7.9,
+        33.9,
+        97.6,
+        18.6
+      ]
+    },
+    {
+      "plan_id": 14132,
+      "split": "train",
+      "max_room_area_m2": 99.77,
+      "room_count": 6,
+      "room_areas": [
+        26.1,
+        9.2,
+        28.7,
+        37.4,
+        99.8,
+        19.5
+      ]
+    },
+    {
+      "plan_id": 3775,
+      "split": "test",
+      "max_room_area_m2": 95.19,
+      "room_count": 6,
+      "room_areas": [
+        18.9,
+        25.4,
+        28.8,
+        95.2,
+        14.2,
+        2.9
+      ]
+    },
+    {
+      "plan_id": 12253,
+      "split": "train",
+      "max_room_area_m2": 99.52,
+      "room_count": 8,
+      "room_areas": [
+        27.7,
+        24.8,
+        24.8,
+        28.5,
+        12.3,
+        99.5,
+        20.9,
+        2.5
+      ]
+    },
+    {
+      "plan_id": 917,
+      "split": "train",
+      "max_room_area_m2": 97.69,
+      "room_count": 8,
+      "room_areas": [
+        2.4,
+        20.0,
+        25.5,
+        26.4,
+        25.8,
+        97.7,
+        22.9,
+        2.7
+      ]
+    },
+    {
+      "plan_id": 9712,
+      "split": "train",
+      "max_room_area_m2": 98.58,
+      "room_count": 5,
+      "room_areas": [
+        30.1,
+        39.2,
+        40.5,
+        98.6,
+        18.4
+      ]
+    },
+    {
+      "plan_id": 14619,
+      "split": "train",
+      "max_room_area_m2": 99.96,
+      "room_count": 3,
+      "room_areas": [
+        55.7,
+        100.0,
+        35.7
+      ]
+    },
+    {
+      "plan_id": 72,
+      "split": "test",
+      "max_room_area_m2": 95.63,
+      "room_count": 3,
+      "room_areas": [
+        51.5,
+        95.6,
+        48.1
+      ]
+    },
+    {
+      "plan_id": 418,
+      "split": "train",
+      "max_room_area_m2": 95.85,
+      "room_count": 4,
+      "room_areas": [
+        34.0,
+        32.2,
+        95.9,
+        18.5
+      ]
+    },
+    {
+      "plan_id": 3916,
+      "split": "train",
+      "max_room_area_m2": 95.36,
+      "room_count": 7,
+      "room_areas": [
+        7.7,
+        23.0,
+        16.9,
+        20.8,
+        30.5,
+        95.4,
+        12.7
+      ]
+    },
+    {
+      "plan_id": 15021,
+      "split": "train",
+      "max_room_area_m2": 95.62,
+      "room_count": 4,
+      "room_areas": [
+        29.9,
+        95.6,
+        6.2,
+        22.8
+      ]
+    },
+    {
+      "plan_id": 14170,
+      "split": "train",
+      "max_room_area_m2": 99.99,
+      "room_count": 6,
+      "room_areas": [
+        17.9,
+        24.3,
+        25.9,
+        29.5,
+        100.0,
+        16.2
+      ]
+    },
+    {
+      "plan_id": 1770,
+      "split": "test",
+      "max_room_area_m2": 99.37,
+      "room_count": 6,
+      "room_areas": [
+        35.5,
+        32.3,
+        34.7,
+        99.4,
+        11.2,
+        2.2
+      ]
+    },
+    {
+      "plan_id": 10026,
+      "split": "train",
+      "max_room_area_m2": 96.98,
+      "room_count": 6,
+      "room_areas": [
+        6.6,
+        3.3,
+        12.8,
+        5.7,
+        97.0,
+        28.3
+      ]
+    },
+    {
+      "plan_id": 14527,
+      "split": "test",
+      "max_room_area_m2": 97.65,
+      "room_count": 7,
+      "room_areas": [
+        24.1,
+        6.4,
+        22.7,
+        28.0,
+        24.2,
+        97.6,
+        16.5
+      ]
+    },
+    {
+      "plan_id": 2081,
+      "split": "train",
+      "max_room_area_m2": 97.72,
+      "room_count": 5,
+      "room_areas": [
+        24.7,
+        25.4,
+        25.8,
+        97.7,
+        13.1
+      ]
+    },
+    {
+      "plan_id": 16728,
+      "split": "train",
+      "max_room_area_m2": 97.39,
+      "room_count": 8,
+      "room_areas": [
+        17.2,
+        24.9,
+        35.8,
+        31.0,
+        35.0,
+        97.4,
+        12.7,
+        6.5
+      ]
+    },
+    {
+      "plan_id": 3643,
+      "split": "train",
+      "max_room_area_m2": 99.73,
+      "room_count": 9,
+      "room_areas": [
+        20.1,
+        24.6,
+        27.9,
+        27.2,
+        9.2,
+        16.8,
+        99.7,
+        17.9,
+        2.5
+      ]
+    }
+  ],
+  "zero_eligible_rooms_count": 225,
+  "anomalous_geometry_count": 104,
+  "clean_feasible_count": 16246,
+  "sample_strictly_infeasible": [
+    {
+      "plan_id": 1448,
+      "split": "train",
+      "max_room_area_m2": 107.26,
+      "room_count": 4,
+      "room_areas": [
+        38.1,
+        36.2,
+        107.3,
+        21.5
+      ],
+      "issues": []
+    },
+    {
+      "plan_id": 15681,
+      "split": "train",
+      "max_room_area_m2": 115.38,
+      "room_count": 5,
+      "room_areas": [
+        29.8,
+        34.4,
+        39.4,
+        115.4,
+        28.6
+      ],
+      "issues": []
+    },
+    {
+      "plan_id": 6125,
+      "split": "train",
+      "max_room_area_m2": 115.48,
+      "room_count": 3,
+      "room_areas": [
+        33.1,
+        115.5,
+        24.1
+      ],
+      "issues": []
+    },
+    {
+      "plan_id": 14171,
+      "split": "train",
+      "max_room_area_m2": 356.99,
+      "room_count": 5,
+      "room_areas": [
+        18.1,
+        79.6,
+        357.0,
+        43.4,
+        15.7
+      ],
+      "issues": []
+    },
+    {
+      "plan_id": 33,
+      "split": "val",
+      "max_room_area_m2": 144.55,
+      "room_count": 4,
+      "room_areas": [
+        52.1,
+        144.6,
+        82.6,
+        5.4
+      ],
+      "issues": [
+        "Multi-component inner boundary (2 components)"
+      ]
+    },
+    {
+      "plan_id": 14361,
+      "split": "train",
+      "max_room_area_m2": 148.91,
+      "room_count": 8,
+      "room_areas": [
+        38.7,
+        4.2,
+        29.5,
+        33.0,
+        30.1,
+        148.9,
+        27.7,
+        3.1
+      ],
+      "issues": [
+        "Multi-component inner boundary (2 components)"
+      ]
+    },
+    {
+      "plan_id": 4167,
+      "split": "train",
+      "max_room_area_m2": 116.99,
+      "room_count": 8,
+      "room_areas": [
+        6.3,
+        26.0,
+        37.5,
+        40.3,
+        31.0,
+        117.0,
+        26.4,
+        3.2
+      ],
+      "issues": []
+    },
+    {
+      "plan_id": 15059,
+      "split": "train",
+      "max_room_area_m2": 244.98,
+      "room_count": 4,
+      "room_areas": [
+        7.9,
+        43.5,
+        245.0,
+        17.9
+      ],
+      "issues": []
+    },
+    {
+      "plan_id": 8117,
+      "split": "train",
+      "max_room_area_m2": 100.63,
+      "room_count": 6,
+      "room_areas": [
+        23.2,
+        21.9,
+        20.2,
+        28.9,
+        100.6,
+        16.2
+      ],
+      "issues": []
+    },
+    {
+      "plan_id": 15468,
+      "split": "train",
+      "max_room_area_m2": 100.4,
+      "room_count": 8,
+      "room_areas": [
+        26.7,
+        30.5,
+        35.1,
+        100.4,
+        7.4,
+        20.1,
+        11.9,
+        4.4
+      ],
+      "issues": []
+    }
+  ]
+}

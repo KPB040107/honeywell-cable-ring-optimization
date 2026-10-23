@@ -1,0 +1,52 @@
+{
+  "1_worker_sequential": {
+    "num_envs": 1,
+    "mode": "sequential",
+    "total_steps": 16,
+    "elapsed_s": 27.8992,
+    "sps": 0.57,
+    "cpu_utilization_pct": 33.1,
+    "gpu_utilization_pct": 0.0,
+    "gpu_memory_used_mb": 130.0
+  },
+  "2_workers_sequential": {
+    "num_envs": 2,
+    "mode": "sequential",
+    "total_steps": 32,
+    "elapsed_s": 32.4775,
+    "sps": 0.99,
+    "cpu_utilization_pct": 27.8,
+    "gpu_utilization_pct": 0.0,
+    "gpu_memory_used_mb": 130.0
+  },
+  "2_workers_threadpool": {
+    "num_envs": 2,
+    "mode": "threadpool",
+    "total_steps": 32,
+    "elapsed_s": 28.4269,
+    "sps": 1.13,
+    "cpu_utilization_pct": 22.2,
+    "gpu_utilization_pct": 0.0,
+    "gpu_memory_used_mb": 130.0
+  },
+  "4_workers_sequential": {
+    "num_envs": 4,
+    "mode": "sequential",
+    "total_steps": 64,
+    "elapsed_s": 33.5617,
+    "sps": 1.91,
+    "cpu_utilization_pct": 23.7,
+    "gpu_utilization_pct": 0.0,
+    "gpu_memory_used_mb": 130.0
+  },
+  "4_workers_threadpool": {
+    "num_envs": 4,
+    "mode": "threadpool",
+    "total_steps": 64,
+    "elapsed_s": 48.4603,
+    "sps": 1.32,
+    "cpu_utilization_pct": 22.4,
+    "gpu_utilization_pct": 0.0,
+    "gpu_memory_used_mb": 130.0
+  }
+}

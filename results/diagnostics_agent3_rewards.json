@@ -1,0 +1,72 @@
+{
+  "root_cause_summary": "The reward function imposes a constant step penalty of -0.020 on every valid applied move. When an operator runs but produces zero cost improvement (delta_J == 0), the resulting reward is exactly -0.020. In contrast, inapplicable operators receive -0.050, moves that worsen cost receive < -0.020, and invalid moves receive -1.000. Because PortfolioHybrid baselines on compact plans are already highly optimized, improving moves are rare. WORST_ROUTE_REBUILD (Op 5) evaluates candidate hub rooms that include the current hub room, guaranteeing was_applied=True and delta_J=0. The PPO policy quickly discovered that selecting Op 5 guarantees -0.020 without risk, dominating the expected return of exploring other operators. This caused policy entropy collapse (2.079 -> 0.059) into a safe no-op strategy.",
+  "payoff_matrix": [
+    {
+      "scenario": "Safe No-Op (Op applied, 0 change)",
+      "reward": -0.02,
+      "is_new_incumbent": false
+    },
+    {
+      "scenario": "Inapplicable Operator (returned None)",
+      "reward": -0.05,
+      "is_new_incumbent": false
+    },
+    {
+      "scenario": "Suboptimal Perturbation (+1.0m cost)",
+      "reward": -0.06,
+      "is_new_incumbent": false
+    },
+    {
+      "scenario": "Modest Improvement (-0.5m cost, local)",
+      "reward": 0.0,
+      "is_new_incumbent": false
+    },
+    {
+      "scenario": "New Incumbent J (-1.0m cost, global best)",
+      "reward": 1.02,
+      "is_new_incumbent": true
+    },
+    {
+      "scenario": "Hub Reduction (-1 Hub, same cost)",
+      "reward": 6.98,
+      "is_new_incumbent": true
+    },
+    {
+      "scenario": "Hub Increase (+1 Hub, -5m cost)",
+      "reward": -10.02,
+      "is_new_incumbent": false
+    },
+    {
+      "scenario": "Rule Violation (Invalid solution)",
+      "reward": -1.0,
+      "is_new_incumbent": false
+    }
+  ],
+  "trajectory_metrics": {
+    "num_updates": 156,
+    "early_mean_reward": -0.05172,
+    "late_mean_reward": -0.01953,
+    "early_mean_entropy": 2.07723,
+    "late_mean_entropy": 0.05726,
+    "early_worst_route_freq": 0.106,
+    "late_worst_route_freq": 0.70961,
+    "correlation_worst_freq_and_reward": 0.611
+  },
+  "flaws_identified": [
+    {
+      "issue": "Step penalty asymmetry for zero-change operators",
+      "severity": "CRITICAL",
+      "description": "Operators returning zero-delta solutions are treated as successful applications (-0.02) rather than non-improving/inapplicable attempts (-0.05)."
+    },
+    {
+      "issue": "Sparse positive reward density",
+      "severity": "HIGH",
+      "description": "With delta_J / J_scale typically 0.02 - 0.05 and step penalty at -0.02, marginal improvements yield near-zero net rewards (+0.00 to +0.03), providing insufficient gradient signal compared to the risk of negative perturbations."
+    },
+    {
+      "issue": "Absence of exploration bonus / entropy regularization failure",
+      "severity": "HIGH",
+      "description": "PPO entropy coefficient (0.01) was insufficient to prevent policy collapse against the steady -0.02 vs -0.05 advantage of Op 5."
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "total_plans": 5,
+  "metadata": {
+    "mode": "custom",
+    "timestamp": "2026-10-23 11:08:30 UTC",
+    "total_plans_requested": 5,
+    "total_plans_completed": 5,
+    "time_limit_seconds": 5.0,
+    "max_iterations": 25,
+    "max_workers": 2,
+    "total_elapsed_seconds": 13.11
+  },
+  "algorithms": {
+    "LinUCB_ALNS": {
+      "algo_name": "LinUCB_ALNS",
+      "total_runs": 5,
+      "valid_count": 5,
+      "validity_rate_pct": 100.0,
+      "mean_H": 3.0,
+      "median_H": 3.0,
+      "mean_J": 39.3328,
+      "median_J": 28.8569,
+      "std_J": 25.2889,
+      "min_J": 3.4828,
+      "max_J": 69.9134,
+      "mean_L": 20.23,
+      "mean_B": 11.0,
+      "mean_X": 2.2,
+      "mean_O": 2.606,
+      "mean_area_gap": 39.759,
+      "mean_runtime_s": 3.719,
+      "median_runtime_s": 3.084,
+      "total_runtime_s": 18.59
+    }
+  },
+  "pairwise": {
+    "LinUCB_ALNS_vs_PortfolioHybrid": {
+      "candidate": "LinUCB_ALNS",
+      "competitor": "PortfolioHybrid",
+      "total_pairs": 5,
+      "valid_pairs": 3,
+      "candidate_wins": 0,
+      "competitor_wins": 0,
+      "ties": 3,
+      "candidate_win_rate_pct": 0.0,
+      "candidate_non_loss_rate_pct": 60.0,
+      "mean_delta_J": 0.0,
+      "median_delta_J": 0.0,
+      "mean_pct_improvement": 0.0,
+      "ttest_statistic": 0.0,
+      "ttest_p_value": 1.0,
+      "wilcoxon_statistic": 0.0,
+      "wilcoxon_p_value": 1.0,
+      "bootstrap_ci_95_delta_J": [
+        0.0,
+        0.0
+      ],
+      "bootstrap_ci_95_pct_improvement": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "tiers": {
+    "compact": {
+      "tier": "compact",
+      "plan_count": 0,
+      "pct_of_dataset": 0.0,
+      "algorithms": {},
+      "pairwise_vs_baseline": {}
+    },
+    "standard": {
+      "tier": "standard",
+      "plan_count": 5,
+      "pct_of_dataset": 100.0,
+      "algorithms": {
+        "LinUCB_ALNS": {
+          "algo_name": "LinUCB_ALNS",
+          "total_runs": 5,
+          "valid_count": 5,
+          "validity_rate_pct": 100.0,
+          "mean_H": 3.0,
+          "median_H": 3.0,
+          "mean_J": 39.3328,
+          "median_J": 28.8569,
+          "std_J": 25.2889,
+          "min_J": 3.4828,
+          "max_J": 69.9134,
+          "mean_L": 20.23,
+          "mean_B": 11.0,
+          "mean_X": 2.2,
+          "mean_O": 2.606,
+          "mean_area_gap": 39.759,
+          "mean_runtime_s": 3.719,
+          "median_runtime_s": 3.084,
+          "total_runtime_s": 18.59
+        }
+      },
+      "pairwise_vs_baseline": {
+        "LinUCB_ALNS_vs_PortfolioHybrid": {
+          "candidate": "LinUCB_ALNS",
+          "competitor": "PortfolioHybrid",
+          "total_pairs": 5,
+          "valid_pairs": 3,
+          "candidate_wins": 0,
+          "competitor_wins": 0,
+          "ties": 3,
+          "candidate_win_rate_pct": 0.0,
+          "candidate_non_loss_rate_pct": 60.0,
+          "mean_delta_J": 0.0,
+          "median_delta_J": 0.0,
+          "mean_pct_improvement": 0.0,
+          "ttest_statistic": 0.0,
+          "ttest_p_value": 1.0,
+          "wilcoxon_statistic": 0.0,
+          "wilcoxon_p_value": 1.0,
+          "bootstrap_ci_95_delta_J": [
+            0.0,
+            0.0
+          ],
+          "bootstrap_ci_95_pct_improvement": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "complex": {
+      "tier": "complex",
+      "plan_count": 0,
+      "pct_of_dataset": 0.0,
+      "algorithms": {},
+      "pairwise_vs_baseline": {}
+    }
+  }
+}
