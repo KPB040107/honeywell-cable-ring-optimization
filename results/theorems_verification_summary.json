@@ -1,0 +1,15 @@
+{
+  "total_valid_plans": 15506,
+  "execution_time_s": 82.12,
+  "theorem_1_volumetric_violations": 0,
+  "theorem_2_component_violations": 0,
+  "theorem_3_star_violations": 0,
+  "volumetric_optimality_count": 9889,
+  "volumetric_optimality_pct": 63.78,
+  "component_optimality_count": 12313,
+  "component_optimality_pct": 79.41,
+  "multi_component_count": 3406,
+  "multi_component_strict_topo_gap": 2981,
+  "star_graph_count": 11798,
+  "star_graph_optimality_count": 11295
+}
