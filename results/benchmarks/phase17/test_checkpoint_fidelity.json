@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-10-23T21:45:58Z",
+  "checkpoint_mode": "batch_evaluation",
+  "completed_count": 6,
+  "completed_keys": [
+    "0_2",
+    "0_5",
+    "11_0",
+    "11_3",
+    "4_1",
+    "4_4"
+  ],
+  "records": {
+    "11_0": {
+      "plan_id": "11",
+      "seed": 42,
+      "is_valid": true,
+      "h_count": 1,
+      "cost_J": 25.4074
+    },
+    "4_1": {
+      "plan_id": "4",
+      "seed": 43,
+      "is_valid": true,
+      "h_count": 3,
+      "cost_J": 27.9239
+    },
+    "0_2": {
+      "plan_id": "0",
+      "seed": 44,
+      "is_valid": true,
+      "h_count": 4,
+      "cost_J": 50.6241
+    },
+    "11_3": {
+      "plan_id": "11",
+      "seed": 45,
+      "is_valid": true,
+      "h_count": 1,
+      "cost_J": 25.4074
+    },
+    "4_4": {
+      "plan_id": "4",
+      "seed": 46,
+      "is_valid": true,
+      "h_count": 1,
+      "cost_J": 81.1755
+    },
+    "0_5": {
+      "plan_id": "0",
+      "seed": 47,
+      "is_valid": true,
+      "h_count": 4,
+      "cost_J": 38.2212
+    }
+  }
+}

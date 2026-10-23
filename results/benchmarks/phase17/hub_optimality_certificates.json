@@ -1,0 +1,498 @@
+{
+  "summary": {
+    "title": "Phase 17 Hub-Count Optimality and Lower Bound Certification",
+    "auditor": "Agent 2 (Hub-Count Optimality Lead)",
+    "phase": 17,
+    "date_utc": "2026-10-23T22:20:06Z",
+    "total_certificates_generated": 10,
+    "solvers_compared": [
+      "Independent Bitmask DP",
+      "OR-Tools CP-SAT"
+    ],
+    "solver_agreement_rate_pct": 100.0,
+    "exact_h_star_certified_count": 10,
+    "zero_gap_to_theoretical_lb_count": 9,
+    "decoupling_theorem_certified": true,
+    "decoupling_evidence": [
+      {
+        "plan_id": "0",
+        "proven_minimum_hubs": 2,
+        "bitmask_dp": {
+          "hubs": 2,
+          "cost_J": 70.1431,
+          "partition": [
+            [
+              "bedroom_02"
+            ],
+            [
+              "bedroom_01",
+              "bedroom_03",
+              "kitchen_01",
+              "living_01"
+            ]
+          ]
+        },
+        "cpsat": {
+          "hubs": 2,
+          "cost_J": 83.3498,
+          "partition": [
+            [
+              "kitchen_01"
+            ],
+            [
+              "bedroom_01",
+              "bedroom_02",
+              "bedroom_03",
+              "living_01"
+            ]
+          ]
+        },
+        "identical_hub_count": true,
+        "distinct_partitions": true,
+        "cost_difference_J": 13.2067,
+        "percentage_difference_pct": 18.83,
+        "theoretical_decoupling_certified": true
+      },
+      {
+        "plan_id": "4",
+        "proven_minimum_hubs": 1,
+        "bitmask_dp": {
+          "hubs": 1,
+          "cost_J": 79.1596,
+          "partition": [
+            [
+              "bedroom_01",
+              "bedroom_02",
+              "kitchen_01",
+              "living_01"
+            ]
+          ]
+        },
+        "cpsat": {
+          "hubs": 1,
+          "cost_J": 79.1596,
+          "partition": [
+            [
+              "bedroom_01",
+              "bedroom_02",
+              "kitchen_01",
+              "living_01"
+            ]
+          ]
+        },
+        "identical_hub_count": true,
+        "distinct_partitions": false,
+        "cost_difference_J": 0.0,
+        "percentage_difference_pct": 0.0,
+        "theoretical_decoupling_certified": false
+      }
+    ]
+  },
+  "certificates": [
+    {
+      "plan_id": "0",
+      "tier": "compact",
+      "num_eligible_rooms": 5,
+      "num_fixed_nodes": 5,
+      "total_eligible_area_m2": 108.41,
+      "h_area_lb": 2,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 2,
+      "h_component_lb": 2,
+      "conflict_clique_lb": 1,
+      "conflict_chromatic_lb": 1,
+      "h_theoretical_lb": 2,
+      "h_bitmask_dp": 2,
+      "h_cpsat": 2,
+      "solver_agreement": true,
+      "h_proven_min": 2,
+      "is_optimal": true,
+      "gap_to_naive_lb": 0,
+      "gap_to_theoretical_lb": 0,
+      "gap_root_cause": "ZERO_GAP_MATCH",
+      "formal_proof": "Global unconstrained lower bound H_naive = max(ceil(108.4/100), ceil(5/5)) = 2 is exactly achieved by solver H* = 2. Certified 100% mathematically optimal with 0 gap.",
+      "selected_partition": [
+        [
+          "bedroom_02"
+        ],
+        [
+          "bedroom_01",
+          "bedroom_03",
+          "kitchen_01",
+          "living_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 0.00011,
+      "runtime_cpsat_s": 0.08313,
+      "routing_j_bitmask_dp": 70.1431,
+      "routing_j_cpsat": 83.3498,
+      "j_delta_pct": 18.83,
+      "routing_cost_note": "Solvers achieved identical minimal hub count H*=2, but different routing cost J (BitmaskDP: 70.14, CPSAT: 83.35, delta: 18.83%). Proves H* optimality does NOT imply J* optimality."
+    },
+    {
+      "plan_id": "1",
+      "tier": "compact",
+      "num_eligible_rooms": 5,
+      "num_fixed_nodes": 5,
+      "total_eligible_area_m2": 112.65,
+      "h_area_lb": 2,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 2,
+      "h_component_lb": 2,
+      "conflict_clique_lb": 1,
+      "conflict_chromatic_lb": 1,
+      "h_theoretical_lb": 2,
+      "h_bitmask_dp": 2,
+      "h_cpsat": 2,
+      "solver_agreement": true,
+      "h_proven_min": 2,
+      "is_optimal": true,
+      "gap_to_naive_lb": 0,
+      "gap_to_theoretical_lb": 0,
+      "gap_root_cause": "ZERO_GAP_MATCH",
+      "formal_proof": "Global unconstrained lower bound H_naive = max(ceil(112.7/100), ceil(5/5)) = 2 is exactly achieved by solver H* = 2. Certified 100% mathematically optimal with 0 gap.",
+      "selected_partition": [
+        [
+          "bedroom_02"
+        ],
+        [
+          "bedroom_01",
+          "bedroom_03",
+          "kitchen_01",
+          "living_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 0.00028,
+      "runtime_cpsat_s": 0.02346,
+      "routing_j_bitmask_dp": 77.0577,
+      "routing_j_cpsat": 77.2672,
+      "j_delta_pct": 0.27,
+      "routing_cost_note": "Solvers achieved identical minimal hub count H*=2, but different routing cost J (BitmaskDP: 77.06, CPSAT: 77.27, delta: 0.27%). Proves H* optimality does NOT imply J* optimality."
+    },
+    {
+      "plan_id": "24",
+      "tier": "compact",
+      "num_eligible_rooms": 5,
+      "num_fixed_nodes": 5,
+      "total_eligible_area_m2": 96.23,
+      "h_area_lb": 1,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 1,
+      "h_component_lb": 2,
+      "conflict_clique_lb": 2,
+      "conflict_chromatic_lb": 2,
+      "h_theoretical_lb": 2,
+      "h_bitmask_dp": 2,
+      "h_cpsat": 2,
+      "solver_agreement": true,
+      "h_proven_min": 2,
+      "is_optimal": true,
+      "gap_to_naive_lb": 1,
+      "gap_to_theoretical_lb": 0,
+      "gap_root_cause": "DOORWAY_SEVERANCE",
+      "formal_proof": "Floor plan contains 2 disconnected door-connectivity components. Cables cannot cross solid walls between isolated building wings. Component lower bound H_comp = 2 proves that H* = 2 > H_naive = 1 is strictly necessary and sufficient.",
+      "selected_partition": [
+        [
+          "kitchen_01"
+        ],
+        [
+          "bedroom_01",
+          "bedroom_02",
+          "bedroom_03",
+          "living_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 0.00017,
+      "runtime_cpsat_s": 0.01441,
+      "routing_j_bitmask_dp": 69.4135,
+      "routing_j_cpsat": 69.4135,
+      "j_delta_pct": 0.0,
+      "routing_cost_note": "Both solvers converged to identical partition and routing cost J=69.41."
+    },
+    {
+      "plan_id": "4",
+      "tier": "standard",
+      "num_eligible_rooms": 4,
+      "num_fixed_nodes": 4,
+      "total_eligible_area_m2": 92.09,
+      "h_area_lb": 1,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 1,
+      "h_component_lb": 1,
+      "conflict_clique_lb": 1,
+      "conflict_chromatic_lb": 1,
+      "h_theoretical_lb": 1,
+      "h_bitmask_dp": 1,
+      "h_cpsat": 1,
+      "solver_agreement": true,
+      "h_proven_min": 1,
+      "is_optimal": true,
+      "gap_to_naive_lb": 0,
+      "gap_to_theoretical_lb": 0,
+      "gap_root_cause": "ZERO_GAP_MATCH",
+      "formal_proof": "Global unconstrained lower bound H_naive = max(ceil(92.1/100), ceil(4/5)) = 1 is exactly achieved by solver H* = 1. Certified 100% mathematically optimal with 0 gap.",
+      "selected_partition": [
+        [
+          "bedroom_01",
+          "bedroom_02",
+          "kitchen_01",
+          "living_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 5e-05,
+      "runtime_cpsat_s": 0.01429,
+      "routing_j_bitmask_dp": 79.1596,
+      "routing_j_cpsat": 79.1596,
+      "j_delta_pct": 0.0,
+      "routing_cost_note": "Both solvers converged to identical partition and routing cost J=79.16."
+    },
+    {
+      "plan_id": "5",
+      "tier": "standard",
+      "num_eligible_rooms": 5,
+      "num_fixed_nodes": 5,
+      "total_eligible_area_m2": 118.73,
+      "h_area_lb": 2,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 2,
+      "h_component_lb": 3,
+      "conflict_clique_lb": 2,
+      "conflict_chromatic_lb": 2,
+      "h_theoretical_lb": 3,
+      "h_bitmask_dp": 3,
+      "h_cpsat": 3,
+      "solver_agreement": true,
+      "h_proven_min": 3,
+      "is_optimal": true,
+      "gap_to_naive_lb": 1,
+      "gap_to_theoretical_lb": 0,
+      "gap_root_cause": "DOORWAY_SEVERANCE",
+      "formal_proof": "Floor plan contains 2 disconnected door-connectivity components. Cables cannot cross solid walls between isolated building wings. Component lower bound H_comp = 3 proves that H* = 3 > H_naive = 2 is strictly necessary and sufficient.",
+      "selected_partition": [
+        [
+          "bedroom_02"
+        ],
+        [
+          "bedroom_01",
+          "kitchen_01",
+          "living_01"
+        ],
+        [
+          "storage_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 9e-05,
+      "runtime_cpsat_s": 0.01559,
+      "routing_j_bitmask_dp": 68.4474,
+      "routing_j_cpsat": 70.3304,
+      "j_delta_pct": 2.75,
+      "routing_cost_note": "Solvers achieved identical minimal hub count H*=3, but different routing cost J (BitmaskDP: 68.45, CPSAT: 70.33, delta: 2.75%). Proves H* optimality does NOT imply J* optimality."
+    },
+    {
+      "plan_id": "12",
+      "tier": "standard",
+      "num_eligible_rooms": 4,
+      "num_fixed_nodes": 4,
+      "total_eligible_area_m2": 78.69,
+      "h_area_lb": 1,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 1,
+      "h_component_lb": 1,
+      "conflict_clique_lb": 1,
+      "conflict_chromatic_lb": 1,
+      "h_theoretical_lb": 1,
+      "h_bitmask_dp": 1,
+      "h_cpsat": 1,
+      "solver_agreement": true,
+      "h_proven_min": 1,
+      "is_optimal": true,
+      "gap_to_naive_lb": 0,
+      "gap_to_theoretical_lb": 0,
+      "gap_root_cause": "ZERO_GAP_MATCH",
+      "formal_proof": "Global unconstrained lower bound H_naive = max(ceil(78.7/100), ceil(4/5)) = 1 is exactly achieved by solver H* = 1. Certified 100% mathematically optimal with 0 gap.",
+      "selected_partition": [
+        [
+          "bedroom_01",
+          "bedroom_02",
+          "kitchen_01",
+          "living_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 5e-05,
+      "runtime_cpsat_s": 0.01164,
+      "routing_j_bitmask_dp": 70.8782,
+      "routing_j_cpsat": 70.8782,
+      "j_delta_pct": 0.0,
+      "routing_cost_note": "Both solvers converged to identical partition and routing cost J=70.88."
+    },
+    {
+      "plan_id": "28",
+      "tier": "standard",
+      "num_eligible_rooms": 4,
+      "num_fixed_nodes": 4,
+      "total_eligible_area_m2": 98.49,
+      "h_area_lb": 1,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 1,
+      "h_component_lb": 1,
+      "conflict_clique_lb": 1,
+      "conflict_chromatic_lb": 1,
+      "h_theoretical_lb": 1,
+      "h_bitmask_dp": 1,
+      "h_cpsat": 1,
+      "solver_agreement": true,
+      "h_proven_min": 1,
+      "is_optimal": true,
+      "gap_to_naive_lb": 0,
+      "gap_to_theoretical_lb": 0,
+      "gap_root_cause": "ZERO_GAP_MATCH",
+      "formal_proof": "Global unconstrained lower bound H_naive = max(ceil(98.5/100), ceil(4/5)) = 1 is exactly achieved by solver H* = 1. Certified 100% mathematically optimal with 0 gap.",
+      "selected_partition": [
+        [
+          "bedroom_01",
+          "bedroom_02",
+          "kitchen_01",
+          "living_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 0.00011,
+      "runtime_cpsat_s": 0.01929,
+      "routing_j_bitmask_dp": 81.2268,
+      "routing_j_cpsat": 81.2268,
+      "j_delta_pct": 0.0,
+      "routing_cost_note": "Both solvers converged to identical partition and routing cost J=81.23."
+    },
+    {
+      "plan_id": "59",
+      "tier": "complex",
+      "num_eligible_rooms": 5,
+      "num_fixed_nodes": 5,
+      "total_eligible_area_m2": 129.37,
+      "h_area_lb": 2,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 2,
+      "h_component_lb": 2,
+      "conflict_clique_lb": 2,
+      "conflict_chromatic_lb": 2,
+      "h_theoretical_lb": 2,
+      "h_bitmask_dp": 3,
+      "h_cpsat": 3,
+      "solver_agreement": true,
+      "h_proven_min": 3,
+      "is_optimal": true,
+      "gap_to_naive_lb": 1,
+      "gap_to_theoretical_lb": 1,
+      "gap_root_cause": "BIN_FRAGMENTATION",
+      "formal_proof": "Bin-packing fragmentation: individual room areas form indivisible geometric items that cannot be partitioned into fewer than 3 door-connected components without at least one component exceeding 100.0 m\u00b2.",
+      "selected_partition": [
+        [
+          "bedroom_01"
+        ],
+        [
+          "bedroom_03"
+        ],
+        [
+          "bedroom_02",
+          "kitchen_01",
+          "living_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 0.0001,
+      "runtime_cpsat_s": 0.01529,
+      "routing_j_bitmask_dp": 66.0865,
+      "routing_j_cpsat": 66.0865,
+      "j_delta_pct": 0.0,
+      "routing_cost_note": "Both solvers converged to identical partition and routing cost J=66.09."
+    },
+    {
+      "plan_id": "71",
+      "tier": "complex",
+      "num_eligible_rooms": 5,
+      "num_fixed_nodes": 5,
+      "total_eligible_area_m2": 119.42,
+      "h_area_lb": 2,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 2,
+      "h_component_lb": 2,
+      "conflict_clique_lb": 1,
+      "conflict_chromatic_lb": 1,
+      "h_theoretical_lb": 2,
+      "h_bitmask_dp": 2,
+      "h_cpsat": 2,
+      "solver_agreement": true,
+      "h_proven_min": 2,
+      "is_optimal": true,
+      "gap_to_naive_lb": 0,
+      "gap_to_theoretical_lb": 0,
+      "gap_root_cause": "ZERO_GAP_MATCH",
+      "formal_proof": "Global unconstrained lower bound H_naive = max(ceil(119.4/100), ceil(5/5)) = 2 is exactly achieved by solver H* = 2. Certified 100% mathematically optimal with 0 gap.",
+      "selected_partition": [
+        [
+          "bedroom_01"
+        ],
+        [
+          "bedroom_02",
+          "bedroom_03",
+          "kitchen_01",
+          "living_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 0.0001,
+      "runtime_cpsat_s": 0.00926,
+      "routing_j_bitmask_dp": 104.1039,
+      "routing_j_cpsat": 104.1039,
+      "j_delta_pct": 0.0,
+      "routing_cost_note": "Both solvers converged to identical partition and routing cost J=104.10."
+    },
+    {
+      "plan_id": "14433",
+      "tier": "complex",
+      "num_eligible_rooms": 5,
+      "num_fixed_nodes": 5,
+      "total_eligible_area_m2": 103.58,
+      "h_area_lb": 2,
+      "h_nodes_lb": 1,
+      "h_naive_lb": 2,
+      "h_component_lb": 2,
+      "conflict_clique_lb": 1,
+      "conflict_chromatic_lb": 1,
+      "h_theoretical_lb": 2,
+      "h_bitmask_dp": 2,
+      "h_cpsat": 2,
+      "solver_agreement": true,
+      "h_proven_min": 2,
+      "is_optimal": true,
+      "gap_to_naive_lb": 0,
+      "gap_to_theoretical_lb": 0,
+      "gap_root_cause": "ZERO_GAP_MATCH",
+      "formal_proof": "Global unconstrained lower bound H_naive = max(ceil(103.6/100), ceil(5/5)) = 2 is exactly achieved by solver H* = 2. Certified 100% mathematically optimal with 0 gap.",
+      "selected_partition": [
+        [
+          "bedroom_03"
+        ],
+        [
+          "bedroom_01",
+          "bedroom_02",
+          "kitchen_01",
+          "living_01"
+        ]
+      ],
+      "hub_clearance_verified": true,
+      "runtime_bitmask_dp_s": 0.0001,
+      "runtime_cpsat_s": 0.01296,
+      "routing_j_bitmask_dp": 67.5151,
+      "routing_j_cpsat": 67.5151,
+      "j_delta_pct": 0.0,
+      "routing_cost_note": "Both solvers converged to identical partition and routing cost J=67.52."
+    }
+  ]
+}

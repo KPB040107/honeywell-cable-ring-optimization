@@ -1,0 +1,385 @@
+{
+  "benchmark_title": "Honeywell Cable Ring Optimization - Phase 17 Production Reliability Benchmark",
+  "timestamp_utc": "2026-10-23T21:46:31Z",
+  "target_solvers": {
+    "candidate": "LinUCB_ALNS_V2Optimizer (14 ALNS Operators + 24 Contextual Features)",
+    "baseline": "ALNSLinUCBOptimizer (Frozen v1 Champion Baseline)",
+    "wrapper": "ProductionFallbackOptimizer (4-Level Lexicographical Hierarchy Enforcement)"
+  },
+  "hardware_environment": {
+    "physical_cores": 10,
+    "logical_cores": 16,
+    "p_cores": 6,
+    "system_ram_gb": 15.71,
+    "available_ram_gb": 2.06,
+    "recommended_workers": 6,
+    "affinity_mask": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ]
+  },
+  "arbitration_overhead": {
+    "n_evaluations": 10000,
+    "mean_us": 1.365,
+    "std_us": 1.254,
+    "median_us": 1.3,
+    "p95_us": 1.4,
+    "p99_us": 1.6,
+    "min_us": 1.2,
+    "max_us": 62.4,
+    "mean_ms": 0.00136
+  },
+  "simulated_failures_fallback": {
+    "total_modes_tested": 7,
+    "all_passed": true,
+    "results": [
+      {
+        "failure_mode": "wall_collision",
+        "rule_violated": "Rule 4 (Wall / Obstacle Collision)",
+        "candidate_valid": false,
+        "candidate_cost_J": 50.0,
+        "candidate_h_count": 1,
+        "fallback_triggered": true,
+        "fallback_reason": "v2_obstacle_wall_collision",
+        "expected_reason": "v2_obstacle_wall_collision",
+        "baseline_preserved_cost_J": 84.0,
+        "baseline_preserved_h_count": 2,
+        "pass_status": true
+      },
+      {
+        "failure_mode": "disconnected_ring",
+        "rule_violated": "Rule 1 (Closed Ring Topology)",
+        "candidate_valid": false,
+        "candidate_cost_J": 45.0,
+        "candidate_h_count": 1,
+        "fallback_triggered": true,
+        "fallback_reason": "v2_disconnected_ring_loop",
+        "expected_reason": "v2_disconnected_ring_loop",
+        "baseline_preserved_cost_J": 84.0,
+        "baseline_preserved_h_count": 2,
+        "pass_status": true
+      },
+      {
+        "failure_mode": "illegal_zone_partition",
+        "rule_violated": "Rule 2 (Zone Area & Device Capacity)",
+        "candidate_valid": false,
+        "candidate_cost_J": 55.0,
+        "candidate_h_count": 2,
+        "fallback_triggered": true,
+        "fallback_reason": "v2_illegal_zone_partition",
+        "expected_reason": "v2_illegal_zone_partition",
+        "baseline_preserved_cost_J": 84.0,
+        "baseline_preserved_h_count": 2,
+        "pass_status": true
+      },
+      {
+        "failure_mode": "cost_regression",
+        "rule_violated": "Lexicographical Level 3 (Routing Cost J)",
+        "candidate_valid": true,
+        "candidate_cost_J": 110.0,
+        "candidate_h_count": 2,
+        "fallback_triggered": true,
+        "fallback_reason": "v2_cost_regression",
+        "expected_reason": "v2_cost_regression",
+        "baseline_preserved_cost_J": 84.0,
+        "baseline_preserved_h_count": 2,
+        "pass_status": true
+      },
+      {
+        "failure_mode": "hub_count_regression",
+        "rule_violated": "Lexicographical Level 2 (Minimum Hub Count H*)",
+        "candidate_valid": true,
+        "candidate_cost_J": 60.0,
+        "candidate_h_count": 3,
+        "fallback_triggered": true,
+        "fallback_reason": "v2_hub_count_regression",
+        "expected_reason": "v2_hub_count_regression",
+        "baseline_preserved_cost_J": 84.0,
+        "baseline_preserved_h_count": 2,
+        "pass_status": true
+      },
+      {
+        "failure_mode": "search_stagnation",
+        "rule_violated": "Search Convergence Guard (Stagnation Steps >= 20)",
+        "candidate_valid": true,
+        "candidate_cost_J": 80.0,
+        "candidate_h_count": 2,
+        "fallback_triggered": true,
+        "fallback_reason": "v2_search_stagnation",
+        "expected_reason": "v2_search_stagnation",
+        "baseline_preserved_cost_J": 84.0,
+        "baseline_preserved_h_count": 2,
+        "pass_status": true
+      },
+      {
+        "failure_mode": "unhandled_exception",
+        "rule_violated": "Runtime Exception Safety",
+        "candidate_valid": false,
+        "fallback_triggered": true,
+        "fallback_reason": "v2_unhandled_exception",
+        "v2_exception": "Synthetic unhandled crash in candidate search operator!",
+        "final_valid": true,
+        "final_cost_J": 41.2047,
+        "runtime_s": 1.6794,
+        "pass_status": true
+      }
+    ]
+  },
+  "cache_invalidation": {
+    "initial_cached_routes": 5,
+    "purged_entries_on_hub1_relocation": 2,
+    "stale_route_lookup_after_purge": true,
+    "physical_endpoint_guard_stale_detected": true,
+    "stale_prevented_increments": 0,
+    "spatial_grid_base_hits": 1,
+    "spatial_grid_base_builds": 1,
+    "spatial_grid_augmented_hits": 1,
+    "spatial_grid_augmented_builds": 1,
+    "augmented_cache_clean_flush": true,
+    "zero_stale_routes_guarantee": true
+  },
+  "cold_vs_warm_start": {
+    "compact": {
+      "plan_id": "11",
+      "eligible_rooms": 3,
+      "total_rooms": 5,
+      "total_area_m2": 58.06,
+      "cold_start": {
+        "latency_s": 7.3761,
+        "peak_memory_mb": 7.04,
+        "is_valid": true,
+        "h_count": 1,
+        "cost_J": 25.4074,
+        "arbitration_ms": 0.0257
+      },
+      "warm_start": {
+        "latency_s": 5.6116,
+        "peak_memory_mb": 6.19,
+        "is_valid": true,
+        "h_count": 1,
+        "cost_J": 30.4074,
+        "arbitration_ms": 0.0206
+      },
+      "speedup_factor": 1.31,
+      "memory_saved_mb": 0.85
+    },
+    "standard": {
+      "plan_id": "4",
+      "eligible_rooms": 4,
+      "total_rooms": 8,
+      "total_area_m2": 106.84,
+      "cold_start": {
+        "latency_s": 8.4593,
+        "peak_memory_mb": 13.84,
+        "is_valid": true,
+        "h_count": 2,
+        "cost_J": 59.9935,
+        "arbitration_ms": 0.0166
+      },
+      "warm_start": {
+        "latency_s": 7.5541,
+        "peak_memory_mb": 7.77,
+        "is_valid": true,
+        "h_count": 1,
+        "cost_J": 81.1755,
+        "arbitration_ms": 0.0151
+      },
+      "speedup_factor": 1.12,
+      "memory_saved_mb": 6.06
+    },
+    "complex": {
+      "plan_id": "0",
+      "eligible_rooms": 5,
+      "total_rooms": 9,
+      "total_area_m2": 130.99,
+      "cold_start": {
+        "latency_s": 25.3467,
+        "peak_memory_mb": 29.81,
+        "is_valid": true,
+        "h_count": 2,
+        "cost_J": 87.0347,
+        "arbitration_ms": 0.0165
+      },
+      "warm_start": {
+        "latency_s": 33.9724,
+        "peak_memory_mb": 29.55,
+        "is_valid": true,
+        "h_count": 2,
+        "cost_J": 87.0347,
+        "arbitration_ms": 0.0159
+      },
+      "speedup_factor": 0.75,
+      "memory_saved_mb": 0.26
+    }
+  },
+  "worker_multiprocessing": {
+    "scaling": {
+      "1_workers": {
+        "workers": 1,
+        "total_plans": 6,
+        "elapsed_s": 23.42,
+        "plans_per_second": 0.2562,
+        "all_valid": true,
+        "peak_rss_delta_mb": 0.2,
+        "speedup_factor": 1.0,
+        "efficiency_pct": 100.0
+      },
+      "2_workers": {
+        "workers": 2,
+        "total_plans": 6,
+        "elapsed_s": 19.784,
+        "plans_per_second": 0.3033,
+        "all_valid": true,
+        "peak_rss_delta_mb": 0.0,
+        "speedup_factor": 1.18,
+        "efficiency_pct": 59.2
+      },
+      "4_workers": {
+        "workers": 4,
+        "total_plans": 6,
+        "elapsed_s": 16.952,
+        "plans_per_second": 0.3539,
+        "all_valid": true,
+        "peak_rss_delta_mb": 0.0,
+        "speedup_factor": 1.38,
+        "efficiency_pct": 34.5
+      }
+    },
+    "affinity_profile": {
+      "host_physical_cores": 10,
+      "host_logical_cores": 16,
+      "p_cores_isolated": 6,
+      "e_cores_detected": 4,
+      "core_affinity_supported": true,
+      "p_core_affinity_mask": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "throttling_avoidance_guarantee": "Pinning workers to P-cores isolates compute-bound ALNS from Gracemont low-IPC E-core frequency down-clocking"
+    }
+  },
+  "checkpoint_resumption": {
+    "total_batch_size": 6,
+    "phase1_completed": 3,
+    "phase2_skipped_existing": 3,
+    "phase2_executed_remaining": 3,
+    "final_total_records": 6,
+    "zero_duplicate_executions": true,
+    "checkpoint_file_exists": true,
+    "checkpoint_valid_json": true,
+    "fidelity_verified": true
+  },
+  "failure_isolation": {
+    "total_tasks": 4,
+    "successful_tasks": 3,
+    "quarantined_failures": 1,
+    "worker_pool_survived": true,
+    "adjacent_plan_corrupted": false,
+    "failure_isolation_verified": true
+  },
+  "deterministic_reproducibility": {
+    "verified": true,
+    "evaluations": [
+      {
+        "plan_id": "11",
+        "seed": 42,
+        "trials": [
+          {
+            "trial": 1,
+            "L": 19.4268,
+            "X": 0,
+            "O": 1.4806,
+            "B": 9,
+            "J": 25.4074,
+            "H": 1,
+            "area_gap": 0.0,
+            "is_valid": true
+          },
+          {
+            "trial": 2,
+            "L": 19.4268,
+            "X": 0,
+            "O": 1.4806,
+            "B": 9,
+            "J": 25.4074,
+            "H": 1,
+            "area_gap": 0.0,
+            "is_valid": true
+          },
+          {
+            "trial": 3,
+            "L": 19.4268,
+            "X": 0,
+            "O": 1.4806,
+            "B": 9,
+            "J": 25.4074,
+            "H": 1,
+            "area_gap": 0.0,
+            "is_valid": true
+          }
+        ],
+        "bitwise_identical": true
+      },
+      {
+        "plan_id": "4",
+        "seed": 42,
+        "trials": [
+          {
+            "trial": 1,
+            "L": 40.0004,
+            "X": 5,
+            "O": 9.1751,
+            "B": 14,
+            "J": 81.1755,
+            "H": 1,
+            "area_gap": 0.0,
+            "is_valid": true
+          },
+          {
+            "trial": 2,
+            "L": 40.0004,
+            "X": 5,
+            "O": 9.1751,
+            "B": 14,
+            "J": 81.1755,
+            "H": 1,
+            "area_gap": 0.0,
+            "is_valid": true
+          },
+          {
+            "trial": 3,
+            "L": 40.0004,
+            "X": 5,
+            "O": 9.1751,
+            "B": 14,
+            "J": 81.1755,
+            "H": 1,
+            "area_gap": 0.0,
+            "is_valid": true
+          }
+        ],
+        "bitwise_identical": true
+      }
+    ]
+  }
+}

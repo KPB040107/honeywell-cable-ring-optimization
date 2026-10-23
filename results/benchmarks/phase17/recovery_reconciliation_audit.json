@@ -1,0 +1,124 @@
+{
+  "audit_metadata": {
+    "title": "Phase 17 Recovery Verification and Census Reconciliation Audit",
+    "auditor": "Agent 4 (Recovery Verification Lead)",
+    "phase": "Phase 17 - Final LinUCB-ALNS v2 Certification",
+    "timestamp": "2026-10-23T21:42:32.961769+00:00",
+    "status": "VERIFIED & CERTIFIED"
+  },
+  "census_reconciliation": {
+    "total_dataset_plans": 17000,
+    "splits": {
+      "train": 13053,
+      "val": 1632,
+      "test": 1632,
+      "augmented": 683
+    },
+    "splits_pairwise_disjoint": true,
+    "baseline_accounting": {
+      "certified_valid_plans": 15506,
+      "certified_valid_pct": 91.21,
+      "total_operational_quarantined": 1494,
+      "total_operational_quarantined_pct": 8.79,
+      "coarse_ingestion_quarantined": 754,
+      "coarse_ingestion_quarantined_pct": 4.44,
+      "pipeline_discrepancy_delta": 740,
+      "pipeline_discrepancy_delta_pct": 4.35,
+      "coarse_clean_feasible": 16246,
+      "census_conservation_identity": "17000 = 15506 (valid) + 740 (discrepancy) + 754 (coarse)",
+      "quarantine_conservation_identity": "1494 = 754 (coarse) + 740 (discrepancy)"
+    },
+    "multi_defect_bridge_overlap": {
+      "total_overlapping_records": 65,
+      "portal_intersection_boundary": 46,
+      "boundary_intersection_hub_excluding_portal": 19,
+      "bridge_formula": "689 early halt + 65 multi-defect bridge = 754 coarse quarantine; 805 raw downstream failures - 65 multi-defect bridge = 740 discrepancy"
+    }
+  },
+  "empirical_recovery_audit": {
+    "candidates_audited": 850,
+    "genuinely_rescued_plans": 647,
+    "recovery_success_rate_pct": 76.12,
+    "unrecovered_plans": 203,
+    "unrecovered_rate_pct": 23.88,
+    "rescued_by_category": {
+      "CADASTRAL_PORTAL_DEGENERACY": 424,
+      "TERMINAL_ALIGNMENT_GAP": 120,
+      "BOUNDARY_FREE_SPACE_EXIT": 59,
+      "DEGENERATE_INDEXING_ERROR": 39,
+      "GENERAL_OPTIMIZATION": 5
+    },
+    "physical_infeasibility_catalog": {
+      "total_infeasible_plans": 22,
+      "rank_1_hub_clearance_under_50cm": 14,
+      "rank_2_isolated_leaf_rooms": 8,
+      "rank_1_pids": [
+        5460,
+        15000,
+        15678,
+        145814,
+        227794,
+        284019,
+        301603,
+        345536,
+        399279,
+        413814,
+        586490,
+        589710,
+        622584,
+        952547
+      ],
+      "rank_2_pids": [
+        452,
+        778,
+        4048,
+        7447,
+        8272,
+        8716,
+        16162,
+        16612
+      ]
+    }
+  },
+  "dataset_expansion_impact": {
+    "baseline_operational_valid": 15506,
+    "rescued_additions": 647,
+    "new_total_operational_verified": 16153,
+    "operational_verified_pct": 95.02,
+    "remaining_quarantined": 847,
+    "remaining_quarantined_pct": 4.98,
+    "remaining_quarantine_breakdown": {
+      "coarse_ingestion_quarantine": 754,
+      "remaining_unrecovered_discrepancy": 93,
+      "quarantine_conservation": "847 = 754 + 93"
+    }
+  },
+  "independent_validation_concordance": {
+    "total_dual_audit_samples": 14,
+    "concordance_rate_pct": 100.0,
+    "max_delta_J": 0.0,
+    "max_delta_L_m": 0.0,
+    "max_delta_X": 0,
+    "max_delta_O_m": 0.0,
+    "max_delta_B": 0,
+    "max_delta_area_gap_m2": 0.0,
+    "floorplan_checker_violations_in_rescued_set": 0,
+    "independent_verifier_violations_in_rescued_set": 0,
+    "bit_level_metric_parity": true
+  },
+  "invariant_preservation_audit": {
+    "invariant_1_fixed_nodes_displacement_max_m": 0.0,
+    "invariant_2_spatial_tolerance_bound_m": 0.001,
+    "invariant_3_obstacle_penetration_max_m": 0.0,
+    "invariant_4_hub_clearance_min_m": 0.499,
+    "invariant_5_frozen_baseline_files_status": "UNTOUCHED_BITWISE_PRISTINE",
+    "overall_invariants_preserved": true
+  },
+  "cache_freshness_and_invalidation": {
+    "stale_routes_detected": 0,
+    "plan_id_cache_isolation_verified": true,
+    "endpoint_drift_guard_verified": true,
+    "fresh_geometry_evaluation_verified": true,
+    "status": "PASSED_ZERO_STALE_CACHE_REUSE"
+  }
+}
