@@ -1,9 +1,9 @@
 # Honeywell Cable Ring Optimization: 5-Way Empirical Benchmark Report
 
-**Generated:** 2026-10-23 11:08:30 UTC  
+**Generated:** 2026-10-24 01:56:08 UTC  
 **Benchmark Mode:** `custom`  
-**Evaluated Plans:** 5 floor plans  
-**Compute Budget:** 5.0s timeout per plan | Parallel Workers: 2  
+**Evaluated Plans:** 2 floor plans  
+**Compute Budget:** 2.0s timeout per plan | Parallel Workers: 1  
 **Baseline Reference:** `PortfolioHybrid`  
 
 ---
@@ -18,7 +18,11 @@ competition lexicographical dominance hierarchy:
 
 | Algorithm | Validity (%) | Mean Hubs ($H$) | Mean Cost ($J$) | Median $J$ | Std $J$ | Mean Length ($L$) | Mean Bends ($B$) | Crossings ($X$) | Overlap ($O$) | Avg Runtime (s) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **LinUCB_ALNS** | 100.0% | 3.00 | **39.33** | 28.86 | 25.29 | 20.23m | 11.0 | 2.2 | 2.61m | 3.72s |
+| **PortfolioHybrid** | 100.0% | 1.50 | **79.68** | 79.68 | 1.49 | 39.46m | 14.0 | 5.0 | 8.22m | 3.25s |
+| **ALNS_Bandit** | 100.0% | 1.50 | **79.68** | 79.68 | 1.49 | 39.46m | 14.0 | 5.0 | 8.22m | 2.86s |
+| **ALNS_Random** | 100.0% | 1.50 | **79.68** | 79.68 | 1.49 | 39.46m | 14.0 | 5.0 | 8.22m | 3.05s |
+| **LinUCB_ALNS** | 100.0% | 2.00 | **73.93** | 73.93 | 7.24 | 38.11m | 14.5 | 4.5 | 6.07m | 2.58s |
+| **PPO_ALNS** | 100.0% | 3.00 | **42.33** | 42.33 | 38.85 | 20.16m | 10.0 | 2.5 | 4.66m | 2.86s |
 
 ---
 
@@ -29,7 +33,13 @@ percentage improvements, paired Student's t-test, Wilcoxon signed-rank test, and
 
 | Matchup (Candidate vs Competitor) | Wins | Ties | Losses | Win Rate | Non-Loss Rate | Mean $\Delta J$ | % Imp | $t$-test $p$-val | Wilcoxon $p$-val | Bootstrap 95% CI ($\Delta J$) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **LinUCB_ALNS** vs `PortfolioHybrid` | 0 | 3 | 0 | **0.0%** | 60.0% | +0.0000 | +0.00% | 1.0000 | 1.0000 | `[+0.00, +0.00]` |
+| **ALNS_Bandit** vs `PortfolioHybrid` | 0 | 2 | 0 | **0.0%** | 100.0% | +0.0000 | +0.00% | 1.0000 | 1.0000 | `[+0.00, +0.00]` |
+| **ALNS_Random** vs `PortfolioHybrid` | 0 | 2 | 0 | **0.0%** | 100.0% | +0.0000 | +0.00% | 1.0000 | 1.0000 | `[+0.00, +0.00]` |
+| **LinUCB_ALNS** vs `PortfolioHybrid` | 0 | 1 | 1 | **0.0%** | 50.0% | +5.7513 | +7.36% | 0.5000 | 1.0000 | `[+0.00, +11.50]` |
+| **PPO_ALNS** vs `PortfolioHybrid` | 0 | 1 | 1 | **0.0%** | 50.0% | +37.3550 | +47.77% | 0.5000 | 1.0000 | `[+0.00, +74.71]` |
+| **LinUCB_ALNS** vs `ALNS_Bandit` | 0 | 1 | 1 | **0.0%** | 50.0% | +5.7513 | +7.36% | 0.5000 | 1.0000 | `[+0.00, +11.50]` |
+| **PPO_ALNS** vs `ALNS_Bandit` | 0 | 1 | 1 | **0.0%** | 50.0% | +37.3550 | +47.77% | 0.5000 | 1.0000 | `[+0.00, +74.71]` |
+| **PPO_ALNS** vs `LinUCB_ALNS` | 0 | 1 | 1 | **0.0%** | 50.0% | +31.6037 | +47.39% | 0.5000 | 1.0000 | `[+0.00, +63.21]` |
 
 > \* Indicates statistically significant improvement ($p < 0.05$) under Wilcoxon signed-rank test.
 
@@ -47,11 +57,15 @@ Stratification based on room count complexity:
 | Algorithm | Validity (%) | Mean $H$ | Mean $J$ | Median $J$ | Mean Length ($L$) | Mean Runtime (s) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 
-### Tier: STANDARD (5 plans, 100.0% of suite)
+### Tier: STANDARD (2 plans, 100.0% of suite)
 
 | Algorithm | Validity (%) | Mean $H$ | Mean $J$ | Median $J$ | Mean Length ($L$) | Mean Runtime (s) |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **LinUCB_ALNS** | 100.0% | 3.00 | **39.33** | 28.86 | 20.23m | 3.72s |
+| **PortfolioHybrid** | 100.0% | 1.50 | **79.68** | 79.68 | 39.46m | 3.25s |
+| **ALNS_Bandit** | 100.0% | 1.50 | **79.68** | 79.68 | 39.46m | 2.86s |
+| **ALNS_Random** | 100.0% | 1.50 | **79.68** | 79.68 | 39.46m | 3.05s |
+| **LinUCB_ALNS** | 100.0% | 2.00 | **73.93** | 73.93 | 38.11m | 2.58s |
+| **PPO_ALNS** | 100.0% | 3.00 | **42.33** | 42.33 | 20.16m | 2.86s |
 
 ### Tier: COMPLEX (0 plans, 0.0% of suite)
 

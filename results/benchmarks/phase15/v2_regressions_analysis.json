@@ -1,0 +1,352 @@
+[
+  {
+    "plan_id": "188",
+    "tier": "complex",
+    "seed": 42,
+    "v1_cost_J": 37.3822,
+    "v2_cost_J": 55.3395,
+    "cost_delta": -17.9573,
+    "v1_metrics": {
+      "H": 4,
+      "L": 16.8197,
+      "X": 2,
+      "O": 5,
+      "B": 12,
+      "T": 7.1166
+    },
+    "v2_metrics": {
+      "H": 4,
+      "L": 33.212,
+      "X": 3,
+      "O": 0,
+      "B": 14,
+      "T": 12.3897
+    },
+    "diagnosis": "Higher crossings (+1); Higher bends (+2); Longer wire (+16.39m)"
+  },
+  {
+    "plan_id": "228",
+    "tier": "standard",
+    "seed": 42,
+    "v1_cost_J": 83.1396,
+    "v2_cost_J": 83.1406,
+    "cost_delta": -0.001,
+    "v1_metrics": {
+      "H": 2,
+      "L": 44.5882,
+      "X": 5,
+      "O": 3,
+      "B": 21,
+      "T": 5.8273
+    },
+    "v2_metrics": {
+      "H": 2,
+      "L": 44.5892,
+      "X": 5,
+      "O": 3,
+      "B": 21,
+      "T": 4.6973
+    },
+    "diagnosis": "Longer wire (+0.0m)"
+  },
+  {
+    "plan_id": "439",
+    "tier": "standard",
+    "seed": 42,
+    "v1_cost_J": 76.49,
+    "v2_cost_J": 79.2951,
+    "cost_delta": -2.8051,
+    "v1_metrics": {
+      "H": 1,
+      "L": 37.551,
+      "X": 5,
+      "O": 6,
+      "B": 15,
+      "T": 5.5414
+    },
+    "v2_metrics": {
+      "H": 1,
+      "L": 37.5458,
+      "X": 6,
+      "O": 4,
+      "B": 15,
+      "T": 5.5206
+    },
+    "diagnosis": "Higher crossings (+1)"
+  },
+  {
+    "plan_id": "621",
+    "tier": "standard",
+    "seed": 42,
+    "v1_cost_J": 60.7786,
+    "v2_cost_J": 66.3986,
+    "cost_delta": -5.62,
+    "v1_metrics": {
+      "H": 1,
+      "L": 33.6883,
+      "X": 3,
+      "O": 4,
+      "B": 17,
+      "T": 5.7926
+    },
+    "v2_metrics": {
+      "H": 1,
+      "L": 33.7683,
+      "X": 4,
+      "O": 4,
+      "B": 18,
+      "T": 5.5081
+    },
+    "diagnosis": "Higher crossings (+1); Higher bends (+1); Longer wire (+0.08m)"
+  },
+  {
+    "plan_id": "781",
+    "tier": "standard",
+    "seed": 42,
+    "v1_cost_J": 69.9756,
+    "v2_cost_J": 71.7124,
+    "cost_delta": -1.7368,
+    "v1_metrics": {
+      "H": 2,
+      "L": 39.4552,
+      "X": 4,
+      "O": 4,
+      "B": 13,
+      "T": 5.9095
+    },
+    "v2_metrics": {
+      "H": 2,
+      "L": 39.011,
+      "X": 4,
+      "O": 5,
+      "B": 15,
+      "T": 7.1539
+    },
+    "diagnosis": "Higher overlap (+1m); Higher bends (+2)"
+  },
+  {
+    "plan_id": "917",
+    "tier": "complex",
+    "seed": 42,
+    "v1_cost_J": 9.6654,
+    "v2_cost_J": 12.1639,
+    "cost_delta": -2.4985,
+    "v1_metrics": {
+      "H": 7,
+      "L": 6.5702,
+      "X": 0,
+      "O": 0,
+      "B": 6,
+      "T": 17.9582
+    },
+    "v2_metrics": {
+      "H": 7,
+      "L": 7.569,
+      "X": 0,
+      "O": 1,
+      "B": 8,
+      "T": 9.5164
+    },
+    "diagnosis": "Higher overlap (+1m); Higher bends (+2); Longer wire (+1.0m)"
+  },
+  {
+    "plan_id": "918",
+    "tier": "standard",
+    "seed": 42,
+    "v1_cost_J": 64.6169,
+    "v2_cost_J": 65.0417,
+    "cost_delta": -0.4248,
+    "v1_metrics": {
+      "H": 1,
+      "L": 36.6018,
+      "X": 3,
+      "O": 7,
+      "B": 13,
+      "T": 5.1935
+    },
+    "v2_metrics": {
+      "H": 1,
+      "L": 36.0328,
+      "X": 3,
+      "O": 7,
+      "B": 14,
+      "T": 5.4125
+    },
+    "diagnosis": "Higher bends (+1)"
+  },
+  {
+    "plan_id": "992",
+    "tier": "complex",
+    "seed": 42,
+    "v1_cost_J": 64.2161,
+    "v2_cost_J": 67.5504,
+    "cost_delta": -3.3343,
+    "v1_metrics": {
+      "H": 3,
+      "L": 39.3762,
+      "X": 3,
+      "O": 3,
+      "B": 13,
+      "T": 6.2709
+    },
+    "v2_metrics": {
+      "H": 3,
+      "L": 34.0466,
+      "X": 4,
+      "O": 8,
+      "B": 12,
+      "T": 4.7295
+    },
+    "diagnosis": "Higher crossings (+1); Higher overlap (+5m)"
+  },
+  {
+    "plan_id": "17",
+    "tier": "standard",
+    "seed": 123,
+    "v1_cost_J": 67.3898,
+    "v2_cost_J": 72.0977,
+    "cost_delta": -4.7079,
+    "v1_metrics": {
+      "H": 2,
+      "L": 41.889,
+      "X": 3,
+      "O": 4,
+      "B": 13,
+      "T": 5.4191
+    },
+    "v2_metrics": {
+      "H": 2,
+      "L": 41.889,
+      "X": 4,
+      "O": 3,
+      "B": 15,
+      "T": 6.0007
+    },
+    "diagnosis": "Higher crossings (+1); Higher bends (+2)"
+  },
+  {
+    "plan_id": "27",
+    "tier": "standard",
+    "seed": 123,
+    "v1_cost_J": 62.8664,
+    "v2_cost_J": 66.0804,
+    "cost_delta": -3.214,
+    "v1_metrics": {
+      "H": 1,
+      "L": 38.0054,
+      "X": 3,
+      "O": 3,
+      "B": 14,
+      "T": 5.4465
+    },
+    "v2_metrics": {
+      "H": 1,
+      "L": 38.0024,
+      "X": 3,
+      "O": 7,
+      "B": 13,
+      "T": 6.8859
+    },
+    "diagnosis": "Higher overlap (+4m)"
+  },
+  {
+    "plan_id": "439",
+    "tier": "standard",
+    "seed": 123,
+    "v1_cost_J": 65.4744,
+    "v2_cost_J": 79.2951,
+    "cost_delta": -13.8207,
+    "v1_metrics": {
+      "H": 2,
+      "L": 30.3588,
+      "X": 5,
+      "O": 3,
+      "B": 14,
+      "T": 5.9546
+    },
+    "v2_metrics": {
+      "H": 1,
+      "L": 37.5458,
+      "X": 6,
+      "O": 4,
+      "B": 15,
+      "T": 4.9684
+    },
+    "diagnosis": "Higher crossings (+1); Higher overlap (+1m); Higher bends (+1); Longer wire (+7.19m)"
+  },
+  {
+    "plan_id": "47",
+    "tier": "complex",
+    "seed": 123,
+    "v1_cost_J": 37.5555,
+    "v2_cost_J": 42.5563,
+    "cost_delta": -5.0008,
+    "v1_metrics": {
+      "H": 5,
+      "L": 23.8866,
+      "X": 1,
+      "O": 3,
+      "B": 11,
+      "T": 6.4546
+    },
+    "v2_metrics": {
+      "H": 5,
+      "L": 23.8874,
+      "X": 2,
+      "O": 3,
+      "B": 11,
+      "T": 5.0404
+    },
+    "diagnosis": "Higher crossings (+1); Longer wire (+0.0m)"
+  },
+  {
+    "plan_id": "473",
+    "tier": "compact",
+    "seed": 123,
+    "v1_cost_J": 34.681,
+    "v2_cost_J": 35.8832,
+    "cost_delta": -1.2022,
+    "v1_metrics": {
+      "H": 1,
+      "L": 18.782,
+      "X": 1,
+      "O": 7,
+      "B": 7,
+      "T": 5.3927
+    },
+    "v2_metrics": {
+      "H": 1,
+      "L": 18.7856,
+      "X": 2,
+      "O": 3,
+      "B": 8,
+      "T": 4.9388
+    },
+    "diagnosis": "Higher crossings (+1); Higher bends (+1); Longer wire (+0.0m)"
+  },
+  {
+    "plan_id": "781",
+    "tier": "standard",
+    "seed": 123,
+    "v1_cost_J": 67.5022,
+    "v2_cost_J": 67.5026,
+    "cost_delta": -0.0004,
+    "v1_metrics": {
+      "H": 2,
+      "L": 38.9626,
+      "X": 3,
+      "O": 6,
+      "B": 15,
+      "T": 4.819
+    },
+    "v2_metrics": {
+      "H": 2,
+      "L": 38.963,
+      "X": 3,
+      "O": 6,
+      "B": 15,
+      "T": 5.6409
+    },
+    "diagnosis": "Longer wire (+0.0m)"
+  }
+]
