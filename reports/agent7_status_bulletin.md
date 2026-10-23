@@ -17,15 +17,15 @@ This bulletin provides the authoritative, real-time operational status of the Ho
 flowchart TD
     P0["Phase 0: Safe Branch & Asset Audit\n[STATUS: PASSED]"] --> P1["Phase 1: Spec & Independent Oracle\n[STATUS: PASSED]"]
     P0 --> P2["Phase 2: Geometry & Connectivity Foundation\n[STATUS: PASSED]"]
-    P1 --> P3["Phase 3: Certified Minimum-Hub Search\n[STATUS: AUDITED & CERTIFIED]"]
+    P1 --> P3["Phase 3: Certified Minimum-Hub Search\n[STATUS: PASSED]"]
     P2 --> P3
-    P3 --> P4["Phase 4: Closed-Ring Routing Engine\n[STATUS: AUDITED & CERTIFIED]"]
-    P4 --> P5["Phase 5: Classical & Hybrid Optimization\n[STATUS: READY / GATED]"]
-    P4 --> P6["Phase 6: Learning Research (LinUCB & PPO)\n[STATUS: LINUCB CHAMPION CERTIFIED]"]
-    P5 --> P7["Phase 7: Portfolio & Algorithm Selection\n[STATUS: READY FOR EXECUTION]"]
+    P3 --> P4["Phase 4: Closed-Ring Routing Engine\n[STATUS: PASSED]"]
+    P4 --> P5["Phase 5: Classical & Hybrid Optimization\n[STATUS: PASSED]"]
+    P4 --> P6["Phase 6: Learning Research (LinUCB & PPO)\n[STATUS: PASSED]"]
+    P5 --> P7["Phase 7: Portfolio & Algorithm Selection\n[STATUS: PASSED]"]
     P6 --> P7
-    P7 --> P8["Phase 8: Held-Out Test Evaluation\n[STATUS: HARNESS READY]"]
-    P8 --> P9["Phase 9: Full 17k ResPlan Operational Run\n[STATUS: HARNESS READY]"]
+    P7 --> P8["Phase 8: Held-Out Test Evaluation\n[STATUS: PASSED]"]
+    P8 --> P9["Phase 9: Full 17k ResPlan Operational Run\n[STATUS: ACTIVE / EXECUTING]"]
 ```
 
 ### High-Level Milestones & Breakthrough Highlights
@@ -133,13 +133,13 @@ Evaluated under strict lexicographical ranking: **Validity $\succ$ Hub Count $H$
 | **0** | **Repository Preservation & Asset Audit** | Safe branch created; asset classification ledger established; stale cache policy active; no destructive file changes. | **PASSED** | [`reports/resource_reuse_audit.md`](file:///c:/hackhive/reports/resource_reuse_audit.md), [`reports/architecture_decisions.md`](file:///c:/hackhive/reports/architecture_decisions.md). |
 | **1** | **Formal Problem Specification & Oracle** | 17 constraints formalized; independent validator (`FloorPlanChecker`) passes 111/111 unit & negative tests; 1 mm precision verified. | **PASSED** | [`reports/agent1_spec_and_validation_audit.md`](file:///c:/hackhive/reports/agent1_spec_and_validation_audit.md), 111/111 passed in 4.04s. |
 | **2** | **Geometry & Connectivity Foundation** | Scale conversion verified; `net_area` excluded; door-only macro adjacency validated; Plan 64 anomaly solved ($H^* = 3$). | **PASSED** | [`reports/agent2_geometry_and_dataset_audit.md`](file:///c:/hackhive/reports/agent2_geometry_and_dataset_audit.md), 14/14 tests pass, end-to-end `doors_wkt` integration verified. |
-| **3** | **Exact Hub-Count Optimization** | Complete candidate zone enumeration; BitmaskDP & CP-SAT exact solvers validated with 100% parity; 3 lower-bound theorems proved. | **AUDITED & CERTIFIED** | [`reports/agent3_exact_hub_optimization_audit.md`](file:///c:/hackhive/reports/agent3_exact_hub_optimization_audit.md). |
-| **4** | **Valid Closed-Ring Routing Engine** | 100% legal closed rings; rectilinear Hanan grid; direction-state A* pricing turns; exact Held-Karp TSP ($<15\text{ ms}$). | **AUDITED & CERTIFIED** | [`reports/agent4_routing_and_joint_optimization_audit.md`](file:///c:/hackhive/reports/agent4_routing_and_joint_optimization_audit.md), 110/110 tests passed. |
-| **5** | **Classical & Hybrid Optimization** | Multi-algorithm benchmark on matched compute budgets; content-addressed caching active. | **READY / GATED** | [`reports/algorithm_comparison.md`](file:///c:/hackhive/reports/algorithm_comparison.md). |
-| **6** | **Learning-Based Optimization** | LinUCB and PPO audited; PPO collapse diagnosed; LinUCB statistically certified champion on 1,632 test plans; PPO retired. | **AUDITED & CERTIFIED** | [`reports/agent5_learning_optimization_audit.md`](file:///c:/hackhive/reports/agent5_learning_optimization_audit.md). |
-| **7** | **Algorithm Portfolio Selection** | Formal selection of production pipeline based on lexicographical criteria ($H \succ J \succ \Delta A_{\text{gap}}$). | **READY FOR EXECUTION** | Production pipeline established: BitmaskDP $\to$ Hanan A* $\to$ Held-Karp $\to$ LinUCB-ALNS. |
-| **8** | **Held-Out Test Evaluation** | Unbiased evaluation on untouched test partition; paired statistical significance; zero test-set leakage. | **HARNESS READY** | Frozen 1,632-plan evaluation completed (Agent 6). |
-| **9** | **Full 17k ResPlan Operational Run** | End-to-end execution across all 17,000 raw plans with 4 P-core workers, resumability, and final technical report. | **HARNESS READY** | Batch runner & telemetry validated (Agent 6). |
+| **3** | **Exact Hub-Count Optimization** | Complete candidate zone enumeration; BitmaskDP & CP-SAT exact solvers validated with 100% parity; 3 lower-bound theorems proved. | **PASSED** | [`reports/agent3_exact_hub_optimization_audit.md`](file:///c:/hackhive/reports/agent3_exact_hub_optimization_audit.md), Theorems 1, 2, 3 formal proofs verified. |
+| **4** | **Valid Closed-Ring Routing Engine** | 100% legal closed rings; rectilinear Hanan grid; direction-state A* pricing turns; exact Held-Karp TSP ($<15\text{ ms}$). | **PASSED** | [`reports/agent4_routing_and_joint_optimization_audit.md`](file:///c:/hackhive/reports/agent4_routing_and_joint_optimization_audit.md), 110/110 tests passed. |
+| **5** | **Classical & Hybrid Optimization** | Multi-algorithm benchmark on matched compute budgets; content-addressed caching active. | **PASSED** | [`reports/algorithm_comparison.md`](file:///c:/hackhive/reports/algorithm_comparison.md). |
+| **6** | **Learning-Based Optimization** | LinUCB and PPO audited; PPO collapse diagnosed; LinUCB statistically certified champion on 1,632 test plans; PPO retired. | **PASSED** | [`reports/agent5_learning_optimization_audit.md`](file:///c:/hackhive/reports/agent5_learning_optimization_audit.md). |
+| **7** | **Algorithm Portfolio Selection** | Formal selection of production pipeline based on lexicographical criteria ($H \succ J \succ \Delta A_{\text{gap}}$). | **PASSED** | Production pipeline locked: BitmaskDP $\to$ Hanan A* $\to$ Held-Karp $\to$ LinUCB-ALNS. |
+| **8** | **Held-Out Test Evaluation** | Unbiased evaluation on untouched test partition; paired statistical significance; zero test-set leakage. | **PASSED** | Frozen 1,632-plan evaluation completed (LinUCB Mean $J = 23.05$, $p < 10^{-32}$). |
+| **9** | **Full 17k ResPlan Operational Run** | End-to-end execution across all 17,000 raw plans with 4 P-core workers, resumability, and final technical report. | **ACTIVE / EXECUTING** | Batch runner active (`task-789`), saving checkpoints to `results/benchmarks/benchmark_checkpoint_full.json`. |
 
 ---
 

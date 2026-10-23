@@ -22,7 +22,7 @@ flowchart TD
     P5 --> P7["Phase 7: Portfolio & Algorithm Selection\n[PASSED]"]
     P6 --> P7
     P7 --> P8["Phase 8: Held-Out Test Evaluation\n[PASSED]"]
-    P8 --> P9["Phase 9: Full 17k ResPlan Operational Run\n[ACTIVE / READY]"]
+    P8 --> P9["Phase 9: Full 17k ResPlan Operational Run\n[ACTIVE / EXECUTING]"]
 ```
 
 ---
