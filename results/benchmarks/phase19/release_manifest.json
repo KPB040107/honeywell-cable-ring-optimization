@@ -1,0 +1,103 @@
+{
+  "release_version": "2.0.0",
+  "release_name": "ResPlan Router Production Release",
+  "commit_hash": "978cfe0f08eb365ba1ee07e00c1a03e4752b6e05",
+  "branch": "phase19-production-packaging",
+  "build_timestamp_utc": "2026-10-24T00:00:00Z",
+  "python_requires": ">=3.10",
+  "license": "MIT",
+  "artifacts": [
+    {
+      "format": "wheel",
+      "filename": "resplan_router-2.0.0-py3-none-any.whl",
+      "size_bytes": 544750,
+      "sha256": "1313B940EA59777A8E7EAE20B8532484B2C0138A3CFA6EC436309C531F3BB998",
+      "entry_points": {
+        "console_scripts": [
+          "resplan = resplan_router.cli:main"
+        ]
+      }
+    },
+    {
+      "format": "sdist",
+      "filename": "resplan_router-2.0.0.tar.gz",
+      "size_bytes": 542621,
+      "sha256": "9B71E1898C1845C8E9EF7BDCB6F6F106F8A068071CBD42BDDBB5760117433EDE"
+    }
+  ],
+  "dependencies": {
+    "core": [
+      "pydantic>=2.0",
+      "shapely>=2.0",
+      "networkx>=3.0",
+      "numpy>=1.24",
+      "scipy>=1.10",
+      "ortools>=9.6",
+      "matplotlib>=3.7",
+      "pyyaml>=6.0",
+      "fastapi>=0.100.0",
+      "uvicorn>=0.20.0",
+      "websockets>=11.0",
+      "python-multipart>=0.0.6",
+      "psutil>=5.9.0",
+      "pillow>=9.5.0"
+    ],
+    "optional": {
+      "test": [
+        "pytest>=7.0",
+        "httpx>=0.24.0",
+        "pytest-cov>=4.0"
+      ],
+      "dev": [
+        "ruff>=0.1.0",
+        "black>=23.0",
+        "flake8>=6.0",
+        "mypy>=1.5",
+        "build>=1.0.0",
+        "twine>=4.0.0"
+      ],
+      "benchmarks": [
+        "pandas>=2.0",
+        "torch>=2.0",
+        "gymnasium>=0.29",
+        "tensorboard>=2.14"
+      ]
+    }
+  },
+  "package_metadata": {
+    "package_name": "resplan-router",
+    "summary": "ResPlan Cable Ring Router — Autonomous Cable Ring Layout & Optimization for Commercial & Industrial Facilities",
+    "authors": [
+      {
+        "name": "Honeywell HackHive Team"
+      }
+    ],
+    "classifiers": [
+      "Development Status :: 5 - Production/Stable",
+      "Intended Audience :: Manufacturing",
+      "Intended Audience :: Science/Research",
+      "Operating System :: OS Independent",
+      "Programming Language :: Python :: 3",
+      "Programming Language :: Python :: 3.10",
+      "Programming Language :: Python :: 3.11",
+      "Programming Language :: Python :: 3.12",
+      "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)"
+    ],
+    "keywords": [
+      "cable-routing",
+      "eda",
+      "milp",
+      "alns",
+      "survivability",
+      "bim",
+      "building-automation"
+    ]
+  },
+  "verification": {
+    "wheel_verified": true,
+    "sdist_verified": true,
+    "cli_executable_verified": true,
+    "isolated_install_verified": true,
+    "ci_workflow_path": ".github/workflows/ci.yml"
+  }
+}

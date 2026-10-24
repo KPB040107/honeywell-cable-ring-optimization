@@ -1,0 +1,97 @@
+{
+  "manifest_title": "Honeywell Cable Ring Optimization - Phase 19 Production Run Manifest",
+  "manifest_version": "2.0.0",
+  "timestamp_utc": "2026-10-24T00:06:33.554468+00:00",
+  "phase": 19,
+  "certified_release_tag": "v2.0-full-production-certified",
+  "git_metadata": {
+    "commit_full": "978cfe0f08eb365ba1ee07e00c1a03e4752b6e05",
+    "commit_short": "978cfe0",
+    "branch": "phase19-production-packaging",
+    "tag": "v2.0-full-production-certified",
+    "tags": [
+      "v2.0-full-production-certified"
+    ],
+    "is_clean": false
+  },
+  "hardware_environment": {
+    "platform": "Windows-11-10.0.26300-SP0",
+    "os_name": "Windows",
+    "os_release": "11",
+    "os_version": "10.0.26300",
+    "architecture": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count_logical": 16,
+    "cpu_count_physical": 10,
+    "total_ram_bytes": 16873545728,
+    "total_ram_gb": 15.71,
+    "available_ram_bytes": 1697722368,
+    "available_ram_gb": 1.58
+  },
+  "dependencies": {
+    "python_version": "3.12.8",
+    "python_implementation": "CPython",
+    "python_compiler": "MSC v.1942 64 bit (AMD64)",
+    "pytorch_version": "2.14.0+cpu",
+    "cuda_available": false,
+    "cuda_version": null,
+    "numpy_version": "2.0.2",
+    "shapely_version": "2.2.0",
+    "pydantic_version": "2.14.1",
+    "psutil_version": "7.2.2"
+  },
+  "dataset": {
+    "path": "C:\\hackhive\\ResPlan.pkl",
+    "size_bytes": 300290069,
+    "sha256": "2a73179cf11e6066384400494683072eb1648ed56ae000750d0e9f3fa499c570",
+    "is_verified": true,
+    "total_plans_enumerated": 17000,
+    "min_plan_id": 0,
+    "max_plan_id": 16999
+  },
+  "solver_architecture": {
+    "solver_version": "2.0.0",
+    "production_wrapper": "ProductionFallbackOptimizer",
+    "candidate_optimizer": "LinUCB_ALNS_V2Optimizer (14 ALNS Operators, 24 Features)",
+    "fallback_optimizer": "ALNSLinUCBOptimizer (Frozen v1 Champion Baseline)",
+    "fallback_mode": "ARBITRATED",
+    "spatial_tolerance_m": 0.001,
+    "hub_obstacle_clearance_m": 0.5,
+    "wall_clearance_m": 0.5,
+    "max_nodes_per_hub": 5,
+    "max_area_m2": 100.0,
+    "weights": {
+      "weight_length": 1.0,
+      "weight_crossing": 5.0,
+      "weight_overlap": 1.0,
+      "weight_bend": 0.5
+    },
+    "lexicographical_hierarchy": [
+      "is_valid",
+      "hub_count",
+      "total_cost_J",
+      "area_gap_m2"
+    ],
+    "max_iterations": 25,
+    "per_plan_timeout_s": 5.0
+  },
+  "seed_policy": {
+    "base_seed": 42,
+    "seed_formula": "seed = base_seed + int(plan_id)",
+    "isolation": "independent_per_worker_process_rng",
+    "reproducibility": "BITWISE_IDENTICAL_DETERMINISTIC",
+    "supported_trials": [
+      42,
+      1042,
+      2042
+    ]
+  },
+  "cache_policy": {
+    "cache_schema_version": "2.0.0",
+    "route_cache_maxsize": 20000,
+    "augmented_grid_maxsize": 64,
+    "invalidation_strategy": "COORDINATE_BOUND_AND_MUTATION_EVICTION",
+    "zero_stale_guarantee": true
+  },
+  "audit_status": "CERTIFIED_VERIFIED"
+}

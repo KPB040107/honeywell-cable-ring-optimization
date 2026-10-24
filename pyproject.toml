@@ -1,13 +1,37 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "resplan-router"
-version = "0.1.0"
-description = "ResPlan Cable Ring Router — Autonomous Cable Ring Layout & Optimization"
+version = "2.0.0"
+description = "ResPlan Cable Ring Router — Autonomous Cable Ring Layout & Optimization for Commercial & Industrial Facilities"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+authors = [
+    { name = "Honeywell HackHive Team" }
+]
+keywords = [
+    "cable-routing",
+    "eda",
+    "milp",
+    "alns",
+    "survivability",
+    "bim",
+    "building-automation"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Manufacturing",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+]
 dependencies = [
     "pydantic>=2.0",
     "shapely>=2.0",
@@ -17,16 +41,68 @@ dependencies = [
     "ortools>=9.6",
     "matplotlib>=3.7",
     "pyyaml>=6.0",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+    "websockets>=11.0",
+    "python-multipart>=0.0.6",
+    "psutil>=5.9.0",
+    "pillow>=9.5.0",
 ]
 
 [project.optional-dependencies]
 test = [
     "pytest>=7.0",
+    "httpx>=0.24.0",
+    "pytest-cov>=4.0",
+]
+dev = [
+    "ruff>=0.1.0",
+    "black>=23.0",
+    "flake8>=6.0",
+    "mypy>=1.5",
+    "build>=1.0.0",
+    "twine>=4.0.0",
+]
+benchmarks = [
+    "pandas>=2.0",
+    "torch>=2.0",
+    "gymnasium>=0.29",
+    "tensorboard>=2.14",
 ]
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[project.scripts]
+resplan = "resplan_router.cli:main"
+
+[tool.setuptools]
+package-dir = {"resplan_router" = "src/resplan_router", "rl" = "rl"}
+packages = [
+    "resplan_router",
+    "resplan_router.experimental",
+    "resplan_router.optimizers",
+    "resplan_router.phase10_bim",
+    "resplan_router.phase11_optimization",
+    "resplan_router.phase1_ingestion",
+    "resplan_router.phase2_topology",
+    "resplan_router.phase3_micro_routing",
+    "resplan_router.phase4_partitioning",
+    "resplan_router.phase5_ring_sequencing",
+    "resplan_router.phase6_output",
+    "resplan_router.phase7_interactive",
+    "resplan_router.phase7_interactive.static",
+    "resplan_router.phase7_interactive.static.vendor",
+    "resplan_router.phase8_copilot",
+    "resplan_router.phase9_survivability",
+    "rl",
+]
+
+[tool.setuptools.package-data]
+"resplan_router.phase7_interactive.static" = ["*"]
+"resplan_router.phase7_interactive.static.vendor" = ["*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src", "."]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning",
+]

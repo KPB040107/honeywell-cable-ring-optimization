@@ -1,5 +1,7 @@
 """Floor plan optimizers package."""
 
+from typing import Any
+
 from resplan_router.optimizers.base import (
     BaseFloorPlanOptimizer,
     OptimizerResult,
@@ -13,17 +15,6 @@ from resplan_router.optimizers.alns_optimizer import ALNSOptimizer
 from resplan_router.optimizers.genetic_optimizer import GeneticOptimizer
 from resplan_router.optimizers.portfolio_hybrid import PortfolioHybridOptimizer
 from resplan_router.optimizers.alns_linucb import ALNSLinUCBOptimizer
-from resplan_router.optimizers.alns_linucb_v2 import (
-    LinUCB_ALNS_V2Optimizer,
-    ALNSLinUCBV2Optimizer,
-    ALNSLinUCB_V2Optimizer,
-)
-from resplan_router.optimizers.production_fallback import (
-    FallbackReason,
-    ProductionFallbackMode,
-    ProductionFallbackOptimizer,
-    evaluate_lexicographical_preference,
-)
 
 __all__ = [
     "BaseFloorPlanOptimizer",
@@ -45,3 +36,33 @@ __all__ = [
     "ProductionFallbackOptimizer",
     "evaluate_lexicographical_preference",
 ]
+
+
+def __getattr__(name: str) -> Any:
+    if name in ("LinUCB_ALNS_V2Optimizer", "ALNSLinUCBV2Optimizer", "ALNSLinUCB_V2Optimizer"):
+        from resplan_router.optimizers.alns_linucb_v2 import (
+            LinUCB_ALNS_V2Optimizer,
+            ALNSLinUCBV2Optimizer,
+            ALNSLinUCB_V2Optimizer,
+        )
+        mapping = {
+            "LinUCB_ALNS_V2Optimizer": LinUCB_ALNS_V2Optimizer,
+            "ALNSLinUCBV2Optimizer": ALNSLinUCBV2Optimizer,
+            "ALNSLinUCB_V2Optimizer": ALNSLinUCB_V2Optimizer,
+        }
+        return mapping[name]
+    if name in ("FallbackReason", "ProductionFallbackMode", "ProductionFallbackOptimizer", "evaluate_lexicographical_preference"):
+        from resplan_router.optimizers.production_fallback import (
+            FallbackReason,
+            ProductionFallbackMode,
+            ProductionFallbackOptimizer,
+            evaluate_lexicographical_preference,
+        )
+        mapping = {
+            "FallbackReason": FallbackReason,
+            "ProductionFallbackMode": ProductionFallbackMode,
+            "ProductionFallbackOptimizer": ProductionFallbackOptimizer,
+            "evaluate_lexicographical_preference": evaluate_lexicographical_preference,
+        }
+        return mapping[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
