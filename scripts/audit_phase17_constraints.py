@@ -74,19 +74,34 @@ OUTPUT_JSON_PATH = REPO_ROOT / "results" / "benchmarks" / "phase17" / "constrain
 
 
 def get_cached_solution(plan_id: int) -> Optional[dict[str, Any]]:
-    """Retrieve precomputed solution dictionary from SQLite baseline cache."""
-    if not CACHE_DB_PATH.exists():
-        return None
-    conn = sqlite3.connect(CACHE_DB_PATH)
+    """Retrieve precomputed solution dictionary from SQLite baseline cache or compute on demand."""
+    if CACHE_DB_PATH.exists():
+        conn = sqlite3.connect(CACHE_DB_PATH)
+        try:
+            row = conn.execute(
+                "SELECT bundle_json FROM baseline_cache WHERE plan_id = ?", (plan_id,)
+            ).fetchone()
+            if row and row[0]:
+                return json.loads(row[0])
+        except Exception:
+            pass
+        finally:
+            conn.close()
+
+    # On-demand fallback computation if cache is missing (e.g. in fresh CI clone)
     try:
-        row = conn.execute(
-            "SELECT bundle_json FROM baseline_cache WHERE plan_id = ?", (plan_id,)
-        ).fetchone()
-        if row and row[0]:
-            return json.loads(row[0])
-        return None
-    finally:
-        conn.close()
+        from resplan_router.phase1_ingestion.dataset_repository import DatasetRepository
+        from resplan_router.optimizers.portfolio_hybrid import PortfolioHybridOptimizer
+        from resplan_router.phase6_output.json_exporter import export_slide8_json
+        repo = DatasetRepository.get_instance()
+        plan = repo.get_floor_plan(plan_id)
+        opt = PortfolioHybridOptimizer()
+        res = opt.optimize(plan)
+        if res.is_valid and res.bundle:
+            return export_slide8_json(plan, res.bundle)
+    except Exception:
+        pass
+    return None
 
 
 def extract_xy(pt: Any) -> Tuple[float, float]:
