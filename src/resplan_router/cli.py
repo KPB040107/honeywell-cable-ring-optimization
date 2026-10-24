@@ -1126,9 +1126,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("-c", "--config", type=str, default=None, help=argparse.SUPPRESS)
     parser.add_argument("--max-nodes", type=int, default=None, help=argparse.SUPPRESS)
     parser.add_argument("--max-area", type=float, default=None, help=argparse.SUPPRESS)
-    parser.add_argument("--serve", action="store_true", default=False, help=argparse.SUPPRESS)
-    parser.add_argument("--port", type=int, default=8000, help=argparse.SUPPRESS)
-    parser.add_argument("--host", type=str, default="127.0.0.1", help=argparse.SUPPRESS)
+    parser.add_argument("--serve", action="store_true", default=False, help="Launch interactive Co-Design Studio web server")
+    parser.add_argument("--port", type=int, default=8000, help="Port to bind Co-Design Studio server (default: 8000)")
+    parser.add_argument("--host", type=str, default="127.0.0.1", help="Host interface for Co-Design Studio (default: 127.0.0.1)")
 
     subparsers = parser.add_subparsers(dest="subcommand", title="subcommands", description="Available CLI subcommands")
 
