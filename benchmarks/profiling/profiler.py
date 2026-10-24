@@ -40,7 +40,10 @@ if str(_ROOT) not in sys.path:
 if str(_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(_ROOT / "src"))
 
-import torch
+try:
+    import torch
+except ImportError:
+    torch = None
 from resplan_router.contracts import MetricFloorPlan, Point2D
 from resplan_router.optimizers.alns_operators import (
     ALNSState,
@@ -77,7 +80,7 @@ DEFAULT_REPORT_PATH = Path("results/profiling_breakdown.json")
 def query_gpu_telemetry() -> Dict[str, Any]:
     """Query NVIDIA GPU metrics via torch.cuda and nvidia-smi."""
     gpu_info: Dict[str, Any] = {
-        "available": torch.cuda.is_available(),
+        "available": bool(torch and torch.cuda.is_available()),
         "device_name": "N/A",
         "total_memory_mb": 0.0,
         "allocated_memory_mb": 0.0,
@@ -86,7 +89,7 @@ def query_gpu_telemetry() -> Dict[str, Any]:
         "temperature_c": None,
     }
 
-    if not torch.cuda.is_available():
+    if not torch or not torch.cuda.is_available():
         return gpu_info
 
     try:

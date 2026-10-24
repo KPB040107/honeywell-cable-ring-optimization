@@ -34,7 +34,10 @@ if str(_ROOT) not in sys.path:
 if str(_ROOT / "src") not in sys.path:
     sys.path.insert(0, str(_ROOT / "src"))
 
-import torch
+try:
+    import torch
+except ImportError:
+    torch = None
 from resplan_router.contracts import MetricFloorPlan
 from resplan_router.optimizers.alns_operators import NUM_OPERATORS
 from resplan_router.phase1_ingestion.dataset_repository import DatasetRepository
@@ -57,7 +60,7 @@ REPRESENTATIVE_PLANS = [
 
 def query_gpu_metrics() -> Tuple[float, float, Optional[float]]:
     """Query GPU compute utilization (%), VRAM used (MB), and GPU temperature (deg C)."""
-    if not torch.cuda.is_available():
+    if not torch or not torch.cuda.is_available():
         return 0.0, 0.0, None
 
     try:
