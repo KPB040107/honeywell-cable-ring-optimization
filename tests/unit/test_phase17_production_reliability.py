@@ -103,8 +103,8 @@ class TestLiveProductionFallbackWrapper:
         plan = repo.get_floor_plan(1)
         opt1 = LinUCB_ALNS_V2Optimizer(max_iterations=5)
         opt2 = LinUCB_ALNS_V2Optimizer(max_iterations=5)
-        r1 = opt1.optimize(plan)
-        r2 = opt2.optimize(plan)
+        r1 = opt1.optimize(plan, time_limit_seconds=15.0, random_seed=42)
+        r2 = opt2.optimize(plan, time_limit_seconds=15.0, random_seed=42)
         assert r1.bundle is not None and r2.bundle is not None
         assert r1.bundle.total_cost_J == r2.bundle.total_cost_J
         assert len(r1.bundle.hub_rings) == len(r2.bundle.hub_rings)

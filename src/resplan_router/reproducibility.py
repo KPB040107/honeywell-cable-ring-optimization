@@ -50,9 +50,10 @@ MANIFEST_SCHEMA_VERSION: str = "2.0.0"
 SOLVER_VERSION: str = "2.0.0"
 DEFAULT_BASE_SEED: int = 42
 
+_REPO_ROOT: Path = Path(__file__).resolve().parents[2]
 EXPECTED_DATASET_SHA256: str = "2a73179cf11e6066384400494683072eb1648ed56ae000750d0e9f3fa499c570"
-DEFAULT_DATASET_PATH: Path = Path("C:/hackhive/ResPlan.pkl")
-DEFAULT_MANIFEST_PATH: Path = Path("C:/hackhive/results/benchmarks/phase19/run_manifest.json")
+DEFAULT_DATASET_PATH: Path = _REPO_ROOT / "ResPlan.pkl"
+DEFAULT_MANIFEST_PATH: Path = _REPO_ROOT / "results" / "benchmarks" / "phase19" / "run_manifest.json"
 
 CANONICAL_OBJECTIVE_WEIGHTS: Dict[str, float] = {
     "weight_length": 1.0,
@@ -499,7 +500,16 @@ def extract_dataset_metadata(
     """
     path = Path(file_path)
     if not path.is_file():
-        raise FileNotFoundError(f"Dataset file not found at: {path}")
+        candidates = [
+            _REPO_ROOT / "ResPlan.pkl",
+            Path.cwd() / "ResPlan.pkl",
+        ]
+        for cand in candidates:
+            if cand.is_file():
+                path = cand
+                break
+        else:
+            raise FileNotFoundError(f"Dataset file not found at: {path}")
 
     size_bytes = path.stat().st_size
     if verify:
