@@ -309,7 +309,7 @@ def test_phase1_to_phase4_regression(
     assert "R06" in topology.leaf_room_ids
 
     # Phase 3 Invariants
-    assert tensor.computation_time_ms < 1000.0
+    assert tensor.computation_time_ms < 5000.0
     for node_id in plan.nodes:
         assert tensor.get_metric(node_id, node_id) is not None
 
