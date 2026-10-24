@@ -12,7 +12,7 @@ Computes:
 from __future__ import annotations
 
 import math
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple
 
 import networkx as nx
 from ortools.sat.python import cp_model

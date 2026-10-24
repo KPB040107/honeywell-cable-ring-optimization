@@ -10,7 +10,7 @@ import copy
 import math
 import random
 import time
-from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple
+from typing import Any, Dict, FrozenSet, List, Optional, Sequence, Set, Tuple
 
 import networkx as nx
 import shapely

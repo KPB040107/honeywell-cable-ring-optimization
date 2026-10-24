@@ -22,6 +22,7 @@ import time
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 import networkx as nx
+import numpy as np
 
 from resplan_router.contracts import MetricFloorPlan
 from resplan_router.optimizers.alns_operators import (

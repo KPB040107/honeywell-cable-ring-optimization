@@ -51,6 +51,10 @@ jobs:
           # Exit-zero treats all errors as warnings
           flake8 src/ tests/ --count --exit-zero --max-complexity=15 --max-line-length=120 --statistics
 
+      - name: Prepare test dataset fixture
+        run: |
+          python scripts/generate_ci_dataset.py
+
       - name: Run pytest test suite
         run: |
           pytest tests/ -v --maxfail=5

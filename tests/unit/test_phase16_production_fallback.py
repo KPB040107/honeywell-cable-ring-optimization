@@ -22,7 +22,7 @@ import math
 from pathlib import Path
 import random
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 import unittest.mock as mock
 
 import numpy as np
