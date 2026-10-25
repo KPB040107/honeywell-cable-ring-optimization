@@ -15,6 +15,7 @@ import math
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
+from fastapi import Response
 from pydantic import BaseModel, ConfigDict, Field
 import shapely
 from shapely.geometry import LineString, MultiPolygon, Point, Polygon
@@ -1127,7 +1128,7 @@ def create_export_router(engine_instance: Optional[Any] = None) -> Any:
     Returns:
         FastAPI APIRouter.
     """
-    from fastapi import APIRouter, Body, HTTPException, Query, Response
+    from fastapi import APIRouter, Body, HTTPException, Query
     from fastapi.responses import JSONResponse
     from starlette.requests import Request as StarletteRequest
 

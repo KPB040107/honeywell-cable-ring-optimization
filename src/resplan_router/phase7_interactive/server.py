@@ -959,7 +959,8 @@ def download_overlay_png() -> Response:
     )
 
 
-@app.api_route("/api/demo/{demo_id}", methods=["GET", "POST"])
+@app.get("/api/demo/{demo_id}")
+@app.post("/api/demo/{demo_id}")
 def load_demo_endpoint(demo_id: str, generate: bool = False) -> Any:
     """Load one of the demo benchmark floor plans."""
     try:
